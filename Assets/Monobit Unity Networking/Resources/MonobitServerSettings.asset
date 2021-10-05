@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 394559642, guid: aa49a80689af50d47948c3793b5e6082, type: 3}
+  m_Name: MonobitServerSettings
+  m_EditorClassIdentifier: 
+  HostType: 4
+  HostProtocol: 0
+  AuthID: a4fcfe2f-8c94-441e-bb92-d19f1360f09c-1bacd668
+  SelfServerAddress: 
+  m_SelfServerPortString: 
+  m_SelfServerPort: 0
+  MunCloudEndpointAddress: https://endpoint.cloud.monobitengine.com
+  MunCloudAppID: 937ee063b37b5ec196e33380e762d09f
+  MunCloudConnectionTimeOut: 20000
+  EnableAutoJoinLobby: 1
+  EnableLobbyStatistics: 0
+  CustomAuthType: 0
+  CustomAuth_IgnoreError: 0
+  CustomAuthServerAddress: 
+  ObjectStreamSendLimitBytesPerFrame: 2147483647
+  RpcSendLimitBytesPerFrame: 2147483647
+  ReceiveLimitBytesPerFrame: 4294967295
+  ServerConnectWaitTime: 5000
+  KeepAliveUpdateTime: 10000
