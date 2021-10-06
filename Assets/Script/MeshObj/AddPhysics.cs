@@ -17,7 +17,7 @@ public class AddPhysics : MonobitEngine.MonoBehaviour
     [SerializeField] private float drag = 0;
     [SerializeField] private float angularDrag = 0.05f;
     [SerializeField] private CollisionDetectionMode collisionDetectionMode = CollisionDetectionMode.Discrete;
-
+    [SerializeField] private bool freezeZ = true;
 
     void Start()
     {
@@ -36,6 +36,14 @@ public class AddPhysics : MonobitEngine.MonoBehaviour
         rigidbody.drag = drag;
         rigidbody.angularDrag = angularDrag;
         rigidbody.collisionDetectionMode = collisionDetectionMode;
+
+        if(freezeZ)
+        {
+            rigidbody.constraints =
+                RigidbodyConstraints.FreezePositionZ |
+                RigidbodyConstraints.FreezeRotationX |
+                RigidbodyConstraints.FreezeRotationY;
+        }
 
         // 同期設定
         monobitView = thisObj.gameObject.AddComponent<MonobitView>();
