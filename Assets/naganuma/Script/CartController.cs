@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class CartController : MonoBehaviour {
     [Header("カートのスピード")]
-    public float cartSpeed = 1.0f;        // カートスピード
+    public float      cartSpeed        = 1.0f; // カートスピード
     [Header("カートの減速値")]
-    public float cartDeceleration = 0.5f; // カートの低速値
+    public float      cartDeceleration = 0.5f; // カートの低速値
+    [Header("カートの中心")]
+    public Vector3    centerPos;               // カートの中心
 
-    private Rigidbody rigidBody;          // カートのリジッドボディ
+    private Rigidbody rigidBody;               // カートのリジッドボディ
 
     // Start is called before the first frame update
     void Start()
     {
         // リジッドボディを取得
         rigidBody = this.GetComponent<Rigidbody>();
+        if (rigidBody) {
+            rigidBody.centerOfMass = centerPos;
+        }
     }
 
     // Update is called once per frame
@@ -22,6 +27,7 @@ public class CartController : MonoBehaviour {
     {
         if (rigidBody)
         {
+            // TODO 速度の補間をする
             Vector3 speed = new Vector3(cartSpeed, 0.0f); // カートの最終移動ベクトル
             // 低速移動
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
@@ -44,6 +50,7 @@ public class CartController : MonoBehaviour {
                     rigidBody.velocity =  speed;
                 }
             }
+            Debug.Log(rigidBody.velocity);
         }
     }
 }
