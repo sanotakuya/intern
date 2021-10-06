@@ -52,7 +52,7 @@ public class CartController : MonobitEngine.MonoBehaviour {
                     rigidBody.velocity =  speed;
                 }
             }
-            Debug.Log(rigidBody.velocity);
+            //Debug.Log(rigidBody.velocity);
         }
     }
 }

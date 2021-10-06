@@ -590,7 +590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee9f89152491d5e4ba84e2b1c4bf7bfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InstantiatePrefab: {fileID: 7125812460915565671, guid: 3b9675f758bac1e44a5a001aec4f267a, type: 3}
+  InstantiatePrefab: {fileID: 8389552189839540372, guid: f49fa946d5864344392a2fc35159ed2b, type: 3}
   camPosition: {x: 1, y: 1, z: -3}
   camRotation: {x: 0, y: 0, z: 0, w: 1}
 --- !u!114 &1452354546
