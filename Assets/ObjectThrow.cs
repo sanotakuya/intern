@@ -39,7 +39,7 @@ public class ObjectThrow : MonobitEngine.MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             //インスタンスを生成
-            cubeInstance = Instantiate(cube, new Vector3(transform.position.x, transform.position.y + 2.0f, transform.position.z), Quaternion.identity);
+            cubeInstance = MonobitNetwork.Instantiate("Hotdog", new Vector3(transform.position.x, transform.position.y + 2.0f, transform.position.z), Quaternion.identity, 0);
             //インスタンスのリジッドボディを取得
             Rigidbody rb = cubeInstance.GetComponent<Rigidbody>();
             //マウスカーソルまでのベクトルを計算

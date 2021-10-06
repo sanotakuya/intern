@@ -19,7 +19,7 @@ public class AddPhysics : MonobitEngine.MonoBehaviour
     [SerializeField] private CollisionDetectionMode collisionDetectionMode = CollisionDetectionMode.Discrete;
     [SerializeField] private bool freezeZ = true;
 
-    void Start()
+    void Awake()
     {
         GameObject thisObj = this.gameObject;
         MeshCollider meshCollider = null;
@@ -46,7 +46,7 @@ public class AddPhysics : MonobitEngine.MonoBehaviour
         }
 
         // 同期設定
-        monobitView = thisObj.gameObject.AddComponent<MonobitView>();
-        monobitView.ObservedComponents.Add(thisObj.gameObject.AddComponent<MonobitTransformView>());
+        //monobitView = thisObj.gameObject.AddComponent<MonobitView>();
+        //monobitView.ObservedComponents.Add(thisObj.gameObject.AddComponent<MonobitTransformView>());
     }
 }

@@ -19,7 +19,7 @@ public class SendStamp : MonobitEngine.MonoBehaviour
     [MunRPC]
     void SpawnStamp(string stampName, Vector3 pos)
     {
-        GameObject stamp = Instantiate(Resources.Load("icon/" + stampName), pos +relative, Quaternion.Euler(0, 0, 0)) as GameObject;
+        GameObject stamp = MonobitNetwork.Instantiate(("icon/" + stampName), pos +relative, Quaternion.Euler(0, 0, 0), 0) as GameObject;
         Destroy(stamp, destroyTime);
     }
 
