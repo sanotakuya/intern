@@ -10,17 +10,41 @@ using MonobitEngine;
 //! [内容]		ネットワークの管理をする
 //-----------------------------------------------------------------------------
 
-public class Networkmanager : MonobitEngine.MonoBehaviour
+public class NetworkManager : MonobitEngine.MonoBehaviour
 {
     //-----------------------------------------------------------------------------
     //!	private変数
     //-----------------------------------------------------------------------------
     private string roomName = "";       // ルーム名
+    private GameObject playerObj = null;
 
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
-    public GameObject playerObj = null;
+    public GameObject camera = null;
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		更新処理
+    //-----------------------------------------------------------------------------
+    void Update()
+    {
+        // MUNサーバに接続しており、かつルームに入室している場合
+        if (MonobitNetwork.isConnect && MonobitNetwork.inRoom)
+        {
+            // プレイヤーキャラクタが未登場の場合に登場させる
+            if (playerObj == null)
+            {
+                playerObj = MonobitNetwork.Instantiate(
+                                "Player",
+                                Vector3.zero,
+                                Quaternion.identity,
+                                0
+                                );
+
+                camera.transform.parent = playerObj.transform;
+            }
+        }
+    }
 
     //-----------------------------------------------------------------------------
     //! [内容]		GUI制御
@@ -45,6 +69,14 @@ public class Networkmanager : MonobitEngine.MonoBehaviour
                 if (GUILayout.Button("Leave Room", GUILayout.Width(150)))
                 {
                     MonobitNetwork.LeaveRoom();
+
+                    // シーンをリロードする
+#if UNITY_5_3_OR_NEWER || UNITY_5_3
+                    string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+#else
+                     Application.LoadLevel(Application.loadedLevelName);
+#endif
                 }
             }
             // ルームに入室していない場合
@@ -78,18 +110,22 @@ public class Networkmanager : MonobitEngine.MonoBehaviour
                     if (GUILayout.Button("Enter Room : " + roomParam))
                     {
                         MonobitNetwork.JoinRoom(room.name);
-
-                        GameObject newNPC = MonobitEngine.MonobitNetwork.Instantiate(
-                                                playerObj.name,
-                                                new Vector3(0, 0, 0),
-                                                Quaternion.Euler(0, Random.value * 180, 0),
-                                                0,
-                                                null,
-                                                true,
-                                                false,
-                                                true) as GameObject;
-
                     }
+                }
+
+                // ボタン入力でサーバから切断＆シーンリセット
+                if (GUILayout.Button("Disconnect", GUILayout.Width(150)))
+                {
+                    // サーバから切断する
+                    MonobitNetwork.DisconnectServer();
+
+                    // シーンをリロードする
+#if UNITY_5_3_OR_NEWER || UNITY_5_3
+                    string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+#else
+                     Application.LoadLevel(Application.loadedLevelName);
+#endif
                 }
             }
         }
@@ -108,12 +144,12 @@ public class Networkmanager : MonobitEngine.MonoBehaviour
             GUILayout.EndHorizontal();
 
             // デフォルトロビーへの自動入室を許可する
-            MonobitNetwork.autoJoinLobby = false;
+            MonobitNetwork.autoJoinLobby = true;
 
             // MUNサーバに接続する
             if (GUILayout.Button("Connect Server", GUILayout.Width(150)))
             {
-                MonobitNetwork.ConnectServer("SimpleChat_v1.0");
+                MonobitNetwork.ConnectServer("SimpleNetwork3D_v1.0");
             }
         }
     }
