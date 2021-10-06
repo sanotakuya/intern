@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MonobitEngine;
 
-public class CartController : MonoBehaviour {
+
+public class CartController : MonobitEngine.MonoBehaviour {
     [Header("カートのスピード")]
     public float      cartSpeed        = 1.0f; // カートスピード
     [Header("カートの減速値")]

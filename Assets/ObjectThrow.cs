@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MonobitEngine;
 
-public class ObjectThrow : MonoBehaviour
+
+public class ObjectThrow : MonobitEngine.MonoBehaviour
 {
     Camera mainCamera;
     GameObject cube;
@@ -17,7 +19,7 @@ public class ObjectThrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cube = Resources.Load<GameObject>("Cube (1)");
+        cube = Resources.Load<GameObject>("food/Hotdog");
 
         mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
