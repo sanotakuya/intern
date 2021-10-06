@@ -37,6 +37,11 @@ public class SendStamp : MonobitEngine.MonoBehaviour
     {
         string stampName;
 
+        if (!monobitView.isMine)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))   //スマイルの送信
         {
             stampName = "smile";

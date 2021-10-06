@@ -14,6 +14,7 @@ public class ObjectThrow : MonobitEngine.MonoBehaviour
     Vector3 mousePos;
     Vector3 playerPos;
     Vector3 cursorVec;
+    MonobitView monobitView;
 
     
     // Start is called before the first frame update
@@ -22,11 +23,17 @@ public class ObjectThrow : MonobitEngine.MonoBehaviour
         cube = Resources.Load<GameObject>("food/Hotdog");
 
         mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+        monobitView = GetComponent<MonobitView>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!monobitView.isMine)
+        {
+            return;
+        }
+
         playerPos = transform.position;
 
         //マウスのスクリーン座標をワールド座標に変換する
