@@ -8,7 +8,7 @@ public class CartController : MonoBehaviour {
     [Header("カートの減速値")]
     public float cartDeceleration = 0.5f; // カートの低速値
 
-    private Rigidbody rigidBody;       // カートのリジッドボディ
+    private Rigidbody rigidBody;          // カートのリジッドボディ
 
     // Start is called before the first frame update
     void Start()
