@@ -6897,6 +6897,7 @@ GameObject:
   - component: {fileID: 645972953514690376}
   - component: {fileID: 5136899841125995102}
   - component: {fileID: 2868732910992114592}
+  - component: {fileID: 1732346322136577649}
   m_Layer: 0
   m_Name: unitychan_dynamic_locomotion
   m_TagString: Untagged
@@ -8055,6 +8056,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyTime: 2
+  relative: {x: 0, y: 2, z: 0}
+--- !u!114 &1732346322136577649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7125812460915565671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67fbc2196c92d0948a00a19a6da0c3fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  power: 100
 --- !u!1 &7127109198478119129
 GameObject:
   m_ObjectHideFlags: 0

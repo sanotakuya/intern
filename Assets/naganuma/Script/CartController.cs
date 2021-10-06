@@ -40,12 +40,12 @@ public class CartController : MonoBehaviour {
             // スピードを制限
             if (rigidBody.velocity.x < speed.x && rigidBody.velocity.x > -speed.x) {
                 // 左移動
-                if (Input.GetKey(KeyCode.A))
+                if (Input.GetKey(KeyCode.J))
                 {
                     rigidBody.velocity = -speed;
                 }
                 // 右移動
-                if (Input.GetKey(KeyCode.D))
+                if (Input.GetKey(KeyCode.L))
                 {
                     rigidBody.velocity =  speed;
                 }
