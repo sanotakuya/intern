@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using MonobitEngine;
 
-
+//-----------------------------------------------------------------------------
+//! [制作者]     長沼豪琉
+//!	[最終更新日] 2021/10/06
+//! [内容]       カート操作クラス
+//-----------------------------------------------------------------------------
 public class CartController : MonobitEngine.MonoBehaviour {
-    [Header("カートのスピード")]
-    public float      cartSpeed        = 1.0f; // カートスピード
-    [Header("カートの減速値")]
-    public float      cartDeceleration = 0.5f; // カートの低速値
-    [Header("カートの中心")]
-    public Vector3    centerPos;               // カートの中心
+    [Header("カートのスピード")] public float   cartSpeed        = 1.0f; // カートスピード
+    [Header("カートの減速値")]   public float   cartDeceleration = 0.5f; // カートの低速値
+    [Header("カートの中心")]     public Vector3 centerPos              ; // カートの中心
 
     private Rigidbody rigidBody;               // カートのリジッドボディ
 
@@ -32,8 +33,7 @@ public class CartController : MonobitEngine.MonoBehaviour {
             // TODO 速度の補間をする
             Vector3 speed = new Vector3(cartSpeed, 0.0f); // カートの最終移動ベクトル
             // 低速移動
-            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-            {
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
                 speed.x -= cartDeceleration;
                 // スピードをマイナス値にしない
                 if (speed.x <= 0.0f) speed.x = 0.0f;
@@ -42,17 +42,14 @@ public class CartController : MonobitEngine.MonoBehaviour {
             // スピードを制限
             if (rigidBody.velocity.x < speed.x && rigidBody.velocity.x > -speed.x) {
                 // 左移動
-                if (Input.GetKey(KeyCode.J))
-                {
+                if (Input.GetKey(KeyCode.J)) {
                     rigidBody.velocity = -speed;
                 }
                 // 右移動
-                if (Input.GetKey(KeyCode.L))
-                {
+                if (Input.GetKey(KeyCode.L)) {
                     rigidBody.velocity =  speed;
                 }
             }
-            Debug.Log(rigidBody.velocity);
         }
     }
 }
