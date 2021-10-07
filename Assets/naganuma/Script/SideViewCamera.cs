@@ -28,7 +28,7 @@ public class SideViewCamera : MonoBehaviour
     {
         if (cameraTransform) {
             // カメラの位置を設定
-            cameraTransform.position  = (followUpObject.transform.position) + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
+            cameraTransform.position  = followUpObject.transform.position + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
             // カメラコンポーネントを取得
             mainCamera = cameraTransform.gameObject.GetComponent<Camera>();
             if (mainCamera) {
@@ -57,7 +57,7 @@ public class SideViewCamera : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (cameraTransform) {
+        if (cameraTransform && followUpObject) {
             // カメラとオブジェクトの位置を同期
             if (isDelay) {
                 cameraTransform.position = Vector3.Lerp(cameraTransform.position, followUpObject.transform.position + (cameraTransform.forward * distance) + (cameraTransform.up * vertical), delaySpeed * Time.deltaTime);
@@ -68,10 +68,10 @@ public class SideViewCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (cameraTransform) {
+        if (cameraTransform && followUpObject) {
             // カメラとオブジェクトの位置を同期
             if (!isDelay) {
-                cameraTransform.position = (followUpObject.transform.position) + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
+                cameraTransform.position = followUpObject.transform.position + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
             }
             // カメラの角度を設定(角度の制限以内なら回転)
             if (angle <= LIMIT_ANGLE && angle >= -LIMIT_ANGLE) {
