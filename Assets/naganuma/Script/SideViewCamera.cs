@@ -4,7 +4,7 @@ using UnityEngine;
 
 //-----------------------------------------------------------------------------
 //! [制作者]     長沼豪琉
-//!	[最終更新日] 2021/10/06
+//! [最終更新日] 2021/10/06
 //! [内容]       横から見たカメラ
 //-----------------------------------------------------------------------------
 public class SideViewCamera : MonoBehaviour
@@ -18,10 +18,10 @@ public class SideViewCamera : MonoBehaviour
     [Header("ディレイスピード")]           public float      delaySpeed     = 4.0f ; // ディレイスピード
     [Header("平行投影")]                   public bool       isParallel     = false; // 平行投影
 
-    private Camera    camera                             ; // カメラ
-    private float     orthographicSize                   ; // カメラの表示範囲
-    private Vector3   prevCameraAngle    = Vector3.zero  ; // 前フレームのカメラの角度
-    private float     limitAngle         = 90.0f         ; // 回転角度の制限
+    private Camera      mainCamera                       ; // カメラ
+    private float       orthographicSize                 ; // カメラの表示範囲
+    private Vector3     prevCameraAngle    = Vector3.zero; // 前フレームのカメラの角度
+    private const float LIMIT_ANGLE        = 90.0f       ; // 回転角度の制限
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +30,9 @@ public class SideViewCamera : MonoBehaviour
             // カメラの位置を設定
             cameraTransform.position  = (followUpObject.transform.position) + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
             // カメラコンポーネントを取得
-            camera = cameraTransform.gameObject.GetComponent<Camera>();
-            if (camera) {
-                orthographicSize = camera.orthographicSize;
+            mainCamera = cameraTransform.gameObject.GetComponent<Camera>();
+            if (mainCamera) {
+                orthographicSize = mainCamera.orthographicSize;
             }
         }
     }
@@ -42,17 +42,18 @@ public class SideViewCamera : MonoBehaviour
     {
         if (cameraTransform && followUpObject) {
             // カメラのプロジェクション設定
-            if (isParallel && camera) {
-                camera.orthographic     = true;
-                camera.orthographicSize = -distance;
+            if (isParallel && mainCamera) {
+                mainCamera.orthographic     = true;
+                mainCamera.orthographicSize = -distance;
             }
             else {
-                camera.orthographic     = false;
-                camera.orthographicSize = orthographicSize;
+                mainCamera.orthographic     = false;
+                mainCamera.orthographicSize = orthographicSize;
 
             }
         }
     }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -63,6 +64,7 @@ public class SideViewCamera : MonoBehaviour
             }
         }
     }
+
     // Update is called once per frame
     void LateUpdate()
     {
@@ -72,7 +74,7 @@ public class SideViewCamera : MonoBehaviour
                 cameraTransform.position = (followUpObject.transform.position) + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
             }
             // カメラの角度を設定(角度の制限以内なら回転)
-            if (angle <= limitAngle && angle >= -limitAngle) {
+            if (angle <= LIMIT_ANGLE && angle >= -LIMIT_ANGLE) {
                 cameraTransform.RotateAround(followUpObject.transform.position, transform.right, angle - prevCameraAngle.x);
                 prevCameraAngle = cameraTransform.rotation.eulerAngles;
             }
