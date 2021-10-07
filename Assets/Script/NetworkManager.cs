@@ -21,7 +21,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
-    public GameObject camera = null;
+   // public GameObject camera = null;
 
     //-----------------------------------------------------------------------------
     //! [内容]		更新処理
@@ -35,13 +35,13 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             if (playerObj == null)
             {
                 playerObj = MonobitNetwork.Instantiate(
-                                "Player",
+                                "unitychan_dynamic_locomotion",
                                 Vector3.zero,
                                 Quaternion.identity,
                                 0
                                 );
 
-                camera.transform.parent = playerObj.transform;
+                //camera.transform.parent = playerObj.transform;
             }
         }
     }
