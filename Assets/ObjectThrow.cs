@@ -41,7 +41,6 @@ public class ObjectThrow : MonobitEngine.MonoBehaviour
         //マウスのZ軸を固定する
         mousePos.z = 0.0f;
 
-        Debug.Log(mousePos);
         //オブジェクトを飛ばす
         if (Input.GetKeyDown(KeyCode.F))
         {
