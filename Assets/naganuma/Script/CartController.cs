@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using MonobitEngine;
 
-
+//-----------------------------------------------------------------------------
+//! [制作者]     長沼豪琉
+//!	[最終更新日] 2021/10/06
+//! [内容]       カート操作クラス
+//-----------------------------------------------------------------------------
 public class CartController : MonobitEngine.MonoBehaviour {
-    [Header("カートのスピード")]
-    public float      cartSpeed        = 1.0f; // カートスピード
-    [Header("カートの減速値")]
-    public float      cartDeceleration = 0.5f; // カートの低速値
-    [Header("カートの中心")]
-    public Vector3    centerPos;               // カートの中心
+    [Header("カートのスピード")] public float   cartSpeed        = 1.0f; // カートスピード
+    [Header("加速度")]           public float   acceleration     = 4.0f; // 加速度
+    [Header("カートの減速値")]   public float   cartDeceleration = 0.5f; // カートの低速値
+    [Header("カートの中心")]     public Vector3 centerPos              ; // カートの中心
 
-    private Rigidbody rigidBody;               // カートのリジッドボディ
+    private Rigidbody rigidBody               ; // カートのリジッドボディ
+    private Vector3   speed     = Vector3.zero; // スピード
 
     // Start is called before the first frame update
     void Start()
@@ -29,30 +32,33 @@ public class CartController : MonobitEngine.MonoBehaviour {
     {
         if (rigidBody)
         {
-            // TODO 速度の補間をする
-            Vector3 speed = new Vector3(cartSpeed, 0.0f); // カートの最終移動ベクトル
+            speed = Vector3.Lerp(speed, new Vector3(cartSpeed, 0.0f), acceleration * Time.deltaTime); // カートの最終移動ベクトル
             // 低速移動
-            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-            {
-                speed.x -= cartDeceleration;
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+                if (cartSpeed != 0.0f) {
+                    speed.x -= cartDeceleration / cartSpeed;
+                }
                 // スピードをマイナス値にしない
                 if (speed.x <= 0.0f) speed.x = 0.0f;
             }
 
             // スピードを制限
-            if (rigidBody.velocity.x < speed.x && rigidBody.velocity.x > -speed.x) {
+            if (rigidBody.velocity.x < cartSpeed && rigidBody.velocity.x > -cartSpeed) {
+                bool isMove = false;
                 // 左移動
-                if (Input.GetKey(KeyCode.J))
-                {
+                if (Input.GetKey(KeyCode.J)) {
                     rigidBody.velocity = -speed;
+                    isMove = true;
                 }
                 // 右移動
-                if (Input.GetKey(KeyCode.L))
-                {
+                if (Input.GetKey(KeyCode.L)) {
                     rigidBody.velocity =  speed;
+                    isMove = true;
+                }
+                if (!isMove) {
+                    speed = Vector3.zero;
                 }
             }
-            //Debug.Log(rigidBody.velocity);
         }
     }
 }
