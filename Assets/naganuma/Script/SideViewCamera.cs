@@ -9,45 +9,73 @@ using UnityEngine;
 //-----------------------------------------------------------------------------
 public class SideViewCamera : MonoBehaviour
 {
-    [Header("カメラ")]                            public Transform  cameraTransform      ; // カメラオブジェクト
-    [Header("追従するオブジェクト")]              public GameObject followUpObject       ; // 追従するオブジェクト
-    [Header("オブジェクトとの距離")]              public float      distance             ; // 追従するオブジェクトとの距離
-    [Header("オブジェクトとカメラの角度")]        public float      angle                ; // オブジェクトとカメラの角度
-    /*[Header("ディレイ有効")]                  public*/ bool       isDelay        = true; // ディレイ有効
-    [Header("ディレイスピード")]                  public float      delaySpeed     = 4.0f; // ディレイスピード
+    [Header("カメラ")]                     public Transform  cameraTransform       ; // カメラオブジェクト
+    [Header("追従するオブジェクト")]       public GameObject followUpObject        ; // 追従するオブジェクト
+    [Header("オブジェクトとの距離")]       public float      distance              ; // 追従するオブジェクトとの距離
+    [Header("オブジェクトとの高さ")]       public float      vertical              ; // オブジェクトとカメラの高さ
+    [Header("オブジェクトとカメラの角度")] public float      angle                 ; // オブジェクトとカメラの角度
+    [Header("ディレイ有効")]               public bool       isDelay        = true ; // ディレイ有効
+    [Header("ディレイスピード")]           public float      delaySpeed     = 4.0f ; // ディレイスピード
+    [Header("平行投影")]                   public bool       isParallel     = false; // 平行投影
 
-    private Vector3 prevCameraAngle = Vector3.zero; // 前フレームのカメラの角度
-    private Vector3 prevCameraPos   = Vector3.zero; // 前フレームのカメラの位置
-    private Vector3 prevObjectPos   = Vector3.zero; // 前フレームのオブジェクトの座標
-    private float   limitAngle      = 90.0f       ; // 回転角度の制限
+    private Camera    camera                             ; // カメラ
+    private float     orthographicSize                   ; // カメラの表示範囲
+    private Vector3   prevCameraAngle    = Vector3.zero  ; // 前フレームのカメラの角度
+    private float     limitAngle         = 90.0f         ; // 回転角度の制限
 
     // Start is called before the first frame update
     void Start()
     {
-        // カメラの位置を設定
-        cameraTransform.position = followUpObject.transform.position + new Vector3(0.0f, 0.0f, distance);
-        prevCameraPos = cameraTransform.position;
+        if (cameraTransform) {
+            // カメラの位置を設定
+            cameraTransform.position  = (followUpObject.transform.position) + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
+            // カメラコンポーネントを取得
+            camera = cameraTransform.gameObject.GetComponent<Camera>();
+            if (camera) {
+                orthographicSize = camera.orthographicSize;
+            }
+        }
     }
 
     // Update is called once per frame
+    void Update()
+    {
+        if (cameraTransform && followUpObject) {
+            // カメラのプロジェクション設定
+            if (isParallel && camera) {
+                camera.orthographic     = true;
+                camera.orthographicSize = -distance;
+            }
+            else {
+                camera.orthographic     = false;
+                camera.orthographicSize = orthographicSize;
+
+            }
+        }
+    }
+    // Update is called once per frame
     void FixedUpdate()
     {
-        // カメラとオブジェクトの位置を同期
-        if (isDelay) {
-            float cameraYPos         = cameraTransform.position.y;
-            cameraTransform.position = Vector3.Lerp(cameraTransform.position, followUpObject.transform.position + new Vector3(0.0f, 0.0f, distance), delaySpeed * Time.deltaTime);
-            cameraTransform.position = new Vector3(cameraTransform.position.x, cameraYPos, cameraTransform.position.z);
+        if (cameraTransform) {
+            // カメラとオブジェクトの位置を同期
+            if (isDelay) {
+                cameraTransform.position = Vector3.Lerp(cameraTransform.position, followUpObject.transform.position + (cameraTransform.forward * distance) + (cameraTransform.up * vertical), delaySpeed * Time.deltaTime);
+            }
         }
-        else {
-            cameraTransform.position += followUpObject.transform.position - prevObjectPos + new Vector3(0.0f, 0.0f, distance - prevCameraPos.z);
-            prevCameraPos                    = cameraTransform.position;
-            prevObjectPos                    = followUpObject.transform.position;
-        }
-
-        // カメラの角度を設定(角度の制限以内なら回転)
-        if (angle <= limitAngle && angle >= -limitAngle) {
-            cameraTransform.transform.RotateAround(followUpObject.transform.position, transform.right, angle - prevCameraAngle.x);
-            prevCameraAngle = cameraTransform.transform.rotation.eulerAngles;
+    }
+    // Update is called once per frame
+    void LateUpdate()
+    {
+        if (cameraTransform) {
+            // カメラとオブジェクトの位置を同期
+            if (!isDelay) {
+                cameraTransform.position = (followUpObject.transform.position) + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
+            }
+            // カメラの角度を設定(角度の制限以内なら回転)
+            if (angle <= limitAngle && angle >= -limitAngle) {
+                cameraTransform.RotateAround(followUpObject.transform.position, transform.right, angle - prevCameraAngle.x);
+                prevCameraAngle = cameraTransform.rotation.eulerAngles;
+            }
         }
     }
 }

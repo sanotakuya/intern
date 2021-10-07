@@ -542,8 +542,11 @@ MonoBehaviour:
   cameraTransform: {fileID: 460381252}
   followUpObject: {fileID: 1315041212}
   distance: -10
+  vertical: 0
   angle: 0
-  delaySpeed: 0
+  isDelay: 1
+  delaySpeed: 4
+  isParallel: 1
 --- !u!1 &543788696
 GameObject:
   m_ObjectHideFlags: 0
