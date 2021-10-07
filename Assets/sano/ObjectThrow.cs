@@ -12,7 +12,7 @@ public class ObjectThrow : MonobitEngine.MonoBehaviour
 {
     Camera mainCamera;
 
-    public float power;
+    
     Vector3 mousePos;
     Vector3 playerPos;
     Vector3 cursorVec;
@@ -21,7 +21,8 @@ public class ObjectThrow : MonobitEngine.MonoBehaviour
     GameObject hitObject;   //当たったオブジェクトを取得
 
     static bool objectHoldFlg = false;
-
+    private float power;
+    private float mass;
     private bool inputFlg = false;
     private float inputCnt = 0;
 
@@ -56,7 +57,7 @@ public class ObjectThrow : MonobitEngine.MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit, 1.0f))
             {
 
-                if (hit.transform.gameObject.name == "Hotdog")
+                if (hit.transform.gameObject.tag == "ThrowObject")
                 {
                     //オブジェクトをつかむ
                     if (Input.GetKeyDown(KeyCode.F))
@@ -71,42 +72,45 @@ public class ObjectThrow : MonobitEngine.MonoBehaviour
             }
         }
         if (objectHoldFlg == true)
-        {  
+        {
+            //掴んでいるオブジェクトの座標を更新する
+            hitObject.transform.position = new Vector3(playerPos.x, playerPos.y + 2.0f, playerPos.z);
+
             //つかんでいるオブジェクトのリジッドボディを取得
             Rigidbody rb = hitObject.GetComponent<Rigidbody>();
+            
             //動かないようにしておく
             rb.velocity = Vector3.zero;
 
-            //掴んでいるオブジェクトの座標を更新する
-            hitObject.transform.position = new Vector3(playerPos.x, playerPos.y + 2.0f, playerPos.z);
+            //飛ばす力を計算する
+            power = rb.mass * 10;
 
             //マウスカーソルまでのベクトルを計算
             cursorVec = mousePos - playerPos;
             cursorVec.z = 0.0f;
 
             //マウスカーソルのある場所を向く
-            if (cursorVec.x >= 0)
+            if (cursorVec.x >= 0)       //画面右にカーソルがあるとき
             {
-                //キャラの向いている方向へ向きを変える
+                
                 float nowAngle = this.transform.eulerAngles.y;
                 float angle = Mathf.LerpAngle(0.0f, 90.0f, nowAngle);
                 this.transform.eulerAngles = new Vector3(0, angle, 0);
             }
-            else if(cursorVec.x < 0)
+            else if(cursorVec.x < 0)    //画面左にカーソルがあるとき
             {
-                //キャラの向いている方向へ向きを変える
+               
                 float nowAngle = this.transform.eulerAngles.y;
                 float angle = Mathf.LerpAngle(nowAngle, 270.0f, 1.0f);
                 this.transform.eulerAngles = new Vector3(0, angle, 0);
             }
-
 
             if (inputFlg == false)
             {
                 //オブジェクトを飛ばす
                 if (Input.GetKeyUp(KeyCode.F))
                 { 
-                    //単位ベクトルに向けてオブジェクトを射出する
+                    //カーソル目掛けてオブジェクトを射出する
                     rb.AddForce(cursorVec.normalized * power, ForceMode.Impulse);
                     Debug.Log("ベクトル"+cursorVec);
 
