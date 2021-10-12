@@ -28,6 +28,11 @@ public class StackRoot : MonoBehaviour
         foreach(GameObject obj in children)
         {
             top.stackList.Add(obj);
+
+            if(obj.CompareTag(top.groundTag))
+            {
+                top.hitGround = true;
+            }
         }
     }
 
@@ -63,7 +68,9 @@ public class StackRoot : MonoBehaviour
         if(top.AddConsideration(obj))
         {
             AddChild(obj);
+            obj.layer = LayerMask.NameToLayer("Stack"); // レイヤーをStackに変更
         }
+
     }
 
     //-----------------------------------------------------------------------------
@@ -77,7 +84,9 @@ public class StackRoot : MonoBehaviour
         {
             // objより下のrootをすべて解除する
             obj.GetComponent<StackRoot>().ReleaseRoot();
+            obj.layer = LayerMask.NameToLayer("Default");       //レイヤーをもとに戻す
             children.Remove(obj);       // 親子ではなくなったのでremove
+
         }
     }
 
