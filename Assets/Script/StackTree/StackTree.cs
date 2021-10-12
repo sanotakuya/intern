@@ -65,7 +65,7 @@ public class StackTree : MonoBehaviour
     {
         Debug.Log("StackNum:" + stackList.Count.ToString());
         Debug.Log("Height:" + GetHeight().ToString());
-
+        Debug.Log("SetBonus:" + CheckSetBonus("blue", "red").ToString());
     }
 
     //-----------------------------------------------------------------------------
@@ -167,5 +167,34 @@ public class StackTree : MonoBehaviour
         }
 
         return 0.0f;
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		セットボーナスが現在スタックされている中に存在するか
+    //! [arg]       セットボーナスの組み合わせとなるオブジェクトの名前
+    //-----------------------------------------------------------------------------
+    bool CheckSetBonus(params string[] objects)
+    {
+        foreach(string obj in objects)
+        {
+            bool exist = false;
+
+            //stackの中にセットの一つが存在するか確認する
+            foreach (GameObject stack in stackList)
+            {
+                if(stack.name == obj)
+                {
+                    exist = true;
+                }
+                
+            }
+
+            if(!exist)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
