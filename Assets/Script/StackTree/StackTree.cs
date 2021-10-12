@@ -150,7 +150,7 @@ public class StackTree : MonoBehaviour
         RaycastHit raycastHit;
 
         // boxCanstを飛ばして判定
-        Physics.BoxCast(
+        bool hit = Physics.BoxCast(
             startPos, 
             BoxCastSize, 
             this.transform.up * -1,
@@ -160,6 +160,12 @@ public class StackTree : MonoBehaviour
             LayerMask.GetMask("Stack")
             );
 
-        return raycastHit.point.y - pos.y + HeightBulky;
+        if(hit)
+        {
+            return raycastHit.point.y - pos.y + HeightBulky;
+
+        }
+
+        return 0.0f;
     }
 }
