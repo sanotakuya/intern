@@ -44,7 +44,7 @@ public class StackTree : MonoBehaviour
             stackList.Add(obj);
         }
 
-        Debug.Log("StackNum:" + stackList.Count.ToString());
+        //Debug.Log("StackNum:" + stackList.Count.ToString());
         stackList.Clear();
     }
 

@@ -6,18 +6,21 @@ public class MovePlayer : MonoBehaviour
 {
     public float movePower; //通常時の歩行速度
 　　public float jumpPower; //ジャンプ力
-    public Collider boxCollider;
 
     Rigidbody rb;
     private float firstMovePower; //通常時の速度を保存する
 
-    float targetAngle;
-    bool isGroundTouch;
+    float targetAngle;  //次のプレイヤーの向き
+    bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
+    bool isDepthLock;   //Z軸固定されているかのフラグ
+
     // Start is called before the first frame update
     void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
         firstMovePower = movePower;
+
+        isDepthLock = false;
     }
 
     // Update is called once per frame
@@ -41,15 +44,21 @@ public class MovePlayer : MonoBehaviour
             }
             else if (Input.GetKey(KeyCode.W))
             {
-                rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
-                targetAngle = 0.0f;
+                if (isDepthLock == false)
+                {
+                    rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
+                    targetAngle = 0.0f;
+                }
             }
             else if (Input.GetKey(KeyCode.S))
             {
-                rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
-                targetAngle = 180.0f;
+                if (isDepthLock == false)
+                {
+                    rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
+                    targetAngle = 180.0f;
+                }
             }
-
+        
             //ジャンプ
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -68,20 +77,26 @@ public class MovePlayer : MonoBehaviour
             movePower = firstMovePower;
         }
 
-        ////足が地面についているのか判定
-        //Ray ray = new Ray(transform.position , new Vector3(0.0f, -1.0f, 0.0f)); 
-        //if (Physics.Raycast(ray, out RaycastHit hit, 10.0f))
-        //{
-        //    if (hit.distance < 0.1f)    //地面についてる
-        //    {
-        //        isGroundTouch = true;
-        //    }
-        //    else　　　　                //地面から離れた
-        //    {
-        //        isGroundTouch = false;
-        //    }
-        //}
-       
+        //Z軸固定
+        if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
+        {
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                isDepthLock = true;
+                this.transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
+            }
+            else
+            {
+                isDepthLock = false;
+            }
+        }
+        else if(this.transform.position.z != 0.0f)
+        {
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
