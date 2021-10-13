@@ -12,11 +12,11 @@ public class SideViewCamera : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private Camera      mainCamera                       ; // カメラ
-    private GameObject  followUpObject                   ; // 追従するオブジェクト
-    private float       orthographicSize                 ; // カメラの表示範囲
-    private Vector3     prevCameraAngle    = Vector3.zero; // 前フレームのカメラの角度
-    private const float LIMIT_ANGLE        = 90.0f       ; // 回転角度の制限
+    private Camera      mainCamera                     ; // カメラ
+    private GameObject  followUpObject                 ; // 追従するオブジェクト
+    private float       orthographicSize               ; // カメラの表示範囲
+    private Vector3     prevCameraAngle  = Vector3.zero; // 前フレームのカメラの角度
+    private const float LIMIT_ANGLE      = 90.0f       ; // 回転角度の制限
 
     //-----------------------------------------------------------------------------
     //! public変数
@@ -39,7 +39,7 @@ public class SideViewCamera : MonoBehaviour
     //-----------------------------------------------------------------------------
     void Start()
     {
-        if (cameraTransform && followUpObject) {
+        if (cameraTransform) {
             // カメラコンポーネントを取得
             mainCamera = cameraTransform.gameObject.GetComponent<Camera>();
             if (mainCamera) {
@@ -55,14 +55,16 @@ public class SideViewCamera : MonoBehaviour
     {
         if (cameraTransform && followUpObject) {
             // カメラのプロジェクション設定
-            if (isParallel && mainCamera) {
-                mainCamera.orthographic     = true;
-                mainCamera.orthographicSize = -distance;
-            }
-            else {
-                mainCamera.orthographic     = false;
-                mainCamera.orthographicSize = orthographicSize;
+            if (mainCamera) {
+                if (isParallel) {
+                    mainCamera.orthographic = true;
+                    mainCamera.orthographicSize = -distance;
+                }
+                else {
+                    mainCamera.orthographic = false;
+                    mainCamera.orthographicSize = orthographicSize;
 
+                }
             }
         }
         else if (cameraTransform && !followUpObject) {
