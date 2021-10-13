@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//-----------------------------------------------------------------------------
+//! [制作者]		佐野拓哉
+//!	[最終更新日]	2021/10/13
+//! [内容]		プレイヤーの移動に関してのクラス
+//-----------------------------------------------------------------------------
 public class MovePlayer : MonobitEngine.MonoBehaviour
 {
     [Tooltip("通常時の歩行速度")] 　　public float movePower; //通常時の歩行速度
@@ -18,6 +23,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     float targetAngle;  //次のプレイヤーの向き
     bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
     bool isDepthLock;   //Z軸固定されているかのフラグ
+
 
     // Start is called before the first frame update
     void Start()
