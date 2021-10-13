@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovePlayer : MonoBehaviour
+public class MovePlayer : MonobitEngine.MonoBehaviour
 {
-    public float movePower; //通常時の歩行速度
-　　public float jumpPower; //ジャンプ力
+    [Tooltip("通常時の歩行速度")] 　　public float movePower; //通常時の歩行速度
+    [Tooltip("ジャンプ力")]       　　public float jumpPower; //ジャンプ力
+
+    [Header("足元チェック用オブジェクト")]     public GameObject groundCheckObj;
 
     Rigidbody rb;
+    GroundCheck groundCheck;
+    
+
     private float firstMovePower; //通常時の速度を保存する
 
     float targetAngle;  //次のプレイヤーの向き
@@ -18,14 +23,17 @@ public class MovePlayer : MonoBehaviour
     void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
+        groundCheck = groundCheckObj.GetComponent<GroundCheck>();
         firstMovePower = movePower;
-
         isDepthLock = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //他スクリプトからの参照
+        isGroundTouch = groundCheck.isHitGround;
+
         //移動と回転(shift押されているときはZ軸移動不可）
         float nowAngle = this.transform.eulerAngles.y;
         float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
@@ -97,14 +105,5 @@ public class MovePlayer : MonoBehaviour
                 this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
             }
         }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        isGroundTouch = true;
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        isGroundTouch = false;
     }
 }
