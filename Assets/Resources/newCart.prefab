@@ -56,6 +56,8 @@ GameObject:
   - component: {fileID: 4602831187195860112}
   - component: {fileID: 1730646532542619738}
   - component: {fileID: 1136570099884359896}
+  - component: {fileID: -5734314121530609523}
+  - component: {fileID: 1442275558531424823}
   m_Layer: 0
   m_Name: newCart
   m_TagString: Untagged
@@ -147,6 +149,58 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
+--- !u!114 &-5734314121530609523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217441249925874063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277584237ad31144584195f79af03cd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_viewIdField: 0
+  m_IsDontDestroyOnRoom: 0
+  m_IsInstantiated: 0
+  m_ObjectStreamCheckTime: 0
+  m_ObjectStreamSendBytes: 
+  m_IsEncrypt: 1
+  InternalObservedComponents: []
+  ObservedComponents:
+  - {fileID: 1442275558531424823}
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  ownershipTransfer: 0
+  compressedStream: 0
+--- !u!114 &1442275558531424823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217441249925874063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e43095d0b31c5c4da5d336507b33fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SyncPosition:
+    m_EnableSync: 1
+    m_EnableInterpolate: 1
+    m_LerpRate: 10
+  m_SyncRotation:
+    m_EnableSync: 1
+    m_EnableInterpolate: 0
+    m_LerpRate: 5
+  m_SyncScale:
+    m_EnableSync: 0
+    m_EnableInterpolate: 0
+    m_LerpRate: 1
+  m_SnapEnabled: 1
+  m_SnapThreshold: 3
 --- !u!1 &1136570098197828309
 GameObject:
   m_ObjectHideFlags: 0
