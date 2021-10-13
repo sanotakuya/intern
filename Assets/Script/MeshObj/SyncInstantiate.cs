@@ -5,7 +5,7 @@ using MonobitEngine;
 
 //-----------------------------------------------------------------------------
 //! [制作者]     長沼豪琉
-//! [最終更新日] 2021/10/12
+//! [最終更新日] 2021/10/13
 //! [内容]       オブジェクトの同期生成
 //-----------------------------------------------------------------------------
 public class SyncInstantiate : MonobitEngine.MonoBehaviour
@@ -17,20 +17,23 @@ public class SyncInstantiate : MonobitEngine.MonoBehaviour
     {
         // ルームに入室しているか確認
         if (MonobitNetwork.inRoom) {
-            // インスタンス生成
-            if (prefab) {
-                var obj = MonobitNetwork.Instantiate(prefab.name, this.transform.position, this.transform.rotation, 0);
-                // 生成できたか確認
-                if (obj) {
-                    // 自身のスケールを生成したオブジェクトに適用
-                    obj.transform.localScale = this.transform.localScale;
+            // 自身がルームのホストの場合はインスタンス化
+            if (MonobitNetwork.isHost) {
+                // インスタンス生成
+                if (prefab) {
+                    var obj = MonobitNetwork.Instantiate(prefab.name, this.transform.position, this.transform.rotation, 0);
+                    // 生成できたか確認
+                    if (obj) {
+                        // 自身のスケールを生成したオブジェクトに適用
+                        obj.transform.localScale = this.transform.localScale;
+                    }
+                    else {
+                        Debug.LogWarning(this.name + "はオブジェクトの生成に失敗しました。");
+                    }
                 }
                 else {
-                    Debug.LogWarning(this.name + "はオブジェクトの生成に失敗しました。");
+                    Debug.LogWarning(this.name + "はプレハブが設定されていません。");
                 }
-            }
-            else {
-                Debug.LogWarning(this.name + "はプレハブが設定されていません。");
             }
             // 自身を削除
             Destroy(this.gameObject);
