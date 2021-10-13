@@ -66,10 +66,17 @@ public class SideViewCamera : MonoBehaviour
             }
         }
         else if (cameraTransform && !followUpObject) {
-            // 指定されているのゲームオブジェクトを検索
-            followUpObject = GameObject.Find(followUpPrefab.name + "(Clone)");
-            // カメラの位置を設定
-            cameraTransform.position = followUpObject.transform.position + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
+            if (followUpPrefab) {
+                // 指定されているのゲームオブジェクトを検索
+                followUpObject = GameObject.Find(followUpPrefab.name + "(Clone)");
+                if (followUpObject) {
+                    // カメラの位置を設定
+                    cameraTransform.position = followUpObject.transform.position + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
+                }
+            }
+            else {
+                Debug.Log(this.name + "追従するオブジェクトのプレハブが設定されていません");
+            }
         }
     }
 
