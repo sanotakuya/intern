@@ -1231,14 +1231,24 @@ MonoBehaviour:
     list:
     - key: "\u30AB\u30EC\u30FC"
       value:
-      - 1000
-      - "\u4EBA\u53C2"
-      - "\u7389\u8471"
-      - "\u3058\u3083\u304C\u3044\u3082"
-    - key: 
-      value: []
-    - key: 
-      value: []
+        score: 1000
+        nameList:
+        - "\u4EBA\u53C2"
+        - "\u7389\u8471"
+        - "\u3058\u3083\u304C\u3044\u3082"
+    - key: "\u30C6\u30B9\u30C8"
+      value:
+        score: 1000
+        nameList:
+        - Hotdog
+  heightBonusList:
+    list:
+    - key: 2
+      value: 1.2
+    - key: 3.5
+      value: 1.5
+    - key: 5
+      value: 2
 --- !u!4 &881337153
 Transform:
   m_ObjectHideFlags: 0
