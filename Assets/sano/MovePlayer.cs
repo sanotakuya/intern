@@ -20,7 +20,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
 
     private float firstMovePower; //通常時の速度を保存する
 
-    float targetAngle;  //次のプレイヤーの向き
+    static float targetAngle;  //次のプレイヤーの向き
     bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
     bool isDepthLock;   //Z軸固定されているかのフラグ
 
@@ -44,6 +44,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         float nowAngle = this.transform.eulerAngles.y;
         float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
         this.transform.eulerAngles = new Vector3(0, angle, 0);
+
         if (isGroundTouch == true)
         {
             if (Input.GetKey(KeyCode.A))
@@ -112,4 +113,13 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             }
         }
     }
+
+    //外部参照用関数
+    //-----------------------------------------------------------------------------
+    //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
+    //-----------------------------------------------------------------------------
+    public static void SetTargetAngle(float target)
+    {
+        targetAngle = target;
+    } 
 }

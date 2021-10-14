@@ -39,6 +39,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     //向き
     Plane plane = new Plane(); //　Rayを受け止めるためのオブジェクト
     float distance = 0;        //　交点の距離
+    float mouseVec = 0;        //　プレイヤーから見たマウス座標へのベクトル
     //角度
     [Header("飛ばす角度を保留するオブジェクト(仮)")] public GameObject meter;   
     bool isChangeRot;           //飛ばす角度を正の方向と負の方向に切り替える
@@ -46,7 +47,9 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     //力
     public float throwPower;   //  オブジェクトを投げる力
     Vector3 forceDirection;    //　力を与える向き
-
+    //入力
+    private bool isPressed;    //　ボタンが押されている間を管理する
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -74,16 +77,18 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 // 最短距離を計算
                 for (int i = 0; i < objectRadar.throwObjects.Count; i++)
                 {
-                    //プレイヤーの距離とオブジェクトの中心距離を計測する
+                    // プレイヤーの距離とオブジェクトの中心距離を計測する
                     float distance = Vector3.Distance(transform.position, objectRadar.throwObjects[i].transform.position);
                    
-                    //現在の最短距離よりも近くにあれば
+                    // 現在の最短距離よりも近くにあれば
                     if (distance <= minDistance)
                     {
-                        minDistance = distance;                     //最短距離更新
-                        holdObject = objectRadar.throwObjects[i];   //掴む用の変数に格納する
+                        minDistance = distance;                     // 最短距離更新
+                        holdObject = objectRadar.throwObjects[i];   // 掴む用の変数に格納する
                     }
                 }
+                // 頭上にオブジェクトを掴めるスペースがあるか確認する
+
 
                 // オブジェクトをつかむ
                 if (Input.GetKeyDown(KeyCode.F) && isInput == false)
@@ -93,10 +98,10 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                         // 最短距離のオブジェクトを掴む
                         holdObject.transform.position = new Vector3(playerPos.x, playerPos.y + 1.5f, playerPos.z);
 
-                        //オブジェクトの回転初期化
+                        // オブジェクトの回転初期化
                         holdAngle = 0.0f;
 
-                        //プレイヤーの子オブジェクトにする
+                        // プレイヤーの子オブジェクトにする
                         holdObject.transform.parent = this.transform;
 
                         isHold = true;
@@ -110,43 +115,45 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             // ブロックをもち上げる
             holdObject.transform.position = new Vector3(playerPos.x, playerPos.y + 1.5f, playerPos.z);
             
-            //オブジェクトの加速度初期化
+            // オブジェクトの加速度初期化
             rbHoldObj = holdObject.GetComponent<Rigidbody>();
             rbHoldObj.velocity = Vector3.zero;
 
-            //掴んでいるオブジェクトの回転
+            // 掴んでいるオブジェクトの回転
             Debug.Log(holdAngle);
             rbHoldObj.transform.rotation = Quaternion.AngleAxis(holdAngle, new Vector3(0, 0, 1));
 
-            //マウスカーソルの位置にプレイヤーを向ける
+            // マウスカーソルの位置にプレイヤーを向ける
             ChangePlayerDirection();
 
-            //オブジェクトの回転（右回転）
+            // オブジェクトの回転（右回転）
             if (Input.GetKeyDown(KeyCode.Q) && isInput == false)
             {
                 holdAngle += 90.0f;
             }
-            //オブジェクトの回転（左回転）
+            // オブジェクトの回転（左回転）
             if (Input.GetKeyDown(KeyCode.E) && isInput == false)
             {
                 holdAngle -= 90.0f;
             }
 
             // オブジェクトを投げる
-
-            //投げる角度更新
-            ChangeMaterAngle();
-
-            //指定の角度にオブジェクトを飛ばす
-            if (Input.GetKeyDown(KeyCode.F) && isInput == false)
+            
+            // キーの入力があれば角度更新
+            if (Input.GetKey(KeyCode.F) && isInput == false)
             {
-                //親から離脱する
+                // 投げる角度更新
+                ChangeMaterAngle();
+            }
+          
+            // 指定の角度にオブジェクトを飛ばす
+            if (Input.GetKeyUp(KeyCode.F) && isInput == false)
+            {
+                // 親から離脱する
                 holdObject.transform.parent = null;
-
-               
-
-                rbHoldObj.AddForce(transform.forward * throwPower, ForceMode.Impulse);
-
+                // オブジェクトを飛ばす
+                CalcForceDirection();
+                ObjectThrow();
                 holdObject = null;
                 isHold = false;
                 isInput = true;
@@ -169,6 +176,17 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     }
 
     //-----------------------------------------------------------------------------
+    //! [内容]		 頭上にオブジェクトを掴めるスペースがあるか確認する
+    //-----------------------------------------------------------------------------
+    void HoldCollisionCheck()
+    {
+        if (holdObject != null)
+        {
+           //holdObject
+        }
+    }
+
+    //-----------------------------------------------------------------------------
     //! [内容]		マウスカーソルの位置にプレイヤーを向ける関数
     //-----------------------------------------------------------------------------
     void ChangePlayerDirection()
@@ -185,32 +203,28 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             Vector3 hitPoint = ray.GetPoint(distance);
 
             // 座標を元にベクトルを算出して、交点の方を向く
-            float vec = transform.position.x - hitPoint.x;
-            Debug.Log("交点" + vec);
+            mouseVec = transform.position.x - hitPoint.x;
+            //Debug.Log("交点" + vec);
 
             //マウスカーソルのある場所を向く
-            if (vec >= 0)       //プレイヤーの右側にカーソルがあるとき
+            if (mouseVec >= 0)       //プレイヤーの右側にカーソルがあるとき
             {
-                float nowAngle = this.transform.eulerAngles.y;
-                float angle = Mathf.LerpAngle(0.0f, 270.0f, nowAngle);
-                this.transform.eulerAngles = new Vector3(0, angle, 0);
+                MovePlayer.SetTargetAngle(-90.0f);
             }
-            else if (vec < 0)    //プレイヤーの左側にカーソルがあるとき
+            else if (mouseVec < 0)    //プレイヤーの左側にカーソルがあるとき
             {
-                float nowAngle = this.transform.eulerAngles.y;
-                float angle = Mathf.LerpAngle(nowAngle, 90.0f, 1.0f);
-                this.transform.eulerAngles = new Vector3(0, angle, 0);
+                MovePlayer.SetTargetAngle(90.0f);
             }
         }
     }
 
     //-----------------------------------------------------------------------------
-    //! [内容]		投げる角度を計算する関数
+    //! [内容]		投げる角度を変更する関数
     //-----------------------------------------------------------------------------
     void ChangeMaterAngle()
     {
         //角度が0.1度以下になるとtureになる。0度は360度
-        if (0.1f >= meter.transform.eulerAngles.z)
+        if (0.5f >= meter.transform.eulerAngles.z)
         {
             isChangeRot = true;
         }
@@ -233,17 +247,37 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         meter.transform.Rotate(0, 0, nowRot);
     }
 
+    //-----------------------------------------------------------------------------
+    //! [内容]		投げる角度を計算する関数
+    //-----------------------------------------------------------------------------
     void CalcForceDirection()
     {
         // 入力された角度をラジアンに変換
         float rad = meter.transform.eulerAngles.z * Mathf.Deg2Rad;
-
         // それぞれの軸の成分を計算
         float x = Mathf.Cos(rad);
         float y = Mathf.Sin(rad);
         float z = 0f;
-
         // Vector3型に格納
         forceDirection = new Vector3(x, y, z);
     }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		オブジェクトを飛ばす関数
+    //-----------------------------------------------------------------------------
+    void ObjectThrow()
+    {
+        // 左向きならX軸を反転させる
+        if (mouseVec > 0)
+        {
+            forceDirection = new Vector3(-forceDirection.x, forceDirection.y, forceDirection.z);
+        }
+
+        // 向きと力の計算
+        Vector3 force = throwPower * forceDirection.normalized;
+
+        Debug.Log("飛ばす向き" + force);
+        rbHoldObj.AddForce(force, ForceMode.Impulse);
+    }
+
 }
