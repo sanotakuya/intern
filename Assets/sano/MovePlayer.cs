@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MonobitEngine;
 
 //-----------------------------------------------------------------------------
 //! [制作者]		佐野拓哉
@@ -16,13 +17,16 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
 
     Rigidbody rb;
     GroundCheck groundCheck;
-    
+    HoldThrow holdThrow;
+
+    MonobitView monobitView;
 
     private float firstMovePower; //通常時の速度を保存する
 
     static float targetAngle;  //次のプレイヤーの向き
     bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
     bool isDepthLock;   //Z軸固定されているかのフラグ
+    bool isHold;        //オブジェクトが掴まれているかのフラグ
 
 
     // Start is called before the first frame update
@@ -30,6 +34,9 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
         groundCheck = groundCheckObj.GetComponent<GroundCheck>();
+        holdThrow = this.gameObject.GetComponent<HoldThrow>();
+        monobitView = GetComponent<MonobitView>();
+
         firstMovePower = movePower;
         isDepthLock = false;
     }
@@ -37,8 +44,14 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if (!monobitView.isMine)
+        //{
+        //    return;
+        //}
+
         //他スクリプトからの参照
         isGroundTouch = groundCheck.isHitGround;
+        isHold = holdThrow.isHold;
 
         //移動と回転(shift押されているときはZ軸移動不可）
         float nowAngle = this.transform.eulerAngles.y;
@@ -49,11 +62,13 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         {
             if (Input.GetKey(KeyCode.A))
             {
-                rb.AddForce(new Vector3(-movePower, 0.0f, 0.0f), ForceMode.Force);
+                //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
+                rb.AddForce(new Vector3(-movePower,0.0f, 0.0f), ForceMode.Force);
                 targetAngle = -90.0f;
             }
             else if (Input.GetKey(KeyCode.D))
             {
+                //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
                 rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
                 targetAngle = 90.0f;
             }
@@ -61,6 +76,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             {
                 if (isDepthLock == false)
                 {
+                    //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
+
                     rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
                     targetAngle = 0.0f;
                 }
@@ -69,6 +86,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             {
                 if (isDepthLock == false)
                 {
+                    //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
                     rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
                     targetAngle = 180.0f;
                 }
