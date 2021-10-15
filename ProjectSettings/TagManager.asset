@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ThrowObject
   - Ground
+  - TemporaryObject
   layers:
   - Default
   - TransparentFX
