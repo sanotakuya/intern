@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MonobitEngine;
-
-public class ObjectRadar : MonobitEngine.MonoBehaviour
+public class OverHitCheck : MonobitEngine.MonoBehaviour
 {
-    public List<GameObject> throwObjects;
+    public bool isHitOver;   //頭上との当たり判定
+
     static MonobitView m_MonobitView = null;
+
     private void Start()
     {
-        throwObjects = new List<GameObject>();
         m_MonobitView = GetComponent<MonobitView>();
     }
-
     private void Update()
     {
         if (!m_MonobitView.isMine)
@@ -22,16 +21,10 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        if (other.transform.gameObject.tag == "ThrowObject")
-        {
-            throwObjects.Add(other.gameObject);
-        }
+        isHitOver = true;
     }
     void OnTriggerExit(Collider other)
     {
-        if (throwObjects != null)
-        {
-            throwObjects.Clear();
-        }
+        isHitOver = false;
     }
 }

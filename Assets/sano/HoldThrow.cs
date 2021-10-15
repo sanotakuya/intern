@@ -19,8 +19,13 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
     static MonobitView m_MonobitView = null;
 
+    [Header("プレイヤーの頭上にスペースがあるのか確認する")] public GameObject overHeadCheck;
+    OverHitCheck overHitCheck;
+
     // プレイヤーステータス
-    public bool isHold;    // オブジェクトを掴んでいるかどうか
+    public bool isOverHit;  //　頭上にスペースがあるか確認する
+    public bool isHold;     //  オブジェクトを掴んでいるかどうか
+    bool isDepthLock;       //　Z軸0に到着しているかどうか
     Vector3 playerPos;      // プレイヤーの現在位置
 
     // 入力
@@ -52,7 +57,6 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     float throwPower;          //  オブジェクトを投げる力
     Vector3 forceDirection;    //　力を与える向き
 
-
     //ガイドの処理
     ThrowGuide guide;
     // Start is called before the first frame update
@@ -61,6 +65,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         objectRadar = objectRadarObj.GetComponent<ObjectRadar>();
         isHold = false;
 
+        overHitCheck = overHeadCheck.GetComponent<OverHitCheck>();
 
         m_MonobitView = GetComponent<MonobitView>();
 
@@ -70,12 +75,14 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (!m_MonobitView.isMine)
-        //{
-        //    return;
-        //}
+        if (!m_MonobitView.isMine)
+        {
+            return;
+        }
 
         playerPos = transform.position; //プレイヤー位置更新
+
+        isOverHit = overHitCheck.isHitOver; //頭上の当たり判定更新
 
         if (objectRadar.throwObjects != null)
         {
@@ -90,10 +97,13 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                     // 現在の最短距離よりも近くにあれば
                     if (distance <= minDistance)
                     {
-                        minDistance = distance;                     // 最短距離更新
-                        holdObject = objectRadar.throwObjects[i];   // 掴む用の変数に格納する
-                                                                    //掴んだオブジェクトの所有権をもらう
-                        holdObject.GetComponent<ObjectIsMine>().SetOwnership();
+                        if (isOverHit == false)
+                        {
+                            minDistance = distance;                     // 最短距離更新
+                            holdObject = objectRadar.throwObjects[i];   // 掴む用の変数に格納する
+                                                                        //掴んだオブジェクトの所有権をもらう
+                            holdObject.GetComponent<ObjectIsMine>().SetOwnership();
+                        }
                     }
                 }
                 // 頭上にオブジェクトを掴めるスペースがあるか確認する
@@ -159,6 +169,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 ChangeMaterAngle();
             }
 
+            //プレイヤーをZ軸０へ誘導
             PlayerDepthMove();
 
             //投擲位置の変更とガイド表示
@@ -167,15 +178,19 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             // 指定の角度にオブジェクトを飛ばす
             if (Input.GetKeyUp(KeyCode.F) && isInput == false)
             {
-                // 親から離脱する
-                holdObject.transform.parent = null;
-                // オブジェクトを飛ばす
-                ObjectThrow();
-                guide.SetGuidesState(false);
-                holdObject = null;
-                isHold = false;
-                isInput = true;
-                minDistance = RESETDISTANCE;
+                if (isDepthLock == true)
+                {
+                    // 親から離脱する
+                    holdObject.transform.parent = null;
+                    // オブジェクトを飛ばす
+                    ObjectThrow();
+                    guide.SetGuidesState(false);
+                    holdObject = null;
+                    isHold = false;
+                    isInput = true;
+                    minDistance = RESETDISTANCE;
+                }
+               
             }
         }
     }
@@ -244,10 +259,12 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
         {
             this.transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
+            isDepthLock = true;
         }
         else if (this.transform.position.z != 0.0f)
         {
             this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
+            isDepthLock = false;
         }
     }
 

@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using MonobitEngine;
 public class ThrowGuide : MonobitEngine.MonoBehaviour
 {
+    static MonobitView m_MonobitView = null;
+
     //　ガイド開始
     public bool isGuideStart;
 
@@ -24,18 +26,21 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
     // インスタンス化されたGuideオブジェクトのリスト
     List<GameObject> guideList;
 
-
+    
     //投げるオブジェクトの重さ
     static float holdMass;
 
     // 画面にプロットするガイドの数を定義
-    int prots = 8;
+    public int protSize;
+    int prots = 25;
 
     void Start()
     {
         holdThrow = this.GetComponent<HoldThrow>();
         sphereRb = this.GetComponent<Rigidbody>();
         guideList = new List<GameObject>();
+
+        m_MonobitView = GetComponent<MonobitView>();
 
         // Prefabをインスタンス化するメソッドを呼ぶ
         InstantiateGuidePrefabs();
@@ -56,9 +61,6 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
 
     void InstantiateGuidePrefabs()
     {
-        // 『GuideParent』の位置を『Sphere』オブジェクトの位置へ移動
-        //guidePrent.transform.position = new Vector3(transform.position.x + 1.0f, transform.position.y, transform.position.z);
-
         // 『GuideParent』の位置をguidePosにセット
         Vector3 guidePos = guidePrent.transform.position;
 
@@ -80,9 +82,6 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
 
     void SetGuidePositions()
     {
-        // 『GuideParent』の位置を『Sphere』オブジェクトの位置へ移動
-        //guidePrent.transform.position = this.transform.position;
-
         // 『GuideParent』の位置を開始位置に設定
         Vector3 startPos = guidePrent.transform.position;
 

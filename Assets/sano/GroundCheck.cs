@@ -7,18 +7,18 @@ public class GroundCheck : MonobitEngine.MonoBehaviour
 {
     public bool isHitGround;   //地面との当たり判定
 
-    //static MonobitView m_MonobitView = null;
+    static MonobitView m_MonobitView = null;
 
     private void Start()
     {
-        //m_MonobitView = GetComponent<MonobitView>();
+        m_MonobitView = GetComponent<MonobitView>();
     }
     private void Update()
     {
-        //if (!m_MonobitView.isMine)
-        //{
-        //    return;
-        //}
+        if (!m_MonobitView.isMine)
+        {
+            return;
+        }
     }
     void OnTriggerStay(Collider other)
     {

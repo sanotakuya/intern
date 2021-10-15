@@ -12,6 +12,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
 {
     [Tooltip("通常時の歩行速度")] 　　public float movePower; //通常時の歩行速度
     [Tooltip("ジャンプ力")]       　　public float jumpPower; //ジャンプ力
+    [Tooltip("法定速度")]       　　  public float maxSpeed;  //最大速度
 
     [Header("足元チェック用オブジェクト")]     public GameObject groundCheckObj;
 
@@ -19,11 +20,14 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     GroundCheck groundCheck;
     HoldThrow holdThrow;
 
-    MonobitView monobitView;
+    static MonobitView m_MonobitView = null;
 
-    private float firstMovePower; //通常時の速度を保存する
+    private float firstMovePower;   //通常時の速度を保存する
+    private float firstSpeed;       //通常時の最高速度を保存する
+
 
     static float targetAngle;  //次のプレイヤーの向き
+
     bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
     bool isDepthLock;   //Z軸固定されているかのフラグ
     bool isHold;        //オブジェクトが掴まれているかのフラグ
@@ -35,19 +39,20 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         rb = this.gameObject.GetComponent<Rigidbody>();
         groundCheck = groundCheckObj.GetComponent<GroundCheck>();
         holdThrow = this.gameObject.GetComponent<HoldThrow>();
-        monobitView = GetComponent<MonobitView>();
+        m_MonobitView = GetComponent<MonobitView>();
 
         firstMovePower = movePower;
+        firstSpeed = maxSpeed;
         isDepthLock = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (!monobitView.isMine)
-        //{
-        //    return;
-        //}
+        if (!m_MonobitView.isMine)
+        {
+            return;
+        }
 
         //他スクリプトからの参照
         isGroundTouch = groundCheck.isHitGround;
@@ -63,13 +68,21 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             if (Input.GetKey(KeyCode.A))
             {
                 //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
-                rb.AddForce(new Vector3(-movePower,0.0f, 0.0f), ForceMode.Force);
+                //速度上限
+                if (rb.velocity.magnitude <= maxSpeed)
+                {
+                    rb.AddForce(new Vector3(-movePower, 0.0f, 0.0f), ForceMode.Force);
+                }
                 targetAngle = -90.0f;
             }
             else if (Input.GetKey(KeyCode.D))
             {
                 //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
-                rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
+                //速度上限
+                if (rb.velocity.magnitude <= maxSpeed)
+                {
+                    rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
+                }
                 targetAngle = 90.0f;
             }
             else if (Input.GetKey(KeyCode.W))
@@ -77,8 +90,12 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 if (isDepthLock == false)
                 {
                     //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
-
-                    rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
+                    //速度上限
+                    if (rb.velocity.magnitude <= maxSpeed)
+                    {
+                        rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
+                    }
+                    
                     targetAngle = 0.0f;
                 }
             }
@@ -87,7 +104,12 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 if (isDepthLock == false)
                 {
                     //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
-                    rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
+                    //速度上限
+                    if (rb.velocity.magnitude <= maxSpeed)
+                    {
+                        rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
+                    }
+                    
                     targetAngle = 180.0f;
                 }
             }
@@ -98,16 +120,20 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 //上に飛ばすだけ 
                 rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
             }
+
+           
         }
 
         //走る
         if (Input.GetKey(KeyCode.LeftShift))
         {
             movePower = firstMovePower * 1.5f;
+            maxSpeed = firstSpeed * 2.0f;
         }
         else
         {
             movePower = firstMovePower;
+            maxSpeed = firstSpeed;
         }
 
         //Z軸固定
