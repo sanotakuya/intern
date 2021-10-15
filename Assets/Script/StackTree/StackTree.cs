@@ -140,7 +140,7 @@ public class StackTree : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		StackTreeの高さを取得(実行順がこのスクリプトより遅いコンポーネントで利用可)
     //-----------------------------------------------------------------------------
-    float GetHeight()
+    public float GetHeight()
     {
         Vector3 pos = this.transform.position;
 
@@ -173,7 +173,7 @@ public class StackTree : MonoBehaviour
     //! [内容]		セットボーナスが現在スタックされている中に存在するか
     //! [arg]       セットボーナスの組み合わせとなるオブジェクトの名前
     //-----------------------------------------------------------------------------
-    bool CheckSetBonus(params string[] objects)
+    public bool CheckSetBonus(params string[] objects)
     {
         foreach(string obj in objects)
         {
