@@ -5,14 +5,20 @@ using MonobitEngine;
 
 //-----------------------------------------------------------------------------
 //! [制作者]     長沼豪琉
-//! [最終更新日] 2021/10/13
+//! [最終更新日] 2021/10/15
 //! [内容]       オブジェクトの同期生成
 //-----------------------------------------------------------------------------
 public class SyncInstantiate : MonobitEngine.MonoBehaviour
 {
-    [Header("同期生成するプレハブ")] public GameObject prefab; // 生成するプレハブ
+    //-----------------------------------------------------------------------------
+    //! public変数
+    //-----------------------------------------------------------------------------
+    [Header("プレハブが存在するパス")] public string     path  ; // プレハブのパス
+    [Header("同期生成するプレハブ")]   public GameObject prefab; // 生成するプレハブ
 
-    // Update is called once per frame
+    //-----------------------------------------------------------------------------
+    //! [内容]    更新処理
+    //-----------------------------------------------------------------------------
     void Update()
     {
         // ルームに入室しているか確認
@@ -21,7 +27,7 @@ public class SyncInstantiate : MonobitEngine.MonoBehaviour
             if (MonobitNetwork.isHost) {
                 // インスタンス生成
                 if (prefab) {
-                    var obj = MonobitNetwork.Instantiate(prefab.name, this.transform.position, this.transform.rotation, 0);
+                    var obj = MonobitNetwork.Instantiate(path + prefab.name, this.transform.position, this.transform.rotation, 0);
                     // 生成できたか確認
                     if (obj) {
                         // 自身のスケールを生成したオブジェクトに適用
