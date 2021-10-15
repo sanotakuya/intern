@@ -34,6 +34,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             // プレイヤーキャラクタが未登場の場合に登場させる
             if (playerObj == null)
             {
+                Object instant = Resources.Load("SD_unitychan_humanoid");
                 playerObj = MonobitNetwork.Instantiate(
                                 "unitychan_dynamic_locomotion",
                                 Vector3.zero,

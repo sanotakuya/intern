@@ -4,7 +4,7 @@ using UnityEngine;
 using MonobitEngine;
 public class ObjectIsMine : MonobitEngine.MonoBehaviour
 {
-    static MonobitView m_MonobitView = null;
+    public MonobitView m_MonobitView = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,10 +17,7 @@ public class ObjectIsMine : MonobitEngine.MonoBehaviour
      
     }
    
-    public void SetOwnership()
-    {
-        m_MonobitView.RequestOwnership();
-    }
+  
 
 
 }

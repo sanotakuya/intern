@@ -102,7 +102,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                             minDistance = distance;                     // 最短距離更新
                             holdObject = objectRadar.throwObjects[i];   // 掴む用の変数に格納する
                                                                         //掴んだオブジェクトの所有権をもらう
-                            holdObject.GetComponent<ObjectIsMine>().SetOwnership();
+                            holdObject.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.player.ID);
                         }
                     }
                 }
