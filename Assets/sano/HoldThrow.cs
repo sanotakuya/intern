@@ -48,7 +48,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     bool isChangeRot;           //飛ばす角度を正の方向と負の方向に切り替える
     float nowRot;               //現在の角度
     //力
-    public float throwPower;   //  オブジェクトを投げる力
+    [Tooltip("重さに対してどのくらいの力で投げるか")] public float strength;
+    float throwPower;          //  オブジェクトを投げる力
     Vector3 forceDirection;    //　力を与える向き
 
 
@@ -159,9 +160,9 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             }
 
             PlayerDepthMove();
-            
+
             //投擲位置の変更とガイド表示
-            guide.isDrawGuide = true;
+            guide.SetGuidesState(true);
             CalcForceDirection();
             // 指定の角度にオブジェクトを飛ばす
             if (Input.GetKeyUp(KeyCode.F) && isInput == false)
@@ -170,7 +171,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 holdObject.transform.parent = null;
                 // オブジェクトを飛ばす
                 ObjectThrow();
-                guide.isDrawGuide = false;
+                guide.SetGuidesState(false);
                 holdObject = null;
                 isHold = false;
                 isInput = true;
@@ -305,6 +306,9 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             forceDirection = new Vector3(-forceDirection.x, forceDirection.y, forceDirection.z);
         }
 
+        //力の計算
+        throwPower = rbHoldObj.mass * strength;
+
         // 向きと力の計算
         throwForce = throwPower * forceDirection.normalized;
 
@@ -322,6 +326,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         {
             forceDirection = new Vector3(-forceDirection.x, forceDirection.y, forceDirection.z);
         }
+        //力の計算
+        throwPower = rbHoldObj.mass * strength;
 
         // 向きと力の計算
         throwForce = throwPower * forceDirection.normalized;

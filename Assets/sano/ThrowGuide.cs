@@ -2,82 +2,157 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThrowGuide : MonoBehaviour
+public class ThrowGuide : MonobitEngine.MonoBehaviour
 {
-    /// ガイドの開始
-    public bool isDrawGuide = false;
-    public bool isNowGuide = false;
+    //　ガイド開始
+    public bool isGuideStart;
 
-    [SerializeField, Header("ガイドの起点となるオブジェクト")]
-    private GameObject guideRoot;
+    // 『Sphere』オブジェクトへの参照
+    [SerializeField]
+    GameObject guidePrent;
 
-    /// 放物線のMaterial
-    [SerializeField, Header("ガイド用投擲オブジェクト")]
-    private GameObject guidePrefab;
-    private GameObject guideInstance;
-    private Rigidbody guideRb; 　//ガイドオブジェクトのリジッドボディ
+    // ガイド表示用オブジェクト
+    [SerializeField]
+    GameObject guidePrefab;
 
-    private float guideCnt;
-
-    // オブジェクと投げる用のスクリプト参照
+    // SphereBoosterへの参照をキャッシュ
     HoldThrow holdThrow;
 
-    // 現在計算されてるオブジェクトを飛ばす方向
-    Vector3 foeceDirection;　
+    // 『Sphere』オブジェクトのRigidbodyへの参照をキャッシュ
+    Rigidbody sphereRb;
+
+    // インスタンス化されたGuideオブジェクトのリスト
+    List<GameObject> guideList;
+
+
+    //投げるオブジェクトの重さ
     static float holdMass;
 
-    /// 着弾マーカーオブジェクトのPrefab
-    [SerializeField, Tooltip("着弾地点に表示するマーカー（もしつけるなら）")]
-    private GameObject pointerPrefab;
-
-    /// 着弾点のマーカーのオブジェクト
-    private GameObject pointerObject;
-
+    // 画面にプロットするガイドの数を定義
+    int prots = 8;
 
     void Start()
     {
-        //// 放物線のLineRendererオブジェクトを用意
-        //CreateLineRendererObjects();
+        holdThrow = this.GetComponent<HoldThrow>();
+        sphereRb = this.GetComponent<Rigidbody>();
+        guideList = new List<GameObject>();
 
-        // マーカーのオブジェクトを用意
-        pointerObject = Instantiate(pointerPrefab, Vector3.zero, Quaternion.identity);
-        pointerObject.SetActive(false);
-
-        // 弾の初速度や生成座標を持つコンポーネント
-        holdThrow = gameObject.GetComponent<HoldThrow>();
+        // Prefabをインスタンス化するメソッドを呼ぶ
+        InstantiateGuidePrefabs();
     }
 
     void Update()
     {
-        // 初速度と放物線の開始座標を更新
-        foeceDirection = holdThrow.GetThrowForce();
-
-        if (isDrawGuide == true && isNowGuide == false)
+        if (isGuideStart == true)
         {
-            Debug.Log("ガイド表示");
-            guideInstance = Instantiate(guidePrefab, guideRoot.transform.position, Quaternion.identity);
-
-            guideRb = guideInstance.GetComponent<Rigidbody>();
-
-            guideRb.mass = holdMass;
-
-            guideRb.AddForce(foeceDirection, ForceMode.Impulse);
-            isNowGuide = true;
+            SetGuidePositions();
         }
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        if (isNowGuide == true)
+
+    }
+
+    void InstantiateGuidePrefabs()
+    {
+        // 『GuideParent』の位置を『Sphere』オブジェクトの位置へ移動
+        //guidePrent.transform.position = new Vector3(transform.position.x + 1.0f, transform.position.y, transform.position.z);
+
+        // 『GuideParent』の位置をguidePosにセット
+        Vector3 guidePos = guidePrent.transform.position;
+
+        for (int i = 0; i < prots; i++)
         {
-            guideCnt += 1;
-            if (guideCnt >= 5)
-            {
-                guideCnt = 0;
-                isNowGuide = false;
-            }
+            // Prefabをインスタンス化
+            GameObject guideObject = (GameObject)Instantiate(guidePrefab, guidePos, Quaternion.identity);
+
+            // インスタンス化したオブジェクトをGuideParentの子オブジェクトにする
+            guideObject.transform.SetParent(gameObject.transform);
+
+            // オブジェクト名を設定する
+            guideObject.name = "Guide_" + i.ToString();
+
+            // リストへ追加
+            guideList.Add(guideObject);
         }
     }
+
+    void SetGuidePositions()
+    {
+        // 『GuideParent』の位置を『Sphere』オブジェクトの位置へ移動
+        //guidePrent.transform.position = this.transform.position;
+
+        // 『GuideParent』の位置を開始位置に設定
+        Vector3 startPos = guidePrent.transform.position;
+
+        // リストの検証
+        if (guideList == null || guideList.Count == 0)
+        {
+            return;
+        }
+
+        // 物理学的なパラメータを取得
+        // 『Sphere』オブジェクトに加わる力
+        Vector3 force = holdThrow.GetThrowForce();
+    
+        // Unityの世界に働く重力
+        Vector3 gravity = Physics.gravity;
+
+        // 『Sphere』オブジェクトが斜方投射される時の初速度
+        Vector3 speed = force / holdMass;
+
+        // プロット数に応じて、各プロットの時刻をリストに格納
+        List<float> timeProtsList = GetTimeProtsList(speed, gravity, prots);
+
+        // リストの検証
+        if (timeProtsList == null || timeProtsList.Count == 0)
+        {
+            return;
+        }
+
+        // 時刻リストを元に、プロットするガイドの位置を設定
+        for (int i = 0; i < prots; i++)
+        {
+            // リストから時刻の値を取り出す
+            float time = timeProtsList[i];
+
+            // リストで対応するインデックスのガイドオブジェクトについて位置を設定
+            guideList[i].transform.position = GetExpectedPosition(startPos, speed, gravity, time);
+        }
+    }
+
+    List<float> GetTimeProtsList(Vector3 speed, Vector3 gravity, int prots)
+    {
+        // 斜方投射後、地面に到達する時刻を計算
+        float landingTime = -2.0f * speed.y / gravity.y;
+
+        // 時刻格納用のリストを作成
+        List<float> timeProtsList = new List<float>();
+
+        // ガイドのプロット数が0なら作成直後の長さ0のリストを返す
+        if (prots <= 0)
+        {
+            return timeProtsList;
+        }
+
+        // プロット数に応じて、ガイドを表示する位置を計算するための時刻をリストに追加
+        for (int i = 1; i <= prots; i++)
+        {
+            float timeProt = i * landingTime / prots;
+            timeProtsList.Add(timeProt);
+        }
+        return timeProtsList;
+    }
+
+    Vector3 GetExpectedPosition(Vector3 startPos, Vector3 speed, Vector3 gravity, float time)
+    {
+        // 時刻を元に、ガイドの位置を計算する
+        Vector3 position = (speed * time) + (gravity * 0.5f * Mathf.Pow(time, 2));
+        Vector3 guidePos = startPos + position;
+        return guidePos;
+    }
+
     //-----------------------------------------------------------------------------
     //! [内容]		 外部参照　掴んでるオブジェクトの重さを取得する
     //-----------------------------------------------------------------------------
@@ -86,14 +161,8 @@ public class ThrowGuide : MonoBehaviour
         holdMass = num;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void SetGuidesState(bool isStart)
     {
-        if (other.transform.gameObject != holdThrow.holdObject)
-        {
-            pointerObject.transform.position = other.transform.position;
-            pointerObject.SetActive(true);
-            Debug.Log("Hit" + other.transform.gameObject);
-        }
+        isGuideStart = isStart;
     }
-
 }

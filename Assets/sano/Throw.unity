@@ -1754,8 +1754,8 @@ MonoBehaviour:
   isHold: 0
   holdObject: {fileID: 0}
   meter: {fileID: 4919053314075080164}
-  meterSpeed: 2
-  throwPower: 60
+  meterSpeed: 0.5
+  strength: 0
 --- !u!114 &4919053313042561968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1768,11 +1768,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9e676960680e124ca34e0c51a539ee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isDrawGuide: 0
-  isNowGuide: 0
-  guideRoot: {fileID: 4919053314075080164}
+  isGuideStart: 0
+  guidePrent: {fileID: 4919053314075080164}
   guidePrefab: {fileID: 6057099306675073543, guid: 2e904e072e76b2a4ebedc7f55835390b, type: 3}
-  pointerPrefab: {fileID: 4541008418262573835, guid: b8facb9dc378af64d90c1629416c0975, type: 3}
 --- !u!1 &4919053313046636566
 GameObject:
   m_ObjectHideFlags: 0
