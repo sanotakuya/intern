@@ -36,7 +36,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             {
                 Object instant = Resources.Load("SD_unitychan_humanoid");
                 playerObj = MonobitNetwork.Instantiate(
-                                "unitychan_dynamic_locomotion",
+                                "SD_unitychan_humanoid",
                                 Vector3.zero,
                                 Quaternion.identity,
                                 0

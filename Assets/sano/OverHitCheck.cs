@@ -14,10 +14,10 @@ public class OverHitCheck : MonobitEngine.MonoBehaviour
     }
     private void Update()
     {
-        if (!m_MonobitView.isMine)
-        {
-            return;
-        }
+        //if (!m_MonobitView.isMine)
+        //{
+        //    return;
+        //}
     }
     void OnTriggerStay(Collider other)
     {

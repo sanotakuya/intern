@@ -234,7 +234,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7083005261432624418}
-  - component: {fileID: 7083005261432624419}
   m_Layer: 0
   m_Name: ThrowMeter
   m_TagString: Untagged
@@ -256,31 +255,6 @@ Transform:
   m_Father: {fileID: 7083005261533221032}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
---- !u!114 &7083005261432624419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7083005261432624416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 277584237ad31144584195f79af03cd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_viewIdField: 0
-  m_IsDontDestroyOnRoom: 0
-  m_IsInstantiated: 0
-  m_ObjectStreamCheckTime: 0
-  m_ObjectStreamSendBytes: 
-  m_IsEncrypt: 1
-  InternalObservedComponents: []
-  ObservedComponents: []
-  ownerId: 0
-  group: 0
-  prefixBackup: -1
-  ownershipTransfer: 0
-  compressedStream: 0
 --- !u!1 &7083005261465909329
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +392,6 @@ GameObject:
   - component: {fileID: 7083005261521648840}
   - component: {fileID: 7083005261521648841}
   - component: {fileID: 7083005261521648846}
-  - component: {fileID: 7083005261521648847}
   m_Layer: 0
   m_Name: OverHitcheck
   m_TagString: Untagged
@@ -466,31 +439,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHitOver: 0
---- !u!114 &7083005261521648847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7083005261521648844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 277584237ad31144584195f79af03cd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_viewIdField: 0
-  m_IsDontDestroyOnRoom: 0
-  m_IsInstantiated: 0
-  m_ObjectStreamCheckTime: 0
-  m_ObjectStreamSendBytes: 
-  m_IsEncrypt: 1
-  InternalObservedComponents: []
-  ObservedComponents: []
-  ownerId: 0
-  group: 0
-  prefixBackup: -1
-  ownershipTransfer: 0
-  compressedStream: 0
 --- !u!1 &7083005261530460783
 GameObject:
   m_ObjectHideFlags: 0
@@ -3088,7 +3036,6 @@ GameObject:
   - component: {fileID: 7083005262255608832}
   - component: {fileID: 7083005262255608833}
   - component: {fileID: 7083005262255608838}
-  - component: {fileID: 7083005262255608839}
   m_Layer: 0
   m_Name: GroundCheck
   m_TagString: Untagged
@@ -3136,31 +3083,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHitGround: 0
---- !u!114 &7083005262255608839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7083005262255608836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 277584237ad31144584195f79af03cd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_viewIdField: 0
-  m_IsDontDestroyOnRoom: 0
-  m_IsInstantiated: 0
-  m_ObjectStreamCheckTime: 0
-  m_ObjectStreamSendBytes: 
-  m_IsEncrypt: 1
-  InternalObservedComponents: []
-  ObservedComponents: []
-  ownerId: 0
-  group: 0
-  prefixBackup: -1
-  ownershipTransfer: 0
-  compressedStream: 0
 --- !u!1 &7083005262272782386
 GameObject:
   m_ObjectHideFlags: 0
@@ -4219,7 +4141,6 @@ GameObject:
   - component: {fileID: 7083005262701908221}
   - component: {fileID: 7083005262701908210}
   - component: {fileID: 7083005262701908211}
-  - component: {fileID: 7083005262701908208}
   m_Layer: 0
   m_Name: ObjectRadar
   m_TagString: Untagged
@@ -4267,31 +4188,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   throwObjects: []
---- !u!114 &7083005262701908208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7083005262701908209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 277584237ad31144584195f79af03cd2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_viewIdField: 0
-  m_IsDontDestroyOnRoom: 0
-  m_IsInstantiated: 0
-  m_ObjectStreamCheckTime: 0
-  m_ObjectStreamSendBytes: 
-  m_IsEncrypt: 1
-  InternalObservedComponents: []
-  ObservedComponents: []
-  ownerId: 0
-  group: 0
-  prefixBackup: -1
-  ownershipTransfer: 0
-  compressedStream: 0
 --- !u!1 &7083005262716054662
 GameObject:
   m_ObjectHideFlags: 0
