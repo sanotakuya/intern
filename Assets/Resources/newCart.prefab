@@ -173,7 +173,7 @@ MonoBehaviour:
   - {fileID: 1442275558531424823}
   ownerId: 0
   group: 0
-  prefixBackup: -1
+  prefixBackup: 0
   ownershipTransfer: 0
   compressedStream: 0
 --- !u!114 &1442275558531424823
@@ -197,7 +197,7 @@ MonoBehaviour:
     m_EnableInterpolate: 0
     m_LerpRate: 5
   m_SyncScale:
-    m_EnableSync: 0
+    m_EnableSync: 1
     m_EnableInterpolate: 0
     m_LerpRate: 1
   m_SnapEnabled: 1
