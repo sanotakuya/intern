@@ -9,26 +9,37 @@ using UnityEngine;
 //-----------------------------------------------------------------------------
 public class SideViewCamera : MonoBehaviour
 {
-    [Header("カメラ")]                     public Transform  cameraTransform       ; // カメラオブジェクト
-    [Header("追従するオブジェクト")]       public GameObject followUpObject        ; // 追従するオブジェクト
-    [Header("オブジェクトとの距離")]       public float      distance              ; // 追従するオブジェクトとの距離
-    [Header("オブジェクトとの高さ")]       public float      vertical              ; // オブジェクトとカメラの高さ
-    [Header("オブジェクトとカメラの角度")] public float      angle                 ; // オブジェクトとカメラの角度
-    [Header("ディレイ有効")]               public bool       isDelay        = true ; // ディレイ有効
-    [Header("ディレイスピード")]           public float      delaySpeed     = 4.0f ; // ディレイスピード
-    [Header("平行投影")]                   public bool       isParallel     = false; // 平行投影
+    //-----------------------------------------------------------------------------
+    //! private変数
+    //-----------------------------------------------------------------------------
+    private Camera      mainCamera                     ; // カメラ
+    private GameObject  followUpObject                 ; // 追従するオブジェクト
+    private float       orthographicSize               ; // カメラの表示範囲
+    private Vector3     prevCameraAngle  = Vector3.zero; // 前フレームのカメラの角度
+    private const float LIMIT_ANGLE      = 90.0f       ; // 回転角度の制限
 
-    private Camera      mainCamera                       ; // カメラ
-    private float       orthographicSize                 ; // カメラの表示範囲
-    private Vector3     prevCameraAngle    = Vector3.zero; // 前フレームのカメラの角度
-    private const float LIMIT_ANGLE        = 90.0f       ; // 回転角度の制限
+    //-----------------------------------------------------------------------------
+    //! public変数
+    //-----------------------------------------------------------------------------
 
-    // Start is called before the first frame update
+    //-----------------------------------------------------------------------------
+    //! Inspectorに公開する変数
+    //-----------------------------------------------------------------------------
+    [Header("カメラ")]                         public Transform  cameraTransform       ; // カメラオブジェクト
+    [Header("追従するオブジェクトのプレハブ")] public GameObject followUpPrefab        ; // 追従するオブジェクトのプレハブ
+    [Header("オブジェクトとの距離")]           public float      distance              ; // 追従するオブジェクトとの距離
+    [Header("オブジェクトとの高さ")]           public float      vertical              ; // オブジェクトとカメラの高さ
+    [Header("オブジェクトとカメラの角度")]     public float      angle                 ; // オブジェクトとカメラの角度
+    [Header("ディレイ有効")]                   public bool       isDelay        = true ; // ディレイ有効
+    [Header("ディレイスピード")]               public float      delaySpeed     = 4.0f ; // ディレイスピード
+    [Header("平行投影")]                       public bool       isParallel     = false; // 平行投影
+
+    //-----------------------------------------------------------------------------
+    //! [内容]    開始処理
+    //-----------------------------------------------------------------------------
     void Start()
     {
         if (cameraTransform) {
-            // カメラの位置を設定
-            cameraTransform.position  = followUpObject.transform.position + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
             // カメラコンポーネントを取得
             mainCamera = cameraTransform.gameObject.GetComponent<Camera>();
             if (mainCamera) {
@@ -37,24 +48,43 @@ public class SideViewCamera : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    //-----------------------------------------------------------------------------
+    //! [内容]    更新処理
+    //-----------------------------------------------------------------------------
     void Update()
     {
         if (cameraTransform && followUpObject) {
             // カメラのプロジェクション設定
-            if (isParallel && mainCamera) {
-                mainCamera.orthographic     = true;
-                mainCamera.orthographicSize = -distance;
+            if (mainCamera) {
+                if (isParallel) {
+                    mainCamera.orthographic = true;
+                    mainCamera.orthographicSize = -distance;
+                }
+                else {
+                    mainCamera.orthographic = false;
+                    mainCamera.orthographicSize = orthographicSize;
+
+                }
+            }
+        }
+        else if (cameraTransform && !followUpObject) {
+            if (followUpPrefab) {
+                // 指定されているのゲームオブジェクトを検索
+                followUpObject = GameObject.Find(followUpPrefab.name + "(Clone)");
+                if (followUpObject) {
+                    // カメラの位置を設定
+                    cameraTransform.position = followUpObject.transform.position + (cameraTransform.forward * distance) + (cameraTransform.up * vertical);
+                }
             }
             else {
-                mainCamera.orthographic     = false;
-                mainCamera.orthographicSize = orthographicSize;
-
+                Debug.Log(this.name + "追従するオブジェクトのプレハブが設定されていません");
             }
         }
     }
 
-    // Update is called once per frame
+    //-----------------------------------------------------------------------------
+    //! [内容]    更新処理
+    //-----------------------------------------------------------------------------
     void FixedUpdate()
     {
         if (cameraTransform && followUpObject) {
@@ -65,7 +95,9 @@ public class SideViewCamera : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    //-----------------------------------------------------------------------------
+    //! [内容]    更新処理
+    //-----------------------------------------------------------------------------
     void LateUpdate()
     {
         if (cameraTransform && followUpObject) {
