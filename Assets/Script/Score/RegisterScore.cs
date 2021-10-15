@@ -131,7 +131,8 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
             // カートがある場合処理
             if (cartObject) {
                 // レジの範囲に入ったら
-                if (cashRegisterManager.GetIsWithAnyRegister() && isScoring) {
+                var registerObject = cashRegisterManager.GetIsWithAnyRegister();
+                if (registerObject && isScoring) {
 
                     ScoreData tmpScore = new ScoreData(); // スコア一時格納
 
@@ -183,7 +184,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     // スコア計算を不可に
                     isScoring = false;
                 }
-                else {
+                else if (!registerObject) {
                     // スコア計算を可能に
                     isScoring = true;
                 }
