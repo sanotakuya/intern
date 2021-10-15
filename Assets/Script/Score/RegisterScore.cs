@@ -55,23 +55,27 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
 
     public struct ScoreData   // スコアデータ
     {
-        public int   totalScore  ; // 合計スコア
-        public int   productScore; // 商品スコア
-        public int   bonusScore  ; // ボーナススコア
-        public float heightScore ; // 高さスコア
+        public int   totalScore  ;      // 今までの合計スコア
+        public int   currentTotalScore; // 今回の合計スコア
+        public int   productScore;      // 商品スコア
+        public int   bonusScore  ;      // ボーナススコア
+        public float heightScore ;      // 高さスコア
     }
 
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private ScoreData  scoreData  = new ScoreData(); // 現在のスコア
-    private GameObject cartObject                  ; // カートオブジェクト
-    private StackTree  stackTree                   ; // スタックツリー
-    private bool       isScoring  = true           ; // スコア計算が可能か
+    private ScoreData  _scoreData  = new ScoreData(); // 現在のスコア
+    private GameObject cartObject                   ; // カートオブジェクト
+    private StackTree  stackTree                    ; // スタックツリー
+    private bool       isScoring   = true           ; // スコア計算が可能か
 
     //-----------------------------------------------------------------------------
     //! public変数
     //-----------------------------------------------------------------------------
+    public ScoreData scoreData {  // スコアデータ
+        get { return _scoreData; }
+    }
 
     //-----------------------------------------------------------------------------
     //! [内容]    RPC受信関数(現在のスコア)
@@ -79,7 +83,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     [MunRPC]
     void RecvScore(ScoreData senderScoreData)
     {
-        scoreData = senderScoreData;
+        _scoreData = senderScoreData;
     }
 
     //-----------------------------------------------------------------------------
@@ -129,7 +133,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     ScoreData tmpScore = new ScoreData(); // スコア一時格納
 
                     // スタックツリーから高さ情報を取得
-                    int height = 0;// stackTree.GetHeight();
+                    float height = 10;// stackTree.GetHeight();
 
                     // 高さボーナス
                     foreach (var heightBonus in heightBonusList.GetDictionary().OrderBy(c => c.Key)) {
@@ -139,8 +143,13 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     }
 
                     // 格納されている最大の高さを取得
-                    var maxHeight = heightBonusList.GetDictionary().OrderByDescending(c => c.Key).FirstOrDefault();
-                    // TODO:最大以上の場合１mごとに倍率を１上げる処理を書く
+                    var maxHeight = heightBonusList.GetDictionary().OrderByDescending(c => c.Key).FirstOrDefault().Key;
+
+                    // 最大の高さより大きい場合
+                    if (height > maxHeight) {
+                        int distance = Mathf.FloorToInt(height - maxHeight);
+                        tmpScore.heightScore += distance;
+                    }
 
                     // カートに載っている物を計算する
                     foreach (var stackObject in stackTree.stackList) {
@@ -160,6 +169,10 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                             tmpScore.bonusScore += bonusCriteria.Value.score;
                         }
                     }
+
+                    // トータルスコアを計算
+                    tmpScore.currentTotalScore  = (int)(((float)tmpScore.productScore + (float)tmpScore.bonusScore) * tmpScore.heightScore);
+                    tmpScore.totalScore        += tmpScore.currentTotalScore;
 
                     // 今回のスコアを送信
                     RecvScore(tmpScore);
@@ -202,16 +215,25 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
             return false;
         }
 
-        foreach(var stackObject in stackList) {
-            string name = stackObject.name.Replace("(Clone)", "");
+        // スタックの中にあるか確認
+        foreach (var name in nameList) {
 
-            // リストの中に存在するか確認
-            var isExist = nameList.Contains(name);
+            bool isExists = false; // 存在するか
 
-            // 存在しないオブジェクトが見つかった場合
-            if (!isExist) {
+            foreach (var stackObject in stackList) {
+
+                // 名前が同じなら
+                if (stackObject.name.Replace("(Clone)", "") == name) {
+                    isExists = true;
+                }
+
+            }
+
+            // 存在しない場合
+            if (!isExists) {
                 return false;
             }
+
         }
 
         return true;
