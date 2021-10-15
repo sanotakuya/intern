@@ -89,12 +89,12 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! Inspectorに公開する変数
     //-----------------------------------------------------------------------------
-    [Header("カートのオブジェクト(テスト用)")]                public GameObject      testCartObject  ; // TODO：テスト用、テストが終わったら消す
-    [Header("カートのプレハブ")]                              public GameObject      cartPrefab      ; // カートプレハブ
-    [Header("スコア単位")]                                    public string          scoreUnit = "￥"; // スコアの単位
-    [Header("スコアリスト(プレハブの名前,スコア)")]           public ScoreList       scoreList       ; // スコアリスト
-    [Header("セットボーナスリスト(セットの名前,セット情報)")] public SetBonusList    setBonusList    ; // スコアリスト
-    [Header("高さボーナスリスト(高さ(昇順),スコア(倍率))")]   public HeightBonusList heightBonusList ; // 高さボーナスリスト
+    [Header("CashRegisterManager")]                           public CashRegisterManager cashRegisterManager; // レジマネージャー
+    [Header("カートのプレハブ")]                              public GameObject          cartPrefab         ; // カートプレハブ
+    [Header("スコア単位")]                                    public string              scoreUnit = "￥"   ; // スコアの単位
+    [Header("スコアリスト(プレハブの名前,スコア)")]           public ScoreList           scoreList          ; // スコアリスト
+    [Header("セットボーナスリスト(セットの名前,セット情報)")] public SetBonusList        setBonusList       ; // スコアリスト
+    [Header("高さボーナスリスト(高さ(昇順),スコア(倍率))")]   public HeightBonusList     heightBonusList    ; // 高さボーナスリスト
 
     //-----------------------------------------------------------------------------
     //! [内容]    有効時処理
@@ -115,6 +115,9 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
         if (!cartPrefab) {
             Debug.LogError("カートのプレハブが設定されていません。");
         }
+        if (!cashRegisterManager) {
+            Debug.LogError("レジマネージャーが設定されていません。");
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -123,12 +126,12 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     void Update()
     {
         // ホストの場合のみ処理
-        if (MonobitNetwork.isHost || true) {
+        if (MonobitNetwork.isHost) {
 
             // カートがある場合処理
             if (cartObject) {
-                // TODO：レジの範囲に入ったらに変更する
-                if (testCartObject.transform.position.x >= 10.0f || true && isScoring) {
+                // レジの範囲に入ったら
+                if (cashRegisterManager.GetIsWithAnyRegister() && isScoring) {
 
                     ScoreData tmpScore = new ScoreData(); // スコア一時格納
 
@@ -187,7 +190,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
             }
             // カートを検索
             else {
-                testCartObject = GameObject.Find(cartPrefab.name + "(Clone)");
+                cartObject = GameObject.Find(cartPrefab.name + "(Clone)");
                 // 見つかった場合スタックツリーコンポーネントを取得
                 if (cartObject) {
                     stackTree = cartObject.GetComponentInChildren<StackTree>();
