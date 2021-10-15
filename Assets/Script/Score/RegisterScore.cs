@@ -133,7 +133,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     ScoreData tmpScore = new ScoreData(); // スコア一時格納
 
                     // スタックツリーから高さ情報を取得
-                    float height = 10;// stackTree.GetHeight();
+                    float height = stackTree.GetHeight();
 
                     // 高さボーナス
                     foreach (var heightBonus in heightBonusList.GetDictionary().OrderBy(c => c.Key)) {
@@ -171,8 +171,8 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     }
 
                     // トータルスコアを計算
-                    tmpScore.currentTotalScore  = (int)(((float)tmpScore.productScore + (float)tmpScore.bonusScore) * tmpScore.heightScore);
-                    tmpScore.totalScore        += tmpScore.currentTotalScore;
+                    tmpScore.currentTotalScore = (int)(((float)tmpScore.productScore + (float)tmpScore.bonusScore) * tmpScore.heightScore);
+                    tmpScore.totalScore        = scoreData.totalScore + tmpScore.currentTotalScore;
 
                     // 今回のスコアを送信
                     RecvScore(tmpScore);
@@ -187,9 +187,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
             }
             // カートを検索
             else {
-                //testCartObject = GameObject.Find(cartPrefab.name + "(Clone)");
-                // TODO:テスト中
-                cartObject = testCartObject;
+                testCartObject = GameObject.Find(cartPrefab.name + "(Clone)");
                 // 見つかった場合スタックツリーコンポーネントを取得
                 if (cartObject) {
                     stackTree = cartObject.GetComponentInChildren<StackTree>();
