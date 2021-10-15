@@ -99,4 +99,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c39f7f728df013147af5a0a03892da9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  path: food/
   prefab: {fileID: 2971460542089065457, guid: 430074e43631c4e4391672fae36d7d51, type: 3}
