@@ -29,6 +29,7 @@ public class RealTimeTextManager : MonoBehaviour
         public float lifeTime;     // 表示時間
         public float fontSize;     // 表示サイズ
         public FontType fontType;
+        public TextAnimation.AnimStyle animStyle;
 
         public void SetDefault()
         {
@@ -40,6 +41,7 @@ public class RealTimeTextManager : MonoBehaviour
             lifeTime = 4;
             fontSize = 64;
             fontType = FontType.LightNovel;
+            animStyle = TextAnimation.AnimStyle.None;
         }
     }
 
@@ -51,7 +53,9 @@ public class RealTimeTextManager : MonoBehaviour
     [SerializeField] private GameObject textPrefab;
     [SerializeField] private GameObject canvas;
     [SerializeField] private List<TMP_FontAsset> fontList = new List<TMP_FontAsset>();
+    private GameObject textObj;
     private TextMeshProUGUI text;
+
 
     // マネージ用変数
     private List<RealTimeTextInfo> textQueue = new List<RealTimeTextInfo>();
@@ -61,28 +65,25 @@ public class RealTimeTextManager : MonoBehaviour
 
     void Start()
     {
-        GameObject obj = Instantiate(textPrefab);
-        obj.transform.parent = canvas.transform;
-
-        text = obj.GetComponent<TextMeshProUGUI>();
-
         RealTimeTextInfo info = new RealTimeTextInfo();
         info.SetDefault();
-        info.text = "1回目の表示";
+        info.text = "なぜか";
         info.color = new Color(1, 0, 0);
         info.lifeTime = 3;
         EnqueueText(info);
 
-        info.text = "2回目の表示";
+        info.text = "無駄に.....";
         info.color = new Color(0, 1, 0);
         info.fontSize *= 2;
         info.fontType = FontType.K8x12;
+        info.animStyle = TextAnimation.AnimStyle.WavePosition;
         EnqueueText(info);
 
-        info.text = "3回目の表示";
+        info.text = "ホラー";
         info.color = new Color(0, 0, 1);
         info.fontSize *= 2;
         info.fontType = FontType.Zomzi;
+        info.animStyle = TextAnimation.AnimStyle.WaveColor;
         EnqueueText(info);
     }
 
@@ -92,10 +93,13 @@ public class RealTimeTextManager : MonoBehaviour
 
         if(elapsedTime > lifeTime)
         {
+            Destroy(textObj);
+
             // キューが残っているなら
-            if(textQueue.Count > 0)
+            if (textQueue.Count > 0)
             {
                 DequeueText();
+
             }
         }
     }
@@ -114,6 +118,13 @@ public class RealTimeTextManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     private void DequeueText()
     {
+
+
+        //テキストを生成してCanvasに追加
+        textObj = Instantiate(textPrefab);
+        textObj.transform.parent = canvas.transform;
+        text = textObj.GetComponent<TextMeshProUGUI>();
+
         // 新しいテキスト情報に変更
         RealTimeTextInfo info = textQueue[0];
         text.text = info.text;
@@ -122,11 +133,13 @@ public class RealTimeTextManager : MonoBehaviour
 
         text.font = fontList[(int)info.fontType];
 
+        textObj.GetComponent<TextAnimation>().animStyle = info.animStyle;
+
         // 表示時間の設定
         lifeTime = info.lifeTime;
         elapsedTime = 0;
 
         textQueue.RemoveAt(0);      //　先頭を削除
-    }
+    }  
 }
 
