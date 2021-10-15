@@ -53,7 +53,6 @@ public class RealTimeTextManager : MonoBehaviour
     [SerializeField] private List<TMP_FontAsset> fontList = new List<TMP_FontAsset>();
     private TextMeshProUGUI text;
 
-
     // マネージ用変数
     private List<RealTimeTextInfo> textQueue = new List<RealTimeTextInfo>();
     private float elapsedTime;
