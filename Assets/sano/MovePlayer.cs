@@ -26,17 +26,24 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     private float firstSpeed;       //通常時の最高速度を保存する
 
 
+    private bool isRunning;       //現在は知っている状態なのかを取得する
+
+
     static float targetAngle;  //次のプレイヤーの向き
 
     bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
     bool isDepthLock;   //Z軸固定されているかのフラグ
     bool isHold;        //オブジェクトが掴まれているかのフラグ
+    bool isJump;        //プレイヤーがジャンプしているかのフラグ
 
+    // アニメーション
+    public Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
+        animator = this.gameObject.GetComponent<Animator>();
         groundCheck = groundCheckObj.GetComponent<GroundCheck>();
         holdThrow = this.gameObject.GetComponent<HoldThrow>();
         monobitView = GetComponent<MonobitView>();
@@ -72,6 +79,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 if (rb.velocity.magnitude <= maxSpeed)
                 {
                     rb.AddForce(new Vector3(-movePower, 0.0f, 0.0f), ForceMode.Force);
+                    if(isRunning==true) animator.SetBool("isRun", true);
+                    else if(isRunning==false) animator.SetBool("isWalk", true);
                 }
                 targetAngle = -90.0f;
             }
@@ -82,6 +91,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 if (rb.velocity.magnitude <= maxSpeed)
                 {
                     rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
+                    if (isRunning == true) animator.SetBool("isRun", true);
+                    else if (isRunning == false) animator.SetBool("isWalk", true);
                 }
                 targetAngle = 90.0f;
             }
@@ -94,6 +105,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                     if (rb.velocity.magnitude <= maxSpeed)
                     {
                         rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
+                        if (isRunning == true) animator.SetBool("isRun", true);
+                        else if (isRunning == false) animator.SetBool("isWalk", true);
                     }
                     
                     targetAngle = 0.0f;
@@ -108,17 +121,25 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                     if (rb.velocity.magnitude <= maxSpeed)
                     {
                         rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
+                        if (isRunning == true) animator.SetBool("isRun", true);
+                        else if (isRunning == false) animator.SetBool("isWalk", true);
                     }
                     
                     targetAngle = 180.0f;
                 }
             }
-        
+            else
+            {
+                if (isRunning == true) animator.SetBool("isRun", false);
+                else if (isRunning == false) animator.SetBool("isWalk", false);
+            }
             //ジャンプ
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 //上に飛ばすだけ 
                 rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
+
+                isJump = true;
             }
 
            
@@ -129,13 +150,17 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         {
             movePower = firstMovePower * 1.5f;
             maxSpeed = firstSpeed * 2.0f;
+            animator.SetBool("isWalk", false);
+            isRunning = true;
         }
         else
         {
             movePower = firstMovePower;
             maxSpeed = firstSpeed;
+            isRunning = false;
+            animator.SetBool("isRun", false);
         }
-
+        Debug.Log(isRunning);
         //Z軸固定
         if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
         {
@@ -157,6 +182,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             }
         }
     }
+  
 
     //外部参照用関数
     //-----------------------------------------------------------------------------
@@ -166,4 +192,9 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     {
         targetAngle = target;
     } 
+
+    public void AnimationReset(string str)
+    {
+        animator.SetBool(str, false);
+    }
 }
