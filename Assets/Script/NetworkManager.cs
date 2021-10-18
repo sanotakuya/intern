@@ -17,11 +17,16 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     private string roomName = "";       // ルーム名
     private GameObject playerObj = null;
+    [SerializeField] private int updateRate = 30;
 
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
-
+    private void Awake()
+    {
+        // １秒間に30回のタイミングで、ストリーミング処理を実行します。
+        MonobitEngine.MonobitNetwork.updateStreamRate = updateRate;
+    }
 
     //-----------------------------------------------------------------------------
     //! [内容]		更新処理
