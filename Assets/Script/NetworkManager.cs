@@ -21,7 +21,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
-   // public GameObject camera = null;
+
 
     //-----------------------------------------------------------------------------
     //! [内容]		更新処理
@@ -92,7 +92,10 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 // ルームを作成して入室する
                 if (GUILayout.Button("Create Room", GUILayout.Width(150)))
                 {
-                    MonobitNetwork.CreateRoom(roomName);
+                    if(MonobitNetwork.CreateRoom(roomName))
+                    {
+
+                    }
                 }
 
                 // ルーム一覧を検索
@@ -110,7 +113,14 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                     // ルームを選択して入室する
                     if (GUILayout.Button("Enter Room : " + roomParam))
                     {
-                        MonobitNetwork.JoinRoom(room.name);
+                        if(MonobitNetwork.JoinRoom(room.name))
+                        {
+                            monobitView.RPC(
+                                "RecvRoomText",
+                                MonobitEngine.MonobitTargets.All,
+                                (string)(MonobitNetwork.playerName + "が入室しました")
+                                );
+                        }
                     }
                 }
 
