@@ -20,7 +20,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     GroundCheck groundCheck;
     HoldThrow holdThrow;
 
-    static MonobitView m_MonobitView = null;
+    MonobitView monobitView= null;
 
     private float firstMovePower;   //通常時の速度を保存する
     private float firstSpeed;       //通常時の最高速度を保存する
@@ -39,7 +39,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         rb = this.gameObject.GetComponent<Rigidbody>();
         groundCheck = groundCheckObj.GetComponent<GroundCheck>();
         holdThrow = this.gameObject.GetComponent<HoldThrow>();
-        m_MonobitView = GetComponent<MonobitView>();
+        monobitView = GetComponent<MonobitView>();
 
         firstMovePower = movePower;
         firstSpeed = maxSpeed;
@@ -49,7 +49,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!m_MonobitView.isMine)
+        if (!monobitView.isMine)
         {
             return;
         }
