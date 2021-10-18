@@ -190,6 +190,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!1001 &32333373
@@ -259,6 +263,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!4 &39324838 stripped
@@ -429,7 +437,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7507806573229991182, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
   m_PrefabInstance: {fileID: 388256090116560366}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 380864063}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2740ae6eb62d1043ace70b915a0e99f, type: 3}
@@ -440,7 +448,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1073126651407191444, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
   m_PrefabInstance: {fileID: 388256090116560366}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 380864063}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34cc336e9a2454f498f4733ec765d0a8, type: 3}
@@ -518,6 +526,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!4 &145497750 stripped
@@ -597,6 +609,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!1001 &249183412
@@ -712,6 +728,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -905,6 +925,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!4 &295603585 stripped
@@ -1021,6 +1045,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!4 &322724829 stripped
@@ -1038,6 +1066,38 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 458588255627962815, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
   m_PrefabInstance: {fileID: 960741084}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &380864063 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1073126651407191440, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
+  m_PrefabInstance: {fileID: 388256090116560366}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &380864066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380864063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b321bc3d73485c4e94d4833bdd3e967, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &380864067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380864063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77732ee396fe8414f991cf5af6e1d852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  startTime: 3
+  limitTime: 300
 --- !u!1001 &383562147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1105,6 +1165,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!4 &383959643 stripped
@@ -1221,6 +1285,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!1 &398903489
@@ -1594,6 +1662,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -1716,6 +1788,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!4 &626816640 stripped
@@ -1940,6 +2016,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!1 &751379808
@@ -2065,6 +2145,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!4 &865856870 stripped
@@ -2248,6 +2332,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!1001 &907583845
@@ -2391,6 +2479,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!1001 &911191690
@@ -2460,6 +2552,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!4 &927208987 stripped
@@ -2482,6 +2578,10 @@ PrefabInstance:
       propertyPath: prefab
       value: 
       objectReference: {fileID: 217441249925874063, guid: 1e4cdd1ec0072804b81a6f11aa5cb866, type: 3}
+    - target: {fileID: 2839277271917957282, guid: b986626ee35fae846aad78e6aace028d, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 3118642864828905780, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.852
@@ -2584,6 +2684,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -2862,6 +2966,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -2939,6 +3047,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -3033,6 +3145,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -3196,6 +3312,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -3290,6 +3410,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -3407,6 +3531,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!1001 &1157711447
@@ -3476,6 +3604,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!1 &1164761776
@@ -3589,6 +3721,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!4 &1180589705 stripped
@@ -3979,6 +4115,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!1 &1287952584
@@ -4202,6 +4342,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!1001 &1380520064
@@ -4536,6 +4680,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!1001 &1435349670
@@ -4577,6 +4725,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -4760,6 +4912,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!1001 &1465941396
@@ -4907,6 +5063,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!1001 &1470192626
@@ -4948,6 +5108,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -5070,6 +5234,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!4 &1541011435 stripped
@@ -5218,6 +5386,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!4 &1582109162 stripped
@@ -5417,6 +5589,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -5630,6 +5806,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!1001 &1694208363
@@ -5699,6 +5879,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!4 &1713149126 stripped
@@ -5773,6 +5957,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!1001 &1812504933
@@ -5842,6 +6030,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!1001 &1821443946
@@ -5911,6 +6103,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!1001 &1866315120
@@ -6064,6 +6260,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!1001 &1933605028
@@ -6133,6 +6333,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!1001 &1955315709
@@ -6276,6 +6480,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!4 &1964148940 stripped
@@ -6476,6 +6684,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!1 &2027075970
@@ -6633,6 +6845,111 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1064082911980929961, guid: 7c631d51796cf4348a142d73e00edddb, type: 3}
   m_PrefabInstance: {fileID: 2027993988}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2032706764
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 133165055}
+    m_Modifications:
+    - target: {fileID: 3502717135288396816, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: registerScore
+      value: 
+      objectReference: {fileID: 274154237}
+    - target: {fileID: 3502717135288396816, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: gameTimer
+      value: 
+      objectReference: {fileID: 380864067}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396817, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3502717135288396821, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_Name
+      value: GameUI
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
 --- !u!1001 &2036283899
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6958,6 +7275,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 3490269573174661316, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 17e485fdaddaf4340b420ebe52adf079, type: 3}
 --- !u!1001 &2100316378
@@ -7027,6 +7348,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_Hamburger (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 3997649283002737531, guid: 461263408690ed548b5128c69785d840, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461263408690ed548b5128c69785d840, type: 3}
 --- !u!1001 &2109842065
@@ -7068,6 +7393,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 3712885389080728970, guid: 58f71baf72ac75a44af84a76a077bd88, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     - target: {fileID: 2309349923325125518, guid: b986626ee35fae846aad78e6aace028d, type: 3}
       propertyPath: m_Name
       value: TEMP_Cart
@@ -7185,6 +7514,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7762795290100733931, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
+      propertyPath: ownershipManager
+      value: 
+      objectReference: {fileID: 380864066}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fe191b8f8341484aa5e069c3d88c7ad, type: 3}
 --- !u!4 &2122818132 stripped
@@ -7258,15 +7591,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1073126651407191443, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.011252403
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1073126651407191443, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.3582902
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1073126651407191443, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.20349574
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1073126651407191443, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
       propertyPath: m_LocalRotation.x
