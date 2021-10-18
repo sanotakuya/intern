@@ -21,8 +21,6 @@ public class SyncInstantiate : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Return))
-        {
             // ルームに入室しているか確認
             if (MonobitNetwork.inRoom)
             {
@@ -52,6 +50,5 @@ public class SyncInstantiate : MonobitEngine.MonoBehaviour
                 // 自身を削除
                 Destroy(this.gameObject);
             }
-        }
     }
 }
