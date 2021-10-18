@@ -32,12 +32,7 @@ public class SyncInstantiate : MonobitEngine.MonoBehaviour
                     {
                         var obj = MonobitNetwork.Instantiate(path + prefab.name, this.transform.position, this.transform.rotation, 0);
                         // 生成できたか確認
-                        if (obj)
-                        {
-                            // 自身のスケールを生成したオブジェクトに適用
-                            obj.transform.localScale = this.transform.localScale;
-                        }
-                        else
+                        if (!obj)
                         {
                             Debug.LogWarning(this.name + "はオブジェクトの生成に失敗しました。");
                         }
