@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MonobitEngine;
 
 //-----------------------------------------------------------------------------
 //! [制作者]		小野龍大
 //!	[最終更新日]	2021/10/12
 //! [内容]		ゲームを制御するクラスを橋渡しをするクラス
 //-----------------------------------------------------------------------------
-public class GameManager : MonoBehaviour
+public class GameManager : MonobitEngine.MonoBehaviour
 {
     //-----------------------------------------------------------------------------
     //!	private変数
@@ -15,9 +16,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] StackTree stackTree = null;       // StackTreeがアタッチされているオブジェクト
     [SerializeField] NetworkManager networkManager = null;     // ネットワークマネージャ
     [SerializeField] RegisterScore registerScore = null;     // ネットワークマネージャ
-    [SerializeField] RealTimeTextManager realTimeTextManager = null;
-    int lastDisplayScore = 0;
 
+    [SerializeField] RealTimeTextManager _realTimeTextManager = null;
+    public RealTimeTextManager realTimeTextManager
+    {  
+        get { return _realTimeTextManager; }
+        set { _realTimeTextManager = realTimeTextManager; }
+    }
+
+    static MonobitEngine.MonobitView monoBitView = null;
+
+    int lastDisplayScore = 0;       // 最後に表示したときのスコア
+    MonobitPlayer[] beforeMonobitPlayer;
+
+    bool inRoom = false;
     bool playing = false;
 
     //-----------------------------------------------------------------------------
@@ -25,11 +37,26 @@ public class GameManager : MonoBehaviour
     //-----------------------------------------------------------------------------
 
     //-----------------------------------------------------------------------------
-    //! [内容]		生成時
+    //! [内容]		受信関数
     //-----------------------------------------------------------------------------
-    private void Awake()
+    [MunRPC]
+    void RecvRoomText(string text)
     {
-        
+        RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
+        textInfo.SetDefault();
+
+        textInfo.text = text;
+
+        GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		開始時
+    //-----------------------------------------------------------------------------
+    private void Start()
+    {
+        monoBitView = GetComponent<MonobitEngine.MonobitView>();
+        EnterOneself();
     }
 
     private void FixedUpdate()
@@ -49,10 +76,22 @@ public class GameManager : MonoBehaviour
                 textInfo.text += str;
             }
 
-            realTimeTextManager.EnqueueText(textInfo);
+            _realTimeTextManager.EnqueueText(textInfo);
 
             textInfo.text = "合計スコア : " + registerScore.scoreData.totalScore.ToString();
-            realTimeTextManager.EnqueueText(textInfo);
+            _realTimeTextManager.EnqueueText(textInfo);
+        }
+
+        // 入室状態に移行
+        if(!inRoom && MonobitNetwork.inRoom)
+        {
+            monobitView.RPC(
+                "RecvRoomText", 
+                MonobitEngine.MonobitTargets.All, 
+                (string)(MonobitNetwork.playerName + "が入室しました")
+                );
+
+            inRoom = true;
         }
     }
 
@@ -139,6 +178,22 @@ public class GameManager : MonoBehaviour
 
         // プレイ中フラグを折る
         playing = false;
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		入室時にコール
+    //-----------------------------------------------------------------------------
+    public void EnterOneself()
+    {
+        monobitView.RPC("RecvRoomText", MonobitEngine.MonobitTargets.All, (string)(MonobitNetwork.playerName +"が入室しました"));
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		退出時にコール
+    //-----------------------------------------------------------------------------
+    public void ExitOneself()
+    {
+        monobitView.RPC("RecvRoomText", MonobitEngine.MonobitTargets.All, MonobitNetwork.playerName + "が退出しました");
     }
 
     //-----------------------------------------------------------------------------
