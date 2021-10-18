@@ -26,17 +26,24 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     private float firstSpeed;       //通常時の最高速度を保存する
 
 
+    private bool isRunning;       //現在は知っている状態なのかを取得する
+
+
     static float targetAngle;  //次のプレイヤーの向き
 
     bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
     bool isDepthLock;   //Z軸固定されているかのフラグ
     bool isHold;        //オブジェクトが掴まれているかのフラグ
+    bool isJump;        //プレイヤーがジャンプしているかのフラグ
 
+    // アニメーション
+    public Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
+        animator = this.gameObject.GetComponent<Animator>();
         groundCheck = groundCheckObj.GetComponent<GroundCheck>();
         holdThrow = this.gameObject.GetComponent<HoldThrow>();
         monobitView = GetComponent<MonobitView>();
@@ -63,65 +70,79 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
         this.transform.eulerAngles = new Vector3(0, angle, 0);
 
-        if (isGroundTouch == true)
+        if (isJump == true && isGroundTouch == true)
         {
-            if (Input.GetKey(KeyCode.A))
+            isJump = false;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
+            //速度上限
+            if (rb.velocity.magnitude <= maxSpeed)
             {
-                //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
+                rb.AddForce(new Vector3(-movePower, 0.0f, 0.0f), ForceMode.Force);
+                if (isRunning == true) animator.SetBool("isRun", true);
+                else if (isRunning == false) animator.SetBool("isWalk", true);
+            }
+            targetAngle = -90.0f;
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
+            //速度上限
+            if (rb.velocity.magnitude <= maxSpeed)
+            {
+                rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
+                if (isRunning == true) animator.SetBool("isRun", true);
+                else if (isRunning == false) animator.SetBool("isWalk", true);
+            }
+            targetAngle = 90.0f;
+        }
+        else if (Input.GetKey(KeyCode.W))
+        {
+            if (isDepthLock == false)
+            {
+                //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
                 //速度上限
                 if (rb.velocity.magnitude <= maxSpeed)
                 {
-                    rb.AddForce(new Vector3(-movePower, 0.0f, 0.0f), ForceMode.Force);
+                    rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
+                    if (isRunning == true) animator.SetBool("isRun", true);
+                    else if (isRunning == false) animator.SetBool("isWalk", true);
                 }
-                targetAngle = -90.0f;
-            }
-            else if (Input.GetKey(KeyCode.D))
-            {
-                //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
-                //速度上限
-                if (rb.velocity.magnitude <= maxSpeed)
-                {
-                    rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
-                }
-                targetAngle = 90.0f;
-            }
-            else if (Input.GetKey(KeyCode.W))
-            {
-                if (isDepthLock == false)
-                {
-                    //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
-                    //速度上限
-                    if (rb.velocity.magnitude <= maxSpeed)
-                    {
-                        rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
-                    }
-                    
-                    targetAngle = 0.0f;
-                }
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                if (isDepthLock == false)
-                {
-                    //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
-                    //速度上限
-                    if (rb.velocity.magnitude <= maxSpeed)
-                    {
-                        rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
-                    }
-                    
-                    targetAngle = 180.0f;
-                }
-            }
-        
-            //ジャンプ
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                //上に飛ばすだけ 
-                rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
-            }
 
-           
+                targetAngle = 0.0f;
+            }
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            if (isDepthLock == false)
+            {
+                //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
+                //速度上限
+                if (rb.velocity.magnitude <= maxSpeed)
+                {
+                    rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
+                    if (isRunning == true) animator.SetBool("isRun", true);
+                    else if (isRunning == false) animator.SetBool("isWalk", true);
+                }
+
+                targetAngle = 180.0f;
+            }
+        }
+        else
+        {
+            if (isRunning == true) animator.SetBool("isRun", false);
+            else if (isRunning == false) animator.SetBool("isWalk", false);
+        }
+
+        //ジャンプ
+        if (Input.GetKeyDown(KeyCode.Space) && isGroundTouch == true)
+        {
+            //上に飛ばすだけ 
+            rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
+            animator.SetBool("isJump", true);
+            isJump = true;
         }
 
         //走る
@@ -129,13 +150,17 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         {
             movePower = firstMovePower * 1.5f;
             maxSpeed = firstSpeed * 2.0f;
+            animator.SetBool("isWalk", false);
+            isRunning = true;
         }
         else
         {
             movePower = firstMovePower;
             maxSpeed = firstSpeed;
+            isRunning = false;
+            animator.SetBool("isRun", false);
         }
-
+       
         //Z軸固定
         if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
         {
@@ -157,6 +182,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             }
         }
     }
+  
 
     //外部参照用関数
     //-----------------------------------------------------------------------------
@@ -166,4 +192,9 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     {
         targetAngle = target;
     } 
+
+    public void AnimationReset(string str)
+    {
+        animator.SetBool(str, false);
+    }
 }
