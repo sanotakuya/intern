@@ -20,27 +20,41 @@ public class OwnershipManager : MonobitEngine.MonoBehaviour
     //! [内容]    RPC受信関数(現在のスコア)
     //-----------------------------------------------------------------------------
     [MunRPC]
-    void SendOwner(MonobitPlayer monobitPlayer)
+    void SendOwner(MonobitPlayer monobitPlayer, int[] viewIDs)
     {
         currentHost = monobitPlayer;
+
+        manageMonobitViews.Clear();
+
+        foreach (var viewID in viewIDs) {
+            var monobitView = MonobitView.Find(viewID);
+            if (monobitView) {
+                manageMonobitViews.Add((MonobitView)monobitView);
+            }
+            else {
+                Debug.LogWarning(this.name + "RPCの受信に失敗しました。");
+            }
+        }
     }
 
     //-----------------------------------------------------------------------------
     //! [内容]    更新処理
     //-----------------------------------------------------------------------------
-    void Update()
+    void LateUpdate()
     {
         // 自分がホストな場合
         if (MonobitNetwork.isHost) {
             var player = MonobitNetwork.player;
             // 現在の所有者が自分と違う場合
             if (player != currentHost) {
-                // 自分を所有者として送信
-                SendOwner(player);
+                List<int> objectIDs = new List<int>();
                 // 所有者を変更する
                 foreach (var monobitView in manageMonobitViews) {
-                    monobitView.TransferOwnership(currentHost);
+                    monobitView.TransferOwnership(player);
+                    objectIDs.Add(monobitView.viewID);
                 }
+                // 自分を所有者として送信
+                this.monobitView.RPC("SendOwner", MonobitTargets.All, player, objectIDs.ToArray());
             }
         }
     }

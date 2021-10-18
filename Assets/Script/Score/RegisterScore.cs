@@ -60,7 +60,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
         public int          productScore     ; // 商品スコア
         public int          bonusScore       ; // ボーナススコア
         public float        heightScore      ; // 高さスコア
-        public List<string> bonusNameList    ;
+        public List<string> bonusNameList    ; // ボーナスの名前リスト
     }
 
     //-----------------------------------------------------------------------------
@@ -83,9 +83,20 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     //! [内容]    RPC受信関数(現在のスコア)
     //-----------------------------------------------------------------------------
     [MunRPC]
-    void RecvScore(ScoreData senderScoreData)
+    void RecvScore(int totalScore         // 今までの合計スコア
+                  ,int currentTotalScore  // 今回の合計スコア
+                  ,int productScore       // 商品スコア
+                  ,int bonusScore         // ボーナススコア
+                  ,float heightScore      // 高さスコア
+                  ,string[] bonusNameList // ボーナスの名前リスト
+    )
     {
-        _scoreData = senderScoreData;
+        _scoreData.totalScore        = totalScore;
+        _scoreData.currentTotalScore = currentTotalScore;
+        _scoreData.productScore      = productScore;
+        _scoreData.bonusScore        = bonusScore;
+        _scoreData.heightScore       = heightScore;
+        _scoreData.bonusNameList     = bonusNameList.ToList<string>();
     }
 
     //-----------------------------------------------------------------------------
@@ -190,7 +201,15 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     tmpScore.totalScore        = scoreData.totalScore + tmpScore.currentTotalScore;
 
                     // 今回のスコアを送信
-                    monobitView.RPC("RecvScore", MonobitTargets.All, tmpScore);
+                    monobitView.RPC("RecvScore"
+                                   ,MonobitTargets.All
+                                   ,tmpScore.totalScore
+                                   ,tmpScore.currentTotalScore
+                                   ,tmpScore.productScore
+                                   ,tmpScore.bonusScore
+                                   ,tmpScore.heightScore
+                                   ,tmpScore.bonusNameList.ToArray()
+                                   );
 
                     // スコア計算を不可に
                     isScoring = false;
