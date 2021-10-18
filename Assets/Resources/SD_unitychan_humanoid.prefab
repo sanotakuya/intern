@@ -5874,6 +5874,7 @@ MonoBehaviour:
   - {fileID: 3299377180002975763}
   ObservedComponents:
   - {fileID: 3299377180002975762}
+  - {fileID: 3299377180002975759}
   ownerId: 0
   group: 0
   prefixBackup: 0

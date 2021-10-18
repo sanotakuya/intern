@@ -45,6 +45,9 @@ public class AddPhysics : MonobitEngine.MonoBehaviour
                 RigidbodyConstraints.FreezeRotationY;
         }
 
+        // MonobitViewにRIgidbodyを追加
+        this.monobitView.ObservedComponents.Add(rigidbody);
+
         // 同期設定
         //monobitView = thisObj.gameObject.AddComponent<MonobitView>();
         //monobitView.ObservedComponents.Add(thisObj.gameObject.AddComponent<MonobitTransformView>());

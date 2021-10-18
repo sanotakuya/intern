@@ -171,6 +171,7 @@ MonoBehaviour:
   InternalObservedComponents: []
   ObservedComponents:
   - {fileID: 1442275558531424823}
+  - {fileID: 1136570099884359896}
   ownerId: 0
   group: 0
   prefixBackup: 0
