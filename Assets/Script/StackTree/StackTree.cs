@@ -39,6 +39,8 @@ public class StackTree : MonoBehaviour
     void Start()
     {
         ignoreTagtList.Add("Player");        // プレイヤーは除外する
+
+
     }
 
     //-----------------------------------------------------------------------------

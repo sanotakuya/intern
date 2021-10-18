@@ -60,6 +60,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
         public int   productScore;      // 商品スコア
         public int   bonusScore  ;      // ボーナススコア
         public float heightScore ;      // 高さスコア
+        public List<string> bonusNameList;
     }
 
     //-----------------------------------------------------------------------------
@@ -135,6 +136,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                 if (registerObject && isScoring) {
 
                     ScoreData tmpScore = new ScoreData(); // スコア一時格納
+                    tmpScore.bonusNameList = new List<string>();
 
                     // スタックツリーから高さ情報を取得
                     float height = stackTree.GetHeight();
@@ -171,6 +173,9 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                         if (hasScore) {
                             currenctBonusList.Add(bonusCriteria.Key, bonusCriteria.Value.score);
                             tmpScore.bonusScore += bonusCriteria.Value.score;
+
+                            // ボーナスのタイプ名をリストに追加
+                            tmpScore.bonusNameList.Add(bonusCriteria.Key);
                         }
                     }
 
