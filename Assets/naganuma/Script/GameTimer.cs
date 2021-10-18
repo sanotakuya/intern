@@ -57,6 +57,8 @@ public class GameTimer : MonoBehaviour
     //-----------------------------------------------------------------------------
     void Start()
     {
+        gameManager = this.GetComponent<GameManager>();
+
         // TODO: 現在はテストのため必要なし
         if (gameManager && false) {
             Debug.LogError("ゲームマネージャーが設定されていません。");
