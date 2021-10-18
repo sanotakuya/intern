@@ -14,17 +14,52 @@ public class GameManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     [SerializeField] StackTree stackTree = null;       // StackTreeがアタッチされているオブジェクト
     [SerializeField] NetworkManager networkManager = null;     // ネットワークマネージャ
+    [SerializeField] RegisterScore registerScore = null;     // ネットワークマネージャ
+    [SerializeField] RealTimeTextManager realTimeTextManager = null;
+    int lastDisplayScore = 0;
+
     bool playing = false;
 
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
 
+    //-----------------------------------------------------------------------------
+    //! [内容]		生成時
+    //-----------------------------------------------------------------------------
+    private void Awake()
+    {
+        
+    }
+
+    private void FixedUpdate()
+    {
+        // スコアが変化していたら表示
+        if(lastDisplayScore != registerScore.scoreData.totalScore)
+        {
+            lastDisplayScore = registerScore.scoreData.totalScore;
+
+            RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
+            textInfo.SetDefault();
+
+            textInfo.text = "ボーナス内容　:";
+
+            foreach(string str in registerScore.scoreData.bonusNameList)
+            {
+                textInfo.text += str;
+            }
+
+            realTimeTextManager.EnqueueText(textInfo);
+
+            textInfo.text = "合計スコア : " + registerScore.scoreData.totalScore.ToString();
+            realTimeTextManager.EnqueueText(textInfo);
+        }
+    }
 
     //-----------------------------------------------------------------------------
     //! [内容]		StackTreeのSet
     //-----------------------------------------------------------------------------
-    void SetStackTree(ref StackTree _stackTree)
+    public void SetStackTree(ref StackTree _stackTree)
     {
         stackTree = _stackTree;
     }
@@ -32,9 +67,17 @@ public class GameManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		NetworkManagerのSet
     //-----------------------------------------------------------------------------
-    void SetNetworkManager(ref NetworkManager _networkManager)
+    public void SetNetworkManager(ref NetworkManager _networkManager)
     {
         networkManager = _networkManager;
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		RegisterScoreのSet
+    //-----------------------------------------------------------------------------
+    public void SetRegisterScore(ref RegisterScore _registerScore)
+    {
+        registerScore = _registerScore;
     }
 
     //-----------------------------------------------------------------------------
@@ -49,6 +92,11 @@ public class GameManager : MonoBehaviour
         }
 
         if(!networkManager)
+        {
+            return false;
+        }
+
+        if(!registerScore)
         {
             return false;
         }
@@ -73,6 +121,14 @@ public class GameManager : MonoBehaviour
 
         // プレイ中フラグを立てる
         playing = true;
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ゴールに辿り着いたときコール
+    //-----------------------------------------------------------------------------
+    void Goal()
+    {
+
     }
 
     //-----------------------------------------------------------------------------

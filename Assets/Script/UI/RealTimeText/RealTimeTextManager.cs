@@ -22,7 +22,7 @@ public class RealTimeTextManager : MonoBehaviour
     }
 
     // メッセージ表示依頼用構造体
-    public struct RealTimeTextInfo
+    public struct TextInfo
     {
         public string text;        // 表示するテキスト
         public Color color;        // 色
@@ -37,6 +37,7 @@ public class RealTimeTextManager : MonoBehaviour
             color.r = 1;
             color.g = 1;
             color.b = 1;
+            color.a = 1;
 
             lifeTime = 4;
             fontSize = 64;
@@ -58,14 +59,14 @@ public class RealTimeTextManager : MonoBehaviour
 
 
     // マネージ用変数
-    private List<RealTimeTextInfo> textQueue = new List<RealTimeTextInfo>();
+    private List<TextInfo> textQueue = new List<TextInfo>();
     private float elapsedTime;
     private float lifeTime;
 
 
     void Start()
     {
-        RealTimeTextInfo info = new RealTimeTextInfo();
+        TextInfo info = new TextInfo();
         info.SetDefault();
         info.text = "なぜか";
         info.color = new Color(1, 0, 0);
@@ -93,7 +94,10 @@ public class RealTimeTextManager : MonoBehaviour
 
         if(elapsedTime > lifeTime)
         {
-            Destroy(textObj);
+            if(textObj)
+            {
+                Destroy(textObj);
+            }
 
             // キューが残っているなら
             if (textQueue.Count > 0)
@@ -108,7 +112,7 @@ public class RealTimeTextManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		リアルタイムテキストのキューに追加
     //-----------------------------------------------------------------------------
-    public void EnqueueText(RealTimeTextInfo textInfo)
+    public void EnqueueText(TextInfo textInfo)
     {
         textQueue.Add(textInfo);        // 最後に追加
     }
@@ -126,7 +130,7 @@ public class RealTimeTextManager : MonoBehaviour
         text = textObj.GetComponent<TextMeshProUGUI>();
 
         // 新しいテキスト情報に変更
-        RealTimeTextInfo info = textQueue[0];
+        TextInfo info = textQueue[0];
         text.text = info.text;
         text.color = info.color;
         text.fontSize = info.fontSize;
