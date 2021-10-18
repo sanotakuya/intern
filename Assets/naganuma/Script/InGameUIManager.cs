@@ -27,6 +27,7 @@ public class InGameUIManager : MonoBehaviour
     [Header("スコアテキスト")]         public Text          scoreText    ; // スコアテキスト
     [Header("タイムテキスト")]         public Text          timeText     ; // タイムテキスト
     [Header("カウントダウンテキスト")] public Text          countDown    ; //　カウントダウンテキスト
+    [Header("高さスライダー")]         public Slider        heightSlider ; // 高さスライダー
 
     //-----------------------------------------------------------------------------
     //! [内容]    開始処理
@@ -40,6 +41,7 @@ public class InGameUIManager : MonoBehaviour
         if (!scoreText)     Debug.LogError("スコアテキストが指定されていません。");
         if (!timeText)      Debug.LogError("タイムテキストが指定されていません。");
         if (!countDown)     Debug.LogError("カウントダウンテキストが指定されていません。");
+        if (!heightSlider)  Debug.LogError("高さスライダーが指定されていません。");
     }
 
     //-----------------------------------------------------------------------------
@@ -63,5 +65,8 @@ public class InGameUIManager : MonoBehaviour
 
         // スコア表示
         scoreText.text = string.Format("{0:00000#,0}", registerScore.scoreData.totalScore);
+
+        // 高さを表示
+
     }
 }
