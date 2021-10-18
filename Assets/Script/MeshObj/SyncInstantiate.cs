@@ -21,28 +21,37 @@ public class SyncInstantiate : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     void Update()
     {
-        // ルームに入室しているか確認
-        if (MonobitNetwork.inRoom) {
-            // 自身がルームのホストの場合はインスタンス化
-            if (MonobitNetwork.isHost) {
-                // インスタンス生成
-                if (prefab) {
-                    var obj = MonobitNetwork.Instantiate(path + prefab.name, this.transform.position, this.transform.rotation, 0);
-                    // 生成できたか確認
-                    if (obj) {
-                        // 自身のスケールを生成したオブジェクトに適用
-                        obj.transform.localScale = this.transform.localScale;
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            // ルームに入室しているか確認
+            if (MonobitNetwork.inRoom)
+            {
+                // 自身がルームのホストの場合はインスタンス化
+                if (MonobitNetwork.isHost)
+                {
+                    // インスタンス生成
+                    if (prefab)
+                    {
+                        var obj = MonobitNetwork.Instantiate(path + prefab.name, this.transform.position, this.transform.rotation, 0);
+                        // 生成できたか確認
+                        if (obj)
+                        {
+                            // 自身のスケールを生成したオブジェクトに適用
+                            obj.transform.localScale = this.transform.localScale;
+                        }
+                        else
+                        {
+                            Debug.LogWarning(this.name + "はオブジェクトの生成に失敗しました。");
+                        }
                     }
-                    else {
-                        Debug.LogWarning(this.name + "はオブジェクトの生成に失敗しました。");
+                    else
+                    {
+                        Debug.LogWarning(this.name + "はプレハブが設定されていません。");
                     }
                 }
-                else {
-                    Debug.LogWarning(this.name + "はプレハブが設定されていません。");
-                }
+                // 自身を削除
+                Destroy(this.gameObject);
             }
-            // 自身を削除
-            Destroy(this.gameObject);
         }
     }
 }
