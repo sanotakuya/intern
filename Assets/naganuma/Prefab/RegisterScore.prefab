@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 787984529803921421}
   - component: {fileID: 787984529803921420}
+  - component: {fileID: 3422704521021912832}
   m_Layer: 0
   m_Name: RegisterScore
   m_TagString: Untagged
@@ -43,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3abab96263d4af84fb096d9980f84b62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testCartObject: {fileID: 0}
+  cashRegisterManager: {fileID: 0}
   cartPrefab: {fileID: 0}
   scoreUnit: "\uFFE5"
   scoreList:
@@ -84,3 +85,28 @@ MonoBehaviour:
       value: 1.5
     - key: 5
       value: 2
+--- !u!114 &3422704521021912832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787984529803921523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277584237ad31144584195f79af03cd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_viewIdField: 0
+  m_IsDontDestroyOnRoom: 0
+  m_IsInstantiated: 0
+  m_ObjectStreamCheckTime: 0
+  m_ObjectStreamSendBytes: 
+  m_IsEncrypt: 1
+  InternalObservedComponents: []
+  ObservedComponents: []
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  ownershipTransfer: 0
+  compressedStream: 0

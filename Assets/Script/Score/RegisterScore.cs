@@ -55,21 +55,22 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
 
     public struct ScoreData   // スコアデータ
     {
-        public int   totalScore  ;      // 今までの合計スコア
-        public int   currentTotalScore; // 今回の合計スコア
-        public int   productScore;      // 商品スコア
-        public int   bonusScore  ;      // ボーナススコア
-        public float heightScore ;      // 高さスコア
-        public List<string> bonusNameList;
+        public int          totalScore       ; // 今までの合計スコア
+        public int          currentTotalScore; // 今回の合計スコア
+        public int          productScore     ; // 商品スコア
+        public int          bonusScore       ; // ボーナススコア
+        public float        heightScore      ; // 高さスコア
+        public List<string> bonusNameList    ;
     }
 
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private ScoreData  _scoreData  = new ScoreData(); // 現在のスコア
-    private GameObject cartObject                   ; // カートオブジェクト
-    private StackTree  stackTree                    ; // スタックツリー
-    private bool       isScoring   = true           ; // スコア計算が可能か
+    private ScoreData   _scoreData  = new ScoreData(); // 現在のスコア
+    private GameObject  cartObject                   ; // カートオブジェクト
+    private StackTree   stackTree                    ; // スタックツリー
+    private MonobitView monobitView                  ; // モノビットビュー
+    private bool        isScoring   = true           ; // スコア計算が可能か
 
     //-----------------------------------------------------------------------------
     //! public変数
@@ -118,6 +119,11 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
         }
         if (!cashRegisterManager) {
             Debug.LogError("レジマネージャーが設定されていません。");
+        }
+
+        monobitView = this.GetComponent<MonobitView>();
+        if (!monobitView) {
+            Debug.LogError("MonobitViewが設定されていません。");
         }
     }
 
@@ -184,7 +190,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     tmpScore.totalScore        = scoreData.totalScore + tmpScore.currentTotalScore;
 
                     // 今回のスコアを送信
-                    RecvScore(tmpScore);
+                    monobitView.RPC("RecvScore", MonobitTargets.All, tmpScore);
 
                     // スコア計算を不可に
                     isScoring = false;
