@@ -10,26 +10,25 @@ using MonobitEngine;
 //-----------------------------------------------------------------------------
 public class MovePlayer : MonobitEngine.MonoBehaviour
 {
-    [Tooltip("通常時の歩行速度")] 　　public float movePower; //通常時の歩行速度
-    [Tooltip("ジャンプ力")]       　　public float jumpPower; //ジャンプ力
-    [Tooltip("法定速度")]       　　  public float maxSpeed;  //最大速度
+    [Tooltip("通常時の歩行速度")] public float movePower; //通常時の歩行速度
+    [Tooltip("ジャンプ力")] public float jumpPower; //ジャンプ力
+    [Tooltip("法定速度")] public float maxSpeed;  //最大速度
 
-    [Header("足元チェック用オブジェクト")]     public GameObject groundCheckObj;
+    [Header("足元チェック用オブジェクト")] public GameObject groundCheckObj;
 
     Rigidbody rb;
     GroundCheck groundCheck;
     HoldThrow holdThrow;
 
-    MonobitView monobitView= null;
+    MonobitView monobitView = null;
 
     private float firstMovePower;   //通常時の速度を保存する
     private float firstSpeed;       //通常時の最高速度を保存する
 
-
     private bool isRunning;       //現在は知っている状態なのかを取得する
-
-
-    static float targetAngle;  //次のプレイヤーの向き
+    
+    static float targetAngle;   //次のプレイヤーの向き
+    public  bool isAnotherHold;  //誰かにHoldされていないか
 
     bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
     bool isDepthLock;   //Z軸固定されているかのフラグ
@@ -51,12 +50,18 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         firstMovePower = movePower;
         firstSpeed = maxSpeed;
         isDepthLock = false;
+        isAnotherHold = false;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (!monobitView.isMine)
+        {
+            return;
+        }
+
+        if (isAnotherHold == true)
         {
             return;
         }
@@ -70,9 +75,19 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
         this.transform.eulerAngles = new Vector3(0, angle, 0);
 
+
+
         if (isJump == true && isGroundTouch == true)
         {
             isJump = false;
+        }
+
+        if (isGroundTouch == true)
+        {
+            if (this.GetComponent<Animator>().enabled == false)
+            {
+                this.GetComponent<Animator>().enabled = true;
+            }
         }
         if (Input.GetKey(KeyCode.A))
         {
@@ -160,7 +175,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             isRunning = false;
             animator.SetBool("isRun", false);
         }
-       
+
         //Z軸固定
         if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
         {
@@ -174,7 +189,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 isDepthLock = false;
             }
         }
-        else if(this.transform.position.z != 0.0f)
+        else if (this.transform.position.z != 0.0f)
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -182,7 +197,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             }
         }
     }
-  
+
 
     //外部参照用関数
     //-----------------------------------------------------------------------------
@@ -191,10 +206,29 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     public static void SetTargetAngle(float target)
     {
         targetAngle = target;
-    } 
+    }
+
+   
+    //-----------------------------------------------------------------------------
+    //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
+    //-----------------------------------------------------------------------------
+    public  void SetPlayerHold(bool isHold)
+    {
+        isAnotherHold = isHold;
+    }
+    
+    //-----------------------------------------------------------------------------
+    //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
+    //-----------------------------------------------------------------------------
+    public bool GetAnotherHold()
+    {
+        return isAnotherHold;
+    }
 
     public void AnimationReset(string str)
     {
         animator.SetBool(str, false);
     }
+
+
 }

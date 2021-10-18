@@ -25,6 +25,7 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
         if (other.transform.gameObject.tag == "ThrowObject")
         {
             throwObjects.Add(other.gameObject);
+            Debug.Log(throwObjects[0]);
         }
     }
     void OnTriggerExit(Collider other)

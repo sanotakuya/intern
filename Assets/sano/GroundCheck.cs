@@ -22,7 +22,10 @@ public class GroundCheck : MonobitEngine.MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        isHitGround = true;
+        if (other.gameObject.tag == "Ground")
+        {
+            isHitGround = true;
+        }
     }
     void OnTriggerExit(Collider other)
     {
