@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MonobitEngine;
+using System.Linq;
 
 //-----------------------------------------------------------------------------
 //! [制作者]     長沼豪琉
@@ -28,9 +29,9 @@ public class CashRegisterManager : MonobitEngine.MonoBehaviour
     //! [内容]    RPC受信関数(ホストからレジのエリアに入ったかを取得)
     //-----------------------------------------------------------------------------
     [MunRPC]
-    void RecvInRegister(List<bool> senderinAreas)
+    void RecvInRegister(bool[] senderinAreas)
     {
-        inAreas = senderinAreas;
+        inAreas = senderinAreas.ToList<bool>();
     }
 
     //-----------------------------------------------------------------------------
@@ -46,7 +47,7 @@ public class CashRegisterManager : MonobitEngine.MonoBehaviour
                 tmpInAreas.Add(registar.inArea);
             }
             // 当たり判定の状況を送信
-            RecvInRegister(tmpInAreas);
+            this.monobitView.RPC("RecvInRegister", MonobitTargets.All, tmpInAreas.ToArray());
         }
     }
 
