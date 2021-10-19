@@ -110,6 +110,7 @@ public class GameTimer : MonobitEngine.MonoBehaviour
     //! [内容]    ゲーム開始
     //-----------------------------------------------------------------------------
     public void GameStart() {
-        monobitView.RPC("RecvGameStart", MonobitTargets.All, new bool());
+        bool flag = false;
+        monobitView.RPC("RecvGameStart", MonobitTargets.All, flag);
     }
 }
