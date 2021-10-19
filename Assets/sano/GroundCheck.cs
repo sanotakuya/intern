@@ -11,14 +11,18 @@ public class GroundCheck : MonobitEngine.MonoBehaviour
 
     private void Start()
     {
-        m_MonobitView = GetComponent<MonobitView>();
+        // 親オブジェクトのMonobitViewを取得する
+        if (GetComponentInParent<MonobitEngine.MonobitView>() != null)
+        {
+            m_MonobitView = GetComponentInParent<MonobitEngine.MonobitView>();
+        }
     }
     private void Update()
     {
-        //if (!m_MonobitView.isMine)
-        //{
-        //    return;
-        //}
+        if (!m_MonobitView.isMine)
+        {
+            return;
+        }
     }
     void OnTriggerStay(Collider other)
     {

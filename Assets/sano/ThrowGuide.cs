@@ -40,7 +40,11 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         sphereRb = this.GetComponent<Rigidbody>();
         guideList = new List<GameObject>();
 
-        m_MonobitView = GetComponent<MonobitView>();
+        // 親オブジェクトのMonobitViewを取得する
+        if (GetComponentInParent<MonobitEngine.MonobitView>() != null)
+        {
+            m_MonobitView = GetComponentInParent<MonobitEngine.MonobitView>();
+        }
 
         // Prefabをインスタンス化するメソッドを呼ぶ
         InstantiateGuidePrefabs();
@@ -48,6 +52,10 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
 
     void Update()
     {
+        if (!m_MonobitView.isMine)
+        {
+            return;
+        }
         if (isGuideStart == true)
         {
             SetGuidePositions();

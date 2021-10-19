@@ -12,38 +12,22 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
     {
         throwObjects = new List<GameObject>();
         //hitObjects = new List<GameObject>();
-        m_MonobitView = GetComponent<MonobitView>();
+
+        // 親オブジェクトのMonobitViewを取得する
+        if (GetComponentInParent<MonobitEngine.MonobitView>() != null)
+        {
+            m_MonobitView = GetComponentInParent<MonobitEngine.MonobitView>();
+        }
+       
     }
 
     private void Update()
     {
-        //if (!m_MonobitView.isMine)
-        //{
-        //    return;
-        //}
-
-        //if (hitObjects != null)
-        //{
-        //    for (int i = 0; i < hitObjects.Count; i++)
-        //    {
-        //        if (throwObjects.Count == 0)
-        //        {
-        //            throwObjects.Add(hitObjects[i]);
-                   
-        //        }
-        //        else
-        //        {
-        //            for (int k = 0; k < throwObjects.Count; k++)
-        //            {
-        //                if (throwObjects[k] != hitObjects[i])
-        //                {
-        //                    throwObjects.Add(hitObjects[i]);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
+        if (!m_MonobitView.isMine)
+        {
+            return;
+        }
+        
     }
     void OnTriggerStay(Collider other)
     {
