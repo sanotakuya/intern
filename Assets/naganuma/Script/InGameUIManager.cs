@@ -21,13 +21,14 @@ public class InGameUIManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! Inspectorに公開する変数
     //-----------------------------------------------------------------------------
-    [Header("RegisterScore")]          public RegisterScore registerScore; // スコア
-    [Header("GameTimer")]              public GameTimer     gameTimer    ; // ゲームタイマー
-    [Header("単位テキスト")]           public Text          UnitText     ; // 単位テキスト
-    [Header("スコアテキスト")]         public Text          scoreText    ; // スコアテキスト
-    [Header("タイムテキスト")]         public Text          timeText     ; // タイムテキスト
-    [Header("カウントダウンテキスト")] public Text          countDown    ; //　カウントダウンテキスト
-    [Header("高さスライダー")]         public Slider        heightSlider ; // 高さスライダー
+    [Header("RegisterScore")]              public RegisterScore registerScore; // スコア
+    [Header("GameTimer")]                  public GameTimer     gameTimer    ; // ゲームタイマー
+    [Header("単位テキスト")]               public Text          UnitText     ; // 単位テキスト
+    [Header("スコアテキスト")]             public Text          scoreText    ; // スコアテキスト
+    [Header("タイムテキスト")]             public Text          timeText     ; // タイムテキスト
+    [Header("カウントダウンテキスト")]     public Text          countDown    ; // ウントダウンテキスト
+    [Header("高さスライダー")]             public Slider        heightSlider ; // 高さスライダー
+    [Header("高さスライダーの表示上限値")] public float         heightLimit  ; // スライダーの上限値
 
     //-----------------------------------------------------------------------------
     //! [内容]    開始処理
@@ -67,6 +68,9 @@ public class InGameUIManager : MonoBehaviour
         scoreText.text = string.Format("{0:00000#,0}", registerScore.scoreData.totalScore);
 
         // 高さを表示
-
+        if (heightLimit != 0) {
+            var distance = registerScore.scoreData.height / heightLimit;
+            heightSlider.value = distance;
+        }
     }
 }
