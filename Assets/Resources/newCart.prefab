@@ -386,6 +386,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 598786364760726325}
     m_Modifications:
+    - target: {fileID: 19016242481469938, guid: 40ec51b84684ce84c9c438c826f5b252, type: 3}
+      propertyPath: ignoreGameObjectList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 19016242481469938, guid: 40ec51b84684ce84c9c438c826f5b252, type: 3}
+      propertyPath: ignoreTagtList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 19016242481469938, guid: 40ec51b84684ce84c9c438c826f5b252, type: 3}
+      propertyPath: ignoreGameObjectList.Array.data[0]
+      value: 
+      objectReference: {fileID: 217441249925874063}
+    - target: {fileID: 19016242481469938, guid: 40ec51b84684ce84c9c438c826f5b252, type: 3}
+      propertyPath: ignoreTagtList.Array.data[0]
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 1958575032229296225, guid: 40ec51b84684ce84c9c438c826f5b252, type: 3}
       propertyPath: m_Name
       value: StackArea
