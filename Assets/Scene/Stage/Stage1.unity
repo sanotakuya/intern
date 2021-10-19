@@ -8001,6 +8001,10 @@ PrefabInstance:
       propertyPath: _realTimeTextManager
       value: 
       objectReference: {fileID: 133165051}
+    - target: {fileID: 281086768584153447, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
+      propertyPath: gameTimer
+      value: 
+      objectReference: {fileID: 380864067}
     - target: {fileID: 1073126651407191440, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
       propertyPath: m_Name
       value: GameManager
