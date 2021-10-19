@@ -17,7 +17,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
     ObjectRadar objectRadar;    // オブジェクト探査スクリプト（あたり判定にあたってるオブジェクト取得のため）
 
-    static MonobitView m_MonobitView = null;
+    MonobitView m_MonobitView = null;
 
     [Header("プレイヤーの頭上にスペースがあるのか確認する")] public GameObject overHeadCheck;
     OverHitCheck overHitCheck;
@@ -49,7 +49,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     float mouseVec = 0;        //　プレイヤーから見たマウス座標へのベクトル
     //角度
     [Header("飛ばす角度を保留するオブジェクト(仮)")] public GameObject meter;
-    [Tooltip("メーターが動く速度")] public float meterSpeed;   
+    [Tooltip("メーターが動く速度")] public float meterSpeed;
     bool isChangeRot;           //飛ばす角度を正の方向と負の方向に切り替える
     float nowRot;               //現在の角度
     //力
@@ -93,7 +93,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 {
                     // プレイヤーの距離とオブジェクトの中心距離を計測する
                     float distance = Vector3.Distance(transform.position, objectRadar.throwObjects[i].transform.position);
-                   
+
                     // 現在の最短距離よりも近くにあれば
                     if (distance <= minDistance)
                     {
@@ -122,6 +122,13 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
                         rbHoldObj = holdObject.GetComponent<Rigidbody>();
 
+                        if (holdObject.GetComponent<Animator>() && holdObject.GetComponent<MovePlayer>())
+                        {
+                            holdObject.GetComponent<Animator>().enabled = false;
+                            holdObject.GetComponent<MovePlayer>().SetPlayerHold(true);
+                            Debug.Log("プレイヤーを掴む");
+                        }
+
                         // プレイヤーの子オブジェクトにする
                         holdObject.transform.parent = this.transform;
 
@@ -137,9 +144,9 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         {
             // ブロックをもち上げる
             holdObject.transform.position = new Vector3(playerPos.x, playerPos.y + 1.5f, playerPos.z);
-            
+
             // オブジェクトの加速度初期化
-            
+
             rbHoldObj.velocity = Vector3.zero;
 
             // 掴んでいるオブジェクトの回転
@@ -161,36 +168,50 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             }
 
             // オブジェクトを投げる
-            
-            // キーの入力があれば角度更新
-            if (Input.GetKey(KeyCode.F) && isInput == false)
-            {
-                // 投げる角度更新
-                ChangeMaterAngle();
-            }
 
             //プレイヤーをZ軸０へ誘導
             PlayerDepthMove();
 
-            //投擲位置の変更とガイド表示
-            guide.SetGuidesState(true);
+            //　0になってたらガイド表示
+            if (isDepthLock == true)
+            {
+                // キーの入力があれば角度更新
+                if (Input.GetKey(KeyCode.F) && isInput == false)
+                {
+                    // 投げる角度更新
+                    ChangeMaterAngle();
+                    //ガイド表示
+                    guide.SetGuidesState(true);
+                }
+            }
+
+           //投げる角度を計算
             CalcForceDirection();
+
             // 指定の角度にオブジェクトを飛ばす
             if (Input.GetKeyUp(KeyCode.F) && isInput == false)
             {
+               
+
                 if (isDepthLock == true)
                 {
                     // 親から離脱する
                     holdObject.transform.parent = null;
                     // オブジェクトを飛ばす
                     ObjectThrow();
-                    guide.SetGuidesState(false);
+                    if (holdObject.GetComponent<MovePlayer>())
+                    {
+                        holdObject.GetComponent<MovePlayer>().SetPlayerHold(false);
+                    }
+                    //投げるときオブジェクトの所有権をホストに返す
+                    holdObject.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.host);
+
                     holdObject = null;
                     isHold = false;
                     isInput = true;
                     minDistance = RESETDISTANCE;
                 }
-               
+
             }
         }
     }
@@ -215,7 +236,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     {
         if (holdObject != null)
         {
-           //holdObject
+            //holdObject
         }
     }
 
@@ -325,11 +346,13 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
         //力の計算
         throwPower = rbHoldObj.mass * strength;
+        Debug.Log("飛ばす強さ" + throwPower);
+
+        guide.SetGuidesState(false);
 
         // 向きと力の計算
         throwForce = throwPower * forceDirection.normalized;
 
-        Debug.Log("飛ばす向き" + throwForce);
         rbHoldObj.AddForce(throwForce, ForceMode.Impulse);
     }
 
