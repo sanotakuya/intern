@@ -63,13 +63,6 @@ public class StackTree : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        Debug.Log("StackNum:" + stackList.Count.ToString());
-        Debug.Log("Height:" + GetHeight().ToString());
-        Debug.Log("SetBonus:" + CheckSetBonus("blue", "red").ToString());
-    }
-
     //-----------------------------------------------------------------------------
     //! [内容]		子供として追加しても問題ないか検討する(trueで問題なし)
     //-----------------------------------------------------------------------------
@@ -106,6 +99,14 @@ public class StackTree : MonoBehaviour
     {
         obj.AddComponent<StackRoot>().top = this;
         children.Add(obj);
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		リセット関数(削除したとき用)
+    //-----------------------------------------------------------------------------
+    public void PowerReset()
+    {
+        children.Clear();
     }
 
     //-----------------------------------------------------------------------------

@@ -211,6 +211,15 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                                    ,tmpScore.bonusNameList.ToArray()
                                    );
 
+                    // 乗っているオブジェクトの削除
+                    foreach(GameObject obj in stackTree.stackList )
+                    {
+                        Destroy(obj);
+                    }
+
+                    // リセット
+                    stackTree.PowerReset();
+
                     // スコア計算を不可に
                     isScoring = false;
                 }
