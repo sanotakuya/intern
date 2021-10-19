@@ -214,7 +214,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     // 乗っているオブジェクトの削除
                     foreach(GameObject obj in stackTree.stackList )
                     {
-                        Destroy(obj);
+                        obj.transform.position = new Vector3(-1000, 0, 0);
                     }
 
                     // リセット
