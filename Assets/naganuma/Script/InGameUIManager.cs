@@ -13,6 +13,8 @@ public class InGameUIManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
+    private StackTree  stackTree ; // スタックツリー
+    private GameObject cartObject; // カートオブジェクト
 
     //-----------------------------------------------------------------------------
     //! public変数
@@ -23,6 +25,7 @@ public class InGameUIManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     [Header("RegisterScore")]              public RegisterScore registerScore; // スコア
     [Header("GameTimer")]                  public GameTimer     gameTimer    ; // ゲームタイマー
+    [Header("カートプレハブ")]             public GameObject    cartPrefab   ; // カートプレハブ
     [Header("単位テキスト")]               public Text          UnitText     ; // 単位テキスト
     [Header("スコアテキスト")]             public Text          scoreText    ; // スコアテキスト
     [Header("タイムテキスト")]             public Text          timeText     ; // タイムテキスト
@@ -50,27 +53,41 @@ public class InGameUIManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     void Update()
     {
-        // カウントダウン
-        if (gameTimer.startCount > 0.0f) {
-            countDown.text = (gameTimer.startCount + 1.0f).ToString();
+        if (stackTree) {
+            // カウントダウン
+            if (gameTimer.startCount > 0.0f) {
+                countDown.text = (gameTimer.startCount + 1.0f).ToString();
+            }
+            else {
+                countDown.enabled = false;
+            }
+
+            // 残り時間から分と秒を計算
+            var limitCount = gameTimer.limitCount;
+            int minutes = Mathf.FloorToInt(limitCount / 60.0f); // 分
+            int seconds = Mathf.FloorToInt(limitCount - minutes * 60.0f); // 秒
+            timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+            // スコア表示
+            scoreText.text = string.Format("{0:00000#,0}", registerScore.scoreData.totalScore);
+
+            // 高さを表示
+            if (heightLimit != 0) {
+                var distance = stackTree.GetHeight() / heightLimit;
+                heightSlider.value = distance;
+            }
         }
         else {
-            countDown.enabled = false;
-        }
-
-        // 残り時間から分と秒を計算
-        var limitCount = gameTimer.limitCount;
-        int minutes = Mathf.FloorToInt(limitCount / 60.0f)          ; // 分
-        int seconds = Mathf.FloorToInt(limitCount - minutes * 60.0f); // 秒
-        timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-
-        // スコア表示
-        scoreText.text = string.Format("{0:00000#,0}", registerScore.scoreData.totalScore);
-
-        // 高さを表示
-        if (heightLimit != 0) {
-            var distance = registerScore.scoreData.height / heightLimit;
-            heightSlider.value = distance;
+            if (cartPrefab) {
+                cartObject = GameObject.Find(cartPrefab.name + "(Clone)");
+                // 見つかった場合スタックツリーコンポーネントを取得
+                if (cartObject) {
+                    stackTree = cartObject.GetComponentInChildren<StackTree>();
+                    if (!stackTree) {
+                        Debug.LogError(cartObject.name + "にスタックツリーが見つかりません。");
+                    }
+                }
+            }
         }
     }
 }

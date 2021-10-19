@@ -460,11 +460,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   registerScore: {fileID: 0}
   gameTimer: {fileID: 0}
+  cartObject: {fileID: 217441249925874063, guid: 1e4cdd1ec0072804b81a6f11aa5cb866, type: 3}
   UnitText: {fileID: 3502717136587689856}
   scoreText: {fileID: 3502717136608630716}
   timeText: {fileID: 3502717134976371671}
   countDown: {fileID: 8055302900496548481}
   heightSlider: {fileID: 7092993862853102692}
+  heightLimit: 0.5
 --- !u!1 &3502717135960631841
 GameObject:
   m_ObjectHideFlags: 0
