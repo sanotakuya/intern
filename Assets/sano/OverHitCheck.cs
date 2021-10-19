@@ -6,7 +6,7 @@ public class OverHitCheck : MonobitEngine.MonoBehaviour
 {
     public bool isHitOver;   //頭上との当たり判定
 
-    static MonobitView m_MonobitView = null;
+    MonobitView m_MonobitView = null;
 
     private void Start()
     {

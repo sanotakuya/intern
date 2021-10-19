@@ -7,7 +7,7 @@ public class GroundCheck : MonobitEngine.MonoBehaviour
 {
     public bool isHitGround;   //地面との当たり判定
 
-    static MonobitView m_MonobitView = null;
+    MonobitView m_MonobitView = null;
 
     private void Start()
     {

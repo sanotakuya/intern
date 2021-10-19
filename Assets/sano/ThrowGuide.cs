@@ -4,7 +4,7 @@ using UnityEngine;
 using MonobitEngine;
 public class ThrowGuide : MonobitEngine.MonoBehaviour
 {
-    static MonobitView m_MonobitView = null;
+    MonobitView m_MonobitView = null;
 
     //　ガイド開始
     public bool isGuideStart;

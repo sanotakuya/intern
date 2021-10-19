@@ -7,7 +7,8 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
 {
     public List<GameObject> throwObjects;
     //public List<GameObject> hitObjects;
-    static MonobitView m_MonobitView = null;
+    MonobitView m_MonobitView = null;
+
     private void Start()
     {
         throwObjects = new List<GameObject>();

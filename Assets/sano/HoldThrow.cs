@@ -17,7 +17,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
     ObjectRadar objectRadar;    // オブジェクト探査スクリプト（あたり判定にあたってるオブジェクト取得のため）
 
-    static MonobitView m_MonobitView = null;
+    MonobitView m_MonobitView = null;
 
     [Header("プレイヤーの頭上にスペースがあるのか確認する")] public GameObject overHeadCheck;
     OverHitCheck overHitCheck;
@@ -169,22 +169,30 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
             // オブジェクトを投げる
 
-            // キーの入力があれば角度更新
-            if (Input.GetKey(KeyCode.F) && isInput == false)
-            {
-                // 投げる角度更新
-                ChangeMaterAngle();
-            }
-
             //プレイヤーをZ軸０へ誘導
             PlayerDepthMove();
 
-            //投擲位置の変更とガイド表示
-            guide.SetGuidesState(true);
+            //　0になってたらガイド表示
+            if (isDepthLock == true)
+            {
+                // キーの入力があれば角度更新
+                if (Input.GetKey(KeyCode.F) && isInput == false)
+                {
+                    // 投げる角度更新
+                    ChangeMaterAngle();
+                    //ガイド表示
+                    guide.SetGuidesState(true);
+                }
+            }
+
+           //投げる角度を計算
             CalcForceDirection();
+
             // 指定の角度にオブジェクトを飛ばす
             if (Input.GetKeyUp(KeyCode.F) && isInput == false)
             {
+                guide.SetGuidesState(false);
+
                 if (isDepthLock == true)
                 {
                     // 親から離脱する
@@ -195,7 +203,9 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                     {
                         holdObject.GetComponent<MovePlayer>().SetPlayerHold(false);
                     }
-                    guide.SetGuidesState(false);
+                    //投げるときオブジェクトの所有権をホストに返す
+                    holdObject.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.host);
+
                     holdObject = null;
                     isHold = false;
                     isInput = true;
