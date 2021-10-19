@@ -16,6 +16,8 @@ public class GameManager : MonobitEngine.MonoBehaviour
     [SerializeField] StackTree stackTree = null;       // StackTreeがアタッチされているオブジェクト
     [SerializeField] NetworkManager networkManager = null;     // ネットワークマネージャ
     [SerializeField] RegisterScore registerScore = null;     // ネットワークマネージャ
+    [SerializeField] GameTimer gameTimer = null;     // ネットワークマネージャ
+
 
     [SerializeField] RealTimeTextManager _realTimeTextManager = null;
     public RealTimeTextManager realTimeTextManager
@@ -37,7 +39,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
 
     //-----------------------------------------------------------------------------
-    //! [内容]		受信関数
+    //! [内容]		参加受信関数
     //-----------------------------------------------------------------------------
     [MunRPC]
     void RecvRoomText(string text)
@@ -48,6 +50,15 @@ public class GameManager : MonobitEngine.MonoBehaviour
         textInfo.text = text;
 
         GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ゲーム開始受信関数
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvGameStart(bool temp)
+    {
+        GameStart();
     }
 
     //-----------------------------------------------------------------------------
@@ -92,6 +103,11 @@ public class GameManager : MonobitEngine.MonoBehaviour
                 );
 
             inRoom = true;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Return) && MonobitNetwork.isHost && !playing)
+        {
+            GameStart();
         }
     }
 
@@ -160,6 +176,9 @@ public class GameManager : MonobitEngine.MonoBehaviour
 
         // プレイ中フラグを立てる
         playing = true;
+
+        // 計測と始める
+        gameTimer.GameStart();
     }
 
     //-----------------------------------------------------------------------------
