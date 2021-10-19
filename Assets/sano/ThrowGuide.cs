@@ -25,14 +25,12 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
 
     // インスタンス化されたGuideオブジェクトのリスト
     List<GameObject> guideList;
-
     
     //投げるオブジェクトの重さ
     static float holdMass;
 
     // 画面にプロットするガイドの数を定義
     public int protSize;
-    int prots = 25;
 
     void Start()
     {
@@ -60,6 +58,14 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         {
             SetGuidePositions();
         }
+        else
+        {
+            // ガイドの位置をリセット
+            for (int i = 0; i < protSize; i++)
+            {
+                guideList[i].transform.position = guidePrent.transform.position;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -72,13 +78,13 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         // 『GuideParent』の位置をguidePosにセット
         Vector3 guidePos = guidePrent.transform.position;
 
-        for (int i = 0; i < prots; i++)
+        for (int i = 0; i < protSize; i++)
         {
             // Prefabをインスタンス化
             GameObject guideObject = (GameObject)Instantiate(guidePrefab, guidePos, Quaternion.identity);
 
             // インスタンス化したオブジェクトをGuideParentの子オブジェクトにする
-            guideObject.transform.SetParent(gameObject.transform);
+            guideObject.transform.SetParent(guidePrent.transform);
 
             // オブジェクト名を設定する
             guideObject.name = "Guide_" + i.ToString();
@@ -110,7 +116,7 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         Vector3 speed = force / holdMass;
 
         // プロット数に応じて、各プロットの時刻をリストに格納
-        List<float> timeProtsList = GetTimeProtsList(speed, gravity, prots);
+        List<float> timeProtsList = GetTimeProtsList(speed, gravity, protSize);
 
         // リストの検証
         if (timeProtsList == null || timeProtsList.Count == 0)
@@ -119,7 +125,7 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         }
 
         // 時刻リストを元に、プロットするガイドの位置を設定
-        for (int i = 0; i < prots; i++)
+        for (int i = 0; i < protSize; i++)
         {
             // リストから時刻の値を取り出す
             float time = timeProtsList[i];

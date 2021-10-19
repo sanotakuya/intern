@@ -191,7 +191,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             // 指定の角度にオブジェクトを飛ばす
             if (Input.GetKeyUp(KeyCode.F) && isInput == false)
             {
-                guide.SetGuidesState(false);
+               
 
                 if (isDepthLock == true)
                 {
@@ -347,6 +347,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         //力の計算
         throwPower = rbHoldObj.mass * strength;
         Debug.Log("飛ばす強さ" + throwPower);
+
+        guide.SetGuidesState(false);
 
         // 向きと力の計算
         throwForce = throwPower * forceDirection.normalized;
