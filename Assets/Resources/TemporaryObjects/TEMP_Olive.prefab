@@ -96,5 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c39f7f728df013147af5a0a03892da9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ownershipManager: {fileID: 0}
   path: food/
   prefab: {fileID: 4426806338375784489, guid: 42acae2e7d1140b409ac2235e3c9c221, type: 3}

@@ -45,6 +45,8 @@ public class GameTimer : MonoBehaviour
         }
     }
 
+    private bool isStart = false; // プレイ開始
+
     //-----------------------------------------------------------------------------
     //! Inspectorに公開する変数
     //-----------------------------------------------------------------------------
@@ -70,8 +72,12 @@ public class GameTimer : MonoBehaviour
     //-----------------------------------------------------------------------------
     void Update()
     {
+
         // 時間計測
-        currentTime += Time.deltaTime;
+        if (isStart) {
+            currentTime += Time.deltaTime;
+        }
+
         // プレイ可能なタイミングから計測開始
         if (isPlayable) {
             _currentGameTime += Time.deltaTime;
@@ -86,5 +92,12 @@ public class GameTimer : MonoBehaviour
         if (limitCount == 0.0f) {
             // TODO:終了時処理
         }
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]    ゲーム開始
+    //-----------------------------------------------------------------------------
+    void TimeStart() {
+        isStart = true;
     }
 }
