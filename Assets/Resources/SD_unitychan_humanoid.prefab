@@ -5539,9 +5539,7 @@ GameObject:
   - component: {fileID: 3299377180002975759}
   - component: {fileID: 3299377180002975756}
   - component: {fileID: 3299377180002975757}
-  - component: {fileID: 3299377180002975762}
-  - component: {fileID: 3299377180002975763}
-  - component: {fileID: 3299377180002975760}
+  - component: {fileID: 3561509715131250204}
   m_Layer: 0
   m_Name: SD_unitychan_humanoid
   m_TagString: Player
@@ -5870,18 +5868,15 @@ MonoBehaviour:
   m_ObjectStreamCheckTime: 0
   m_ObjectStreamSendBytes: 
   m_IsEncrypt: 1
-  InternalObservedComponents:
-  - {fileID: 3299377180002975762}
-  - {fileID: 3299377180002975763}
+  InternalObservedComponents: []
   ObservedComponents:
-  - {fileID: 3299377180002975762}
-  - {fileID: 3299377180002975759}
+  - {fileID: 3561509715131250204}
   ownerId: 0
   group: 0
   prefixBackup: 0
   ownershipTransfer: 0
   compressedStream: 0
---- !u!114 &3299377180002975762
+--- !u!114 &3561509715131250204
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5890,7 +5885,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3299377180002975761}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e43095d0b31c5c4da5d336507b33fe1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1562c3e250aed894ca4e232d2e4fa25e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_SyncPosition:
@@ -5905,87 +5900,9 @@ MonoBehaviour:
     m_EnableSync: 0
     m_EnableInterpolate: 0
     m_LerpRate: 1
+  m_SyncRigid: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
---- !u!114 &3299377180002975763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3299377180002975761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a212333f0fad40b429ea9c65549ab6de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: 3299377180002975750}
-  m_Controller: {fileID: 9100000, guid: 1d23d21610666e749a1119a8988f3216, type: 2}
-  m_SyncAnimLayers:
-  - m_Index: 0
-    m_Name: Base Layer
-    m_EnableSync: 1
-  m_SyncAnimParams:
-  - m_Type: 4
-    m_Name: isJump
-    m_EnableSync: 1
-  - m_Type: 4
-    m_Name: isWalk
-    m_EnableSync: 1
-  - m_Type: 4
-    m_Name: isRun
-    m_EnableSync: 1
---- !u!114 &3299377180002975760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3299377180002975761}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5af7b8fdc9723749b09b2e6d6bf0982, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animView: {fileID: 3299377180002975763}
-  KeyAndAnimSettings:
-  - keyCode: 3
-    axisAction: 0
-    buttonAction: 2
-    actionType: 4
-    Position: {x: 0, y: 1, z: 1}
-    Rotation: {x: 0, y: 0, z: 0}
-    SelectLayer: 0
-    layerInfo:
-    - m_Index: 0
-      m_Name: Base Layer
-      m_animWeight: 0
-    SelectParam: 0
-    paramInfo:
-    - m_Index: 0
-      m_Type: 4
-      m_Name: isJump
-      m_floatValue: 0
-      m_intValue: 0
-      m_boolValue: 0
-    - m_Index: 0
-      m_Type: 4
-      m_Name: isWalk
-      m_floatValue: 0
-      m_intValue: 0
-      m_boolValue: 0
-    - m_Index: 0
-      m_Type: 4
-      m_Name: isRun
-      m_floatValue: 0
-      m_intValue: 0
-      m_boolValue: 0
-    instantiatePrefab: {fileID: 3239026931582470979, guid: 025bb46b17a3f4e4fa72288c4450b16d, type: 3}
-    instantiateType: 0
-    PositionMin: {x: 0, y: 0, z: 0}
-    PositionMax: {x: 0, y: 0, z: 0}
-    RotationMin: {x: 0, y: 0, z: 0}
-    RotationMax: {x: 0, y: 0, z: 0}
 --- !u!1 &3299377180004458527
 GameObject:
   m_ObjectHideFlags: 0
