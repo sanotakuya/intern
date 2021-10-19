@@ -63,7 +63,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
 
         if (isAnotherHold == true)
         {
-            return;
+            monobitView.TransferOwnership(MonobitEngine.MonobitNetwork.host);
         }
 
         //他スクリプトからの参照
@@ -74,9 +74,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         float nowAngle = this.transform.eulerAngles.y;
         float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
         this.transform.eulerAngles = new Vector3(0, angle, 0);
-
-
-
+        
         if (isJump == true && isGroundTouch == true)
         {
             isJump = false;
