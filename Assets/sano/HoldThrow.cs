@@ -203,8 +203,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                     {
                         holdObject.GetComponent<MovePlayer>().SetPlayerHold(false);
                     }
-                    //投げるときオブジェクトの所有権をホストに返す
-                    holdObject.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.host);
+                    ////投げるときオブジェクトの所有権をホストに返す
+                    //holdObject.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.host);
 
                     holdObject = null;
                     isHold = false;
