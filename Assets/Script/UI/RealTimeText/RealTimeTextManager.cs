@@ -66,26 +66,7 @@ public class RealTimeTextManager : MonoBehaviour
 
     void Start()
     {
-        TextInfo info = new TextInfo();
-        info.SetDefault();
-        info.text = "なぜか";
-        info.color = new Color(1, 0, 0);
-        info.lifeTime = 3;
-        EnqueueText(info);
-
-        info.text = "無駄に.....";
-        info.color = new Color(0, 1, 0);
-        info.fontSize *= 2;
-        info.fontType = FontType.K8x12;
-        info.animStyle = TextAnimation.AnimStyle.WavePosition;
-        EnqueueText(info);
-
-        info.text = "ホラー";
-        info.color = new Color(0, 0, 1);
-        info.fontSize *= 2;
-        info.fontType = FontType.Zomzi;
-        info.animStyle = TextAnimation.AnimStyle.WaveColor;
-        EnqueueText(info);
+        
     }
 
     void Update()
