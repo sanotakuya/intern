@@ -61,7 +61,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
         EnterOneself();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         // スコアが変化していたら表示
         if(lastDisplayScore != registerScore.scoreData.totalScore)
