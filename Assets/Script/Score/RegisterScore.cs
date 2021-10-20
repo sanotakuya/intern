@@ -55,6 +55,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
 
     public struct ScoreData   // スコアデータ
     {
+        public int          totalStack       ; // 今まで積み上げたオブジェクトの総数
         public int          totalScore       ; // 今までの合計スコア
         public int          currentTotalScore; // 今回の合計スコア
         public int          productScore     ; // 商品スコア
@@ -84,7 +85,8 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     //! [内容]    RPC受信関数(現在のスコア)
     //-----------------------------------------------------------------------------
     [MunRPC]
-    void RecvScore(int      totalScore        // 今までの合計スコア
+    void RecvScore(int      totalStack        // 今まで積み上げたオブジェクトの総数
+                  ,int      totalScore        // 今までの合計スコア
                   ,int      currentTotalScore // 今回の合計スコア
                   ,int      productScore      // 商品スコア
                   ,int      bonusScore        // ボーナススコア
@@ -93,6 +95,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                   ,string[] bonusNameList     // ボーナスの名前リスト
     )
     {
+        _scoreData.totalStack        = totalStack;
         _scoreData.totalScore        = totalScore;
         _scoreData.currentTotalScore = currentTotalScore;
         _scoreData.productScore      = productScore;
@@ -177,6 +180,10 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                         tmpScore.heightScore += distance;
                     }
 
+                    // 積み上げられている数を取得
+                    var stackNum = stackTree.stackList.Count;
+                    tmpScore.totalStack = scoreData.totalStack + stackNum;
+
                     // カートに載っている物を計算する
                     foreach (var stackObject in stackTree.stackList) {
                         // スコアを取得
@@ -206,6 +213,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     // 今回のスコアを送信
                     monobitView.RPC("RecvScore"
                                    ,MonobitTargets.All
+                                   ,tmpScore.totalStack
                                    ,tmpScore.totalScore
                                    ,tmpScore.currentTotalScore
                                    ,tmpScore.productScore
