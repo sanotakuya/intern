@@ -18,6 +18,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
 
     public bool myCharactor = false;
 
+ 
+
     Rigidbody rb;
     GroundCheck groundCheck;
     HoldThrow holdThrow;
@@ -50,6 +52,21 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     private bool lastUpdate = false;
     private bool lastUpdateShift = false;
 
+    [MunRPC]
+    void RecvJump(int id)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            if (isGroundTouch == true)
+            {
+                //上に飛ばすだけ 
+                rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
+                animator.SetBool("isJump", true);
+                isJump = true;
+            }
+        }
+    }
+
     private void Awake()
     {
         if (!MonobitNetwork.isHost)
@@ -81,22 +98,16 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                lastUpdateJump = true;
+                monobitView.RPC("RecvJump", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
             }
-            else
-            {
-                lastUpdateJump = false;
-            }
+        
         }
 
-        //ジャンプ
-        if (lastUpdateJump == true && isGroundTouch == true && MonobitNetwork.isHost == true)
-        {
-            //上に飛ばすだけ 
-            rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
-            animator.SetBool("isJump", true);
-            isJump = true;
-        }
+        ////ジャンプ
+        //if (lastUpdateJump == true && isGroundTouch == true && MonobitNetwork.isHost == true)
+        //{
+          
+        //}
 
     }
 
@@ -131,84 +142,84 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 this.GetComponent<Animator>().enabled = true;
             }
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
-            //速度上限
-            if (rb.velocity.magnitude <= maxSpeed)
-            {
-                rb.AddForce(new Vector3(-movePower, 0.0f, 0.0f), ForceMode.Force);
-                if (isRunning == true) animator.SetBool("isRun", true);
-                else if (isRunning == false) animator.SetBool("isWalk", true);
-            }
-            targetAngle = -90.0f;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
-            //速度上限
-            if (rb.velocity.magnitude <= maxSpeed)
-            {
-                rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
-                if (isRunning == true) animator.SetBool("isRun", true);
-                else if (isRunning == false) animator.SetBool("isWalk", true);
-            }
-            targetAngle = 90.0f;
-        }
-        else if (Input.GetKey(KeyCode.W))
-        {
-            if (isDepthLock == false)
-            {
-                //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
-                //速度上限
-                if (rb.velocity.magnitude <= maxSpeed)
-                {
-                    rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
-                    if (isRunning == true) animator.SetBool("isRun", true);
-                    else if (isRunning == false) animator.SetBool("isWalk", true);
-                }
+        //if (Input.GetKey(KeyCode.A))
+        //{
+        //    //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
+        //    //速度上限
+        //    if (rb.velocity.magnitude <= maxSpeed)
+        //    {
+        //        rb.AddForce(new Vector3(-movePower, 0.0f, 0.0f), ForceMode.Force);
+        //        if (isRunning == true) animator.SetBool("isRun", true);
+        //        else if (isRunning == false) animator.SetBool("isWalk", true);
+        //    }
+        //    targetAngle = -90.0f;
+        //}
+        //else if (Input.GetKey(KeyCode.D))
+        //{
+        //    //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
+        //    //速度上限
+        //    if (rb.velocity.magnitude <= maxSpeed)
+        //    {
+        //        rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
+        //        if (isRunning == true) animator.SetBool("isRun", true);
+        //        else if (isRunning == false) animator.SetBool("isWalk", true);
+        //    }
+        //    targetAngle = 90.0f;
+        //}
+        //else if (Input.GetKey(KeyCode.W))
+        //{
+        //    if (isDepthLock == false)
+        //    {
+        //        //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
+        //        //速度上限
+        //        if (rb.velocity.magnitude <= maxSpeed)
+        //        {
+        //            rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
+        //            if (isRunning == true) animator.SetBool("isRun", true);
+        //            else if (isRunning == false) animator.SetBool("isWalk", true);
+        //        }
 
-                targetAngle = 0.0f;
-            }
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            if (isDepthLock == false)
-            {
-                //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
-                //速度上限
-                if (rb.velocity.magnitude <= maxSpeed)
-                {
-                    rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
-                    if (isRunning == true) animator.SetBool("isRun", true);
-                    else if (isRunning == false) animator.SetBool("isWalk", true);
-                }
+        //        targetAngle = 0.0f;
+        //    }
+        //}
+        //else if (Input.GetKey(KeyCode.S))
+        //{
+        //    if (isDepthLock == false)
+        //    {
+        //        //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
+        //        //速度上限
+        //        if (rb.velocity.magnitude <= maxSpeed)
+        //        {
+        //            rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
+        //            if (isRunning == true) animator.SetBool("isRun", true);
+        //            else if (isRunning == false) animator.SetBool("isWalk", true);
+        //        }
 
-                targetAngle = 180.0f;
-            }
-        }
-        else
-        {
-            if (isRunning == true) animator.SetBool("isRun", false);
-            else if (isRunning == false) animator.SetBool("isWalk", false);
-        }
+        //        targetAngle = 180.0f;
+        //    }
+        //}
+        //else
+        //{
+        //    if (isRunning == true) animator.SetBool("isRun", false);
+        //    else if (isRunning == false) animator.SetBool("isWalk", false);
+        //}
 
 
-        //走る
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            movePower = firstMovePower * 1.5f;
-            maxSpeed = firstSpeed * 2.0f;
-            animator.SetBool("isWalk", false);
-            isRunning = true;
-        }
-        else
-        {
-            movePower = firstMovePower;
-            maxSpeed = firstSpeed;
-            isRunning = false;
-            animator.SetBool("isRun", false);
-        }
+        ////走る
+        //if (Input.GetKey(KeyCode.LeftShift))
+        //{
+        //    movePower = firstMovePower * 1.5f;
+        //    maxSpeed = firstSpeed * 2.0f;
+        //    animator.SetBool("isWalk", false);
+        //    isRunning = true;
+        //}
+        //else
+        //{
+        //    movePower = firstMovePower;
+        //    maxSpeed = firstSpeed;
+        //    isRunning = false;
+        //    animator.SetBool("isRun", false);
+        //}
 
         //Z軸固定
         if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
@@ -233,16 +244,16 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     }
 
    
-    public override void OnMonobitSerializeViewWrite(MonobitStream stream, MonobitMessageInfo info)
-    {
-        stream.Enqueue(lastUpdateJump);
-
-    }
-    public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
-    {
-        updateNetwork = true;
-        lastUpdateJump = (bool)stream.Dequeue();
-    }
+    //public override void OnMonobitSerializeViewWrite(MonobitStream stream, MonobitMessageInfo info)
+    //{
+    //    stream.Enqueue(lastUpdateJump);
+       
+    //}
+    //public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
+    //{
+    //    updateNetwork = true;
+    //    lastUpdateJump = (bool)stream.Dequeue();
+    //}
 
 
     //外部参照用関数
