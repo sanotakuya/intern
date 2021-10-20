@@ -91,18 +91,21 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 // 最短距離を計算
                 for (int i = 0; i < objectRadar.throwObjects.Count; i++)
                 {
-                    // プレイヤーの距離とオブジェクトの中心距離を計測する
-                    float distance = Vector3.Distance(transform.position, objectRadar.throwObjects[i].transform.position);
-
-                    // 現在の最短距離よりも近くにあれば
-                    if (distance <= minDistance)
+                    if (objectRadar.throwObjects != null)
                     {
-                        if (isOverHit == false)
+                        // プレイヤーの距離とオブジェクトの中心距離を計測する
+                        float distance = Vector3.Distance(transform.position, objectRadar.throwObjects[i].transform.position);
+
+                        // 現在の最短距離よりも近くにあれば
+                        if (distance <= minDistance)
                         {
-                            minDistance = distance;                     // 最短距離更新
-                            holdObject = objectRadar.throwObjects[i];   // 掴む用の変数に格納する
-                                                                        //掴んだオブジェクトの所有権をもらう
-                            holdObject.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.player.ID);
+                            if (isOverHit == false)
+                            {
+                                minDistance = distance;                     // 最短距離更新
+                                holdObject = objectRadar.throwObjects[i];   // 掴む用の変数に格納する
+                                                                            //掴んだオブジェクトの所有権をもらう
+                                holdObject.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.player.ID);
+                            }
                         }
                     }
                 }

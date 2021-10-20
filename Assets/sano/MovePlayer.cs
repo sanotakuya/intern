@@ -53,8 +53,19 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         isAnotherHold = false;
     }
 
+    private void Update()
+    {
+        //ジャンプ
+        if (Input.GetKeyDown(KeyCode.Space) && isGroundTouch == true)
+        {
+            //上に飛ばすだけ 
+            rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
+            animator.SetBool("isJump", true);
+            isJump = true;
+        }
+    }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (!monobitView.isMine)
         {
@@ -149,14 +160,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             else if (isRunning == false) animator.SetBool("isWalk", false);
         }
 
-        //ジャンプ
-        if (Input.GetKeyDown(KeyCode.Space) && isGroundTouch == true)
-        {
-            //上に飛ばすだけ 
-            rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
-            animator.SetBool("isJump", true);
-            isJump = true;
-        }
 
         //走る
         if (Input.GetKey(KeyCode.LeftShift))
