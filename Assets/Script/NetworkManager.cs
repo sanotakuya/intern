@@ -47,6 +47,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                                 0
                                 );
 
+                playerObj.GetComponent<MovePlayer>().myCharactor = true;
+                playerObj.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.host);
                 //camera.transform.parent = playerObj.transform;
             }
         }

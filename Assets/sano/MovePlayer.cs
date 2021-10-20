@@ -16,6 +16,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
 
     [Header("足元チェック用オブジェクト")] public GameObject groundCheckObj;
 
+    public bool myCharactor = false;
+
     Rigidbody rb;
     GroundCheck groundCheck;
     HoldThrow holdThrow;
@@ -38,6 +40,25 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     // アニメーション
     public Animator animator;
 
+    bool updateNetwork = false;
+
+    private bool lastUpdateJump = false;
+    private bool lastUpdateRightWalk = false;
+    private bool lastUpdateLiftWalk = false;
+
+    private bool lastUpdateFlontWalk = false;
+    private bool lastUpdate = false;
+    private bool lastUpdateShift = false;
+
+    private void Awake()
+    {
+        if (!MonobitNetwork.isHost)
+        {
+            Destroy(this.GetComponent<Rigidbody>());
+            Destroy(this.GetComponent<BoxCollider>());
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,24 +74,36 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         isAnotherHold = false;
     }
 
+   
     private void Update()
     {
+        if (myCharactor==true)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                lastUpdateJump = true;
+            }
+            else
+            {
+                lastUpdateJump = false;
+            }
+        }
+
         //ジャンプ
-        if (Input.GetKeyDown(KeyCode.Space) && isGroundTouch == true)
+        if (lastUpdateJump == true && isGroundTouch == true && MonobitNetwork.isHost == true)
         {
             //上に飛ばすだけ 
             rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
             animator.SetBool("isJump", true);
             isJump = true;
         }
+
     }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!monobitView.isMine)
-        {
-            return;
-        }
+      
 
         if (isAnotherHold == true)
         {
@@ -197,6 +230,18 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
             }
         }
+    }
+
+   
+    public override void OnMonobitSerializeViewWrite(MonobitStream stream, MonobitMessageInfo info)
+    {
+        stream.Enqueue(lastUpdateJump);
+
+    }
+    public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
+    {
+        updateNetwork = true;
+        lastUpdateJump = (bool)stream.Dequeue();
     }
 
 
