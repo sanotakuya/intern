@@ -42,6 +42,9 @@ public class DisplayPlayerName : MonobitEngine.MonoBehaviour
 
     private void OnDestroy()
     {
-        Destroy(rectTrans.gameObject);
+        if(rectTrans)
+        {
+            Destroy(rectTrans.gameObject);
+        }
     }
 }
