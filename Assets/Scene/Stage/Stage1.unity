@@ -989,7 +989,7 @@ Transform:
   - {fileID: 489304052}
   - {fileID: 39324838}
   m_Father: {fileID: 0}
-  m_RootOrder: 30
+  m_RootOrder: 29
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &314252751
 PrefabInstance:
@@ -1307,7 +1307,7 @@ Transform:
   - {fileID: 1238100005}
   - {fileID: 979662711}
   m_Father: {fileID: 0}
-  m_RootOrder: 29
+  m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &397601875
 PrefabInstance:
@@ -4901,7 +4901,7 @@ Transform:
   - {fileID: 795057902}
   - {fileID: 1506216918}
   m_Father: {fileID: 0}
-  m_RootOrder: 28
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1424354510
 PrefabInstance:
@@ -8068,7 +8068,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 133165055}
     m_Modifications:
     - target: {fileID: 1252002097305348333, guid: 1a0c12fb5b6236d4fa43781e952e3583, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8100,7 +8100,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1252002097305348333, guid: 1a0c12fb5b6236d4fa43781e952e3583, type: 3}
       propertyPath: m_RootOrder
-      value: 27
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1252002097305348333, guid: 1a0c12fb5b6236d4fa43781e952e3583, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -8168,7 +8168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8706034596642983025, guid: 1a0c12fb5b6236d4fa43781e952e3583, type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: ScreenSpaceCanvas
       objectReference: {fileID: 0}
     - target: {fileID: 9146177173917713023, guid: 1a0c12fb5b6236d4fa43781e952e3583, type: 3}
       propertyPath: m_fontAsset
