@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 //-----------------------------------------------------------------------------
 //! [制作者]     長沼豪琉
-//! [最終更新日] 2021/10/15
+//! [最終更新日] 2021/10/20
 //! [内容]       インゲームのUI
 //-----------------------------------------------------------------------------
 public class InGameUIManager : MonoBehaviour
@@ -42,14 +42,14 @@ public class InGameUIManager : MonoBehaviour
     void Start()
     {
         // インスペクターで指定されているかチェック
-        if (!registerScore) Debug.LogError("RegisterScoreが指定されていません。");
-        if (!gameTimer)     Debug.LogError("ゲームタイマーが指定されていません。");
-        if (!UnitText)      Debug.LogError("単位テキストが指定されていません。");
-        if (!scoreText)     Debug.LogError("スコアテキストが指定されていません。");
-        if (!timeText)      Debug.LogError("タイムテキストが指定されていません。");
+        if (!registerScore) Debug.LogError("RegisterScoreが指定されていません。")         ;
+        if (!gameTimer)     Debug.LogError("ゲームタイマーが指定されていません。")        ;
+        if (!UnitText)      Debug.LogError("単位テキストが指定されていません。")          ;
+        if (!scoreText)     Debug.LogError("スコアテキストが指定されていません。")        ;
+        if (!timeText)      Debug.LogError("タイムテキストが指定されていません。")        ;
         if (!countDown)     Debug.LogError("カウントダウンテキストが指定されていません。");
-        if (!heightSlider)  Debug.LogError("高さスライダーが指定されていません。");
-        if (!heightText)    Debug.LogError("高さテキストが指定されていません。");
+        if (!heightSlider)  Debug.LogError("高さスライダーが指定されていません。")        ;
+        if (!heightText)    Debug.LogError("高さテキストが指定されていません。")          ;
         else {
             // 高さテキストの子を一括取得
             heightTextComs    = new Text[heightText.transform.childCount + 1];
@@ -102,7 +102,7 @@ public class InGameUIManager : MonoBehaviour
                             heightNum = height;
                         }
                     }
-                    string heightStr = string.Format("{0:0.00}", heightNum);
+                    string heightStr = string.Format("{0:0.00}", heightNum) + "m";
                     heightTextComs[(heightTextComs.Length - 1) - i].text = heightStr;
                 }
             }
