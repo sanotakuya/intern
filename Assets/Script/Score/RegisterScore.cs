@@ -60,6 +60,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
         public int          productScore     ; // 商品スコア
         public int          bonusScore       ; // ボーナススコア
         public float        heightScore      ; // 高さスコア
+        public float        height           ; // 現在の高さ
         public List<string> bonusNameList    ; // ボーナスの名前リスト
     }
 
@@ -83,12 +84,13 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     //! [内容]    RPC受信関数(現在のスコア)
     //-----------------------------------------------------------------------------
     [MunRPC]
-    void RecvScore(int totalScore         // 今までの合計スコア
-                  ,int currentTotalScore  // 今回の合計スコア
-                  ,int productScore       // 商品スコア
-                  ,int bonusScore         // ボーナススコア
-                  ,float heightScore      // 高さスコア
-                  ,string[] bonusNameList // ボーナスの名前リスト
+    void RecvScore(int      totalScore        // 今までの合計スコア
+                  ,int      currentTotalScore // 今回の合計スコア
+                  ,int      productScore      // 商品スコア
+                  ,int      bonusScore        // ボーナススコア
+                  ,float    heightScore       // 高さスコア
+                  ,float    height            // 現在の高さ
+                  ,string[] bonusNameList     // ボーナスの名前リスト
     )
     {
         _scoreData.totalScore        = totalScore;
@@ -96,6 +98,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
         _scoreData.productScore      = productScore;
         _scoreData.bonusScore        = bonusScore;
         _scoreData.heightScore       = heightScore;
+        _scoreData.height            = height;
         _scoreData.bonusNameList     = bonusNameList.ToList<string>();
     }
 
@@ -208,6 +211,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                                    ,tmpScore.productScore
                                    ,tmpScore.bonusScore
                                    ,tmpScore.heightScore
+                                   ,height
                                    ,tmpScore.bonusNameList.ToArray()
                                    );
 
