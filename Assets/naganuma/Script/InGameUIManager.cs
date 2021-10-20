@@ -85,29 +85,26 @@ public class InGameUIManager : MonoBehaviour
             timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
 
             // スコア表示
-            scoreText.text = string.Format("{0:00000#,0}", registerScore.scoreData.totalScore);
+            var score = registerScore.scoreData.totalScore;
+            score = score > 9999999 ? 9999999 : score;
+            scoreText.text = string.Format("{0:00000#,0}", score);
 
             // 高さを表示
             if (heightLimit != 0) {
+                var height   = stackTree.GetHeight();
+                heightSlider.value = height <= heightLimit ? height : 1.0f;
 
-                var distance = stackTree.GetHeight() / heightLimit;
-                heightSlider.value = distance <= heightLimit ? distance : 1.0f;
-
-                if (heightLimit != prevHeightLimit) {
-                    // 高さテキストの表示変更
-                    for (int i = 0; i < heightTextComs.Length; i++) {
-                        float  heightNum = i / 5.0f * heightLimit;
-                        if (i == heightTextComs.Length - 1) {
-                            if (heightNum < stackTree.GetHeight()) {
-                                heightNum = stackTree.GetHeight();
-                            }
+                // 高さテキストの表示変更
+                for (int i = 0; i < heightTextComs.Length; i++) {
+                    float  heightNum = i / 5.0f * heightLimit;
+                    if (i == heightTextComs.Length - 1) {
+                        if (heightNum < height) {
+                            heightNum = height;
                         }
-                        string heightStr = string.Format("{0:0.0}", heightNum);
-                        heightTextComs[(heightTextComs.Length - 1) - i].text = heightStr;
                     }
+                    string heightStr = string.Format("{0:0.00}", heightNum);
+                    heightTextComs[(heightTextComs.Length - 1) - i].text = heightStr;
                 }
-
-                prevHeightLimit = heightLimit;
             }
         }
         else {
