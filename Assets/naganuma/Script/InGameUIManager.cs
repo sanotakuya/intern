@@ -13,11 +13,13 @@ public class InGameUIManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private StackTree  stackTree        ; // スタックツリー
-    private GameObject cartObject       ; // カートオブジェクト
-    private float      prevHeightLimit  ; // 前フレームの高さ
-    private Text[]     heightTextComs   ; // 高さテキストコンポーネント
-    private Image      scoreBoardImage  ; // スコアボードのイメージ
+    private StackTree   stackTree        ; // スタックツリー
+    private GameObject  cartObject       ; // カートオブジェクト
+    private float       prevHeightLimit  ; // 前フレームの高さ
+    private Text[]      heightTextComs   ; // 高さテキストコンポーネント
+    private CanvasGroup uiCanvasGroup    ; // UIキャンバスグループ
+    private CanvasGroup sb_canvasGroup   ; // スコアボードキャンバスグループ
+    private float       timeCount        ; // 経過時間
     bool keyDown = false;
 
     //-----------------------------------------------------------------------------
@@ -27,23 +29,25 @@ public class InGameUIManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! Inspectorに公開する変数
     //-----------------------------------------------------------------------------
-    [Header("GameManager")]                        public GameManager   gameManager  ; // ゲームマネージャー
-    [Header("RegisterScore")]                      public RegisterScore registerScore; // スコア
-    [Header("GameTimer")]                          public GameTimer     gameTimer    ; // ゲームタイマー
-    [Header("カートプレハブ")]                     public GameObject    cartPrefab   ; // カートプレハブ
-    [Header("単位テキスト")]                       public Text          UnitText     ; // 単位テキスト
-    [Header("スコアテキスト")]                     public Text          scoreText    ; // スコアテキスト
-    [Header("タイムテキスト")]                     public Text          timeText     ; // タイムテキスト
-    [Header("カウントダウンテキスト")]             public Text          countDown    ; // ウントダウンテキスト
-    [Header("高さスライダー")]                     public Slider        heightSlider ; // 高さスライダー
-    [Header("高さスライダーテキスト")]             public Text          heightText   ; // 高さテキスト
-    [Header("高さスライダーの表示上限値")]         public float         heightLimit  ; // スライダーの上限値
-    [Header("スコアボード")]                       public GameObject    scoreBoard   ; // スコアボード
-    [Header("スコアボードのフェードスピード(秒)")] public float         sb_fadeTime  ; // スコアボードフェードタイム
-    [Header("(スコアボード)ランクテキスト")]       public Text          sb_rankText  ; // (スコアボード)ランクテキスト
-    [Header("(スコアボード)スコアテキスト")]       public Text          sb_scoreText ; // (スコアボード)スコアテキスト
-    [Header("(スコアボード)タイムテキスト")]       public Text          sb_timeText  ; // (スコアボード)タイムテキスト
-    [Header("(スコアボード)スタックテキスト")]     public Text          sb_stackText ; // (スコアボード)スタックテキスト
+    [Header("UIキャンバス")]                   public Canvas        uiCanvas      ; // UIキャンバス
+    [Header("スコアボードキャンバス")]         public Canvas        sb_canvas     ; // スコアボードキャンバス
+    [Header("フェードスピード(秒)")]           public float         fadeTime      ; // スコアボードフェードタイム
+    [Header("GameManager")]                    public GameManager   gameManager   ; // ゲームマネージャー
+    [Header("RegisterScore")]                  public RegisterScore registerScore ; // スコア
+    [Header("GameTimer")]                      public GameTimer     gameTimer     ; // ゲームタイマー
+    [Header("カートプレハブ")]                 public GameObject    cartPrefab    ; // カートプレハブ
+    [Header("単位テキスト")]                   public Text          UnitText      ; // 単位テキスト
+    [Header("スコアテキスト")]                 public Text          scoreText     ; // スコアテキスト
+    [Header("タイムテキスト")]                 public Text          timeText      ; // タイムテキスト
+    [Header("カウントダウンテキスト")]         public Text          countDown     ; // ウントダウンテキスト
+    [Header("高さスライダー")]                 public Slider        heightSlider  ; // 高さスライダー
+    [Header("高さスライダーテキスト")]         public Text          heightText    ; // 高さテキスト
+    [Header("高さスライダーの表示上限値")]     public float         heightLimit   ; // スライダーの上限値
+    [Header("スコアボード")]                   public GameObject    scoreBoard    ; // スコアボード
+    [Header("(スコアボード)ランクテキスト")]   public Text          sb_rankText   ; // (スコアボード)ランクテキスト
+    [Header("(スコアボード)スコアテキスト")]   public Text          sb_scoreText  ; // (スコアボード)スコアテキスト
+    [Header("(スコアボード)タイムテキスト")]   public Text          sb_timeText   ; // (スコアボード)タイムテキスト
+    [Header("(スコアボード)スタックテキスト")] public Text          sb_stackText  ; // (スコアボード)スタックテキスト
 
     //-----------------------------------------------------------------------------
     //! [内容]    開始処理
@@ -51,19 +55,21 @@ public class InGameUIManager : MonoBehaviour
     void Start()
     {
         // インスペクターで指定されているかチェック
-        if (!registerScore) Debug.LogError("RegisterScoreが指定されていません。")                 ;
-        if (!gameTimer)     Debug.LogError("ゲームタイマーが指定されていません。")                ;
-        if (!UnitText)      Debug.LogError("単位テキストが指定されていません。")                  ;
-        if (!scoreText)     Debug.LogError("スコアテキストが指定されていません。")                ;
-        if (!timeText)      Debug.LogError("タイムテキストが指定されていません。")                ;
-        if (!countDown)     Debug.LogError("カウントダウンテキストが指定されていません。")        ;
-        if (!heightSlider)  Debug.LogError("高さスライダーが指定されていません。")                ;
-        if (!scoreBoard)    Debug.LogError("スコアボードが指定されていません。")                  ;
-        if (!sb_rankText )  Debug.LogError("(スコアボード)ランクテキストが指定されていません。")  ;
-        if (!sb_scoreText)  Debug.LogError("(スコアボード)スコアテキストが指定されていません。")  ;
-        if (!sb_timeText )  Debug.LogError("(スコアボード)タイムテキストが指定されていません。")  ;
-        if (!sb_stackText)  Debug.LogError("(スコアボード)スタックテキストが指定されていません。");
-        if (!heightText)    Debug.LogError("高さテキストが指定されていません。")                  ;
+        if (!uiCanvas)         Debug.LogError("uiCanvasが指定されていません。")                      ;
+        if (!sb_canvas)        Debug.LogError("scoreBoardCanvasが指定されていません。")              ;
+        if (!registerScore)    Debug.LogError("RegisterScoreが指定されていません。")                 ;
+        if (!gameTimer)        Debug.LogError("ゲームタイマーが指定されていません。")                ;
+        if (!UnitText)         Debug.LogError("単位テキストが指定されていません。")                  ;
+        if (!scoreText)        Debug.LogError("スコアテキストが指定されていません。")                ;
+        if (!timeText)         Debug.LogError("タイムテキストが指定されていません。")                ;
+        if (!countDown)        Debug.LogError("カウントダウンテキストが指定されていません。")        ;
+        if (!heightSlider)     Debug.LogError("高さスライダーが指定されていません。")                ;
+        if (!scoreBoard)       Debug.LogError("スコアボードが指定されていません。")                  ;
+        if (!sb_rankText )     Debug.LogError("(スコアボード)ランクテキストが指定されていません。")  ;
+        if (!sb_scoreText)     Debug.LogError("(スコアボード)スコアテキストが指定されていません。")  ;
+        if (!sb_timeText )     Debug.LogError("(スコアボード)タイムテキストが指定されていません。")  ;
+        if (!sb_stackText)     Debug.LogError("(スコアボード)スタックテキストが指定されていません。");
+        if (!heightText)       Debug.LogError("高さテキストが指定されていません。")                  ;
         else {
             // 高さテキストの子を一括取得
             heightTextComs    = new Text[heightText.transform.childCount + 1];
@@ -75,15 +81,12 @@ public class InGameUIManager : MonoBehaviour
                 }
             }
         }
-
-        // スコアボードのアルファ値を変更
-        scoreBoardImage = scoreBoard.GetComponent<Image>();
-        if (!scoreBoardImage) Debug.LogError("スコアボードにImageコンポーネントがありません。");
-        scoreBoardImage.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-        sb_rankText .color    = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-        sb_scoreText.color    = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-        sb_timeText .color    = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-        sb_stackText.color    = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+        // キャンバスグループを取得
+        uiCanvasGroup  = uiCanvas.GetComponent<CanvasGroup>();
+        sb_canvasGroup = sb_canvas.GetComponent<CanvasGroup>();
+        if (!(uiCanvasGroup || sb_canvasGroup)) {
+            Debug.LogError("キャンバスグループが見つかりません。");
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -152,25 +155,20 @@ public class InGameUIManager : MonoBehaviour
                     var currentTime = gameTimer.currentGameTime;
                     int minutes = Mathf.FloorToInt(currentTime / 60.0f);              // 分
                     int seconds = Mathf.FloorToInt(currentTime - minutes * 60.0f);    // 秒
-                    timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+                    sb_timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
                     // スタック
                     // TODO:RegisterScoreでスタック総数をカウントする処理を用意
                 }
 
                 // フェード処理
-                if (scoreBoardImage.color.a < 1.0f) {
-                    scoreBoardImage.color = scoreBoardImage.color + (new Color(0.0f, 0.0f, 0.0f, sb_fadeTime) * Time.deltaTime);
-                    sb_rankText.color = sb_rankText.color + (new Color(0.0f, 0.0f, 0.0f, sb_fadeTime) * Time.deltaTime);
-                    sb_scoreText.color = sb_scoreText.color + (new Color(0.0f, 0.0f, 0.0f, sb_fadeTime) * Time.deltaTime);
-                    sb_timeText.color = sb_timeText.color + (new Color(0.0f, 0.0f, 0.0f, sb_fadeTime) * Time.deltaTime);
-                    sb_stackText.color = sb_stackText.color + (new Color(0.0f, 0.0f, 0.0f, sb_fadeTime) * Time.deltaTime);
+                if (sb_canvasGroup.alpha < 1.0f && fadeTime != 0.0f) {
+                    timeCount += Time.deltaTime;
+                    sb_canvasGroup.alpha = timeCount / fadeTime;
+                    uiCanvasGroup.alpha  = 1.0f - (timeCount / fadeTime);
                 }
                 else {
-                    scoreBoardImage.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-                    sb_rankText.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-                    sb_scoreText.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-                    sb_timeText.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-                    sb_stackText.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                    sb_canvasGroup.alpha = 1.0f;
+                    uiCanvasGroup.alpha  = 0.0f;
                 }
             }
         }
