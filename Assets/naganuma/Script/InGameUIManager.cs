@@ -13,8 +13,10 @@ public class InGameUIManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private StackTree  stackTree ; // スタックツリー
-    private GameObject cartObject; // カートオブジェクト
+    private StackTree    stackTree        ; // スタックツリー
+    private GameObject   cartObject       ; // カートオブジェクト
+    private float        prevHeightLimit  ; // 前フレームの高さ
+    private Text[]       heightTextComs   ; // 高さテキストコンポーネント
 
     //-----------------------------------------------------------------------------
     //! public変数
@@ -31,6 +33,7 @@ public class InGameUIManager : MonoBehaviour
     [Header("タイムテキスト")]             public Text          timeText     ; // タイムテキスト
     [Header("カウントダウンテキスト")]     public Text          countDown    ; // ウントダウンテキスト
     [Header("高さスライダー")]             public Slider        heightSlider ; // 高さスライダー
+    [Header("高さスライダーテキスト")]     public Text          heightText   ; // 高さテキスト
     [Header("高さスライダーの表示上限値")] public float         heightLimit  ; // スライダーの上限値
 
     //-----------------------------------------------------------------------------
@@ -46,6 +49,19 @@ public class InGameUIManager : MonoBehaviour
         if (!timeText)      Debug.LogError("タイムテキストが指定されていません。");
         if (!countDown)     Debug.LogError("カウントダウンテキストが指定されていません。");
         if (!heightSlider)  Debug.LogError("高さスライダーが指定されていません。");
+        if (!heightText)    Debug.LogError("高さテキストが指定されていません。");
+        else {
+            // 高さテキストの子を一括取得
+            heightTextComs    = new Text[heightText.transform.childCount + 1];
+            heightTextComs[0] = heightText;
+            for (int i = 0; i < heightText.transform.childCount; i++) {
+                var text = heightText.transform.GetChild(i);
+                if (text) {
+                    heightTextComs[i + 1] = text.GetComponent<Text>();
+                }
+            }
+        }
+
     }
 
     //-----------------------------------------------------------------------------
@@ -73,8 +89,25 @@ public class InGameUIManager : MonoBehaviour
 
             // 高さを表示
             if (heightLimit != 0) {
+
                 var distance = stackTree.GetHeight() / heightLimit;
-                heightSlider.value = distance;
+                heightSlider.value = distance <= heightLimit ? distance : 1.0f;
+
+                if (heightLimit != prevHeightLimit) {
+                    // 高さテキストの表示変更
+                    for (int i = 0; i < heightTextComs.Length; i++) {
+                        float  heightNum = i / 5.0f * heightLimit;
+                        if (i == heightTextComs.Length - 1) {
+                            if (heightNum < stackTree.GetHeight()) {
+                                heightNum = stackTree.GetHeight();
+                            }
+                        }
+                        string heightStr = string.Format("{0:0.0}", heightNum);
+                        heightTextComs[(heightTextComs.Length - 1) - i].text = heightStr;
+                    }
+                }
+
+                prevHeightLimit = heightLimit;
             }
         }
         else {
