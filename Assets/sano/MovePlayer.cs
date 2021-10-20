@@ -18,8 +18,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
 
     public bool myCharactor = false;
 
- 
-
     Rigidbody rb;
     GroundCheck groundCheck;
     HoldThrow holdThrow;
@@ -48,9 +46,9 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     private bool lastUpdateRightWalk = false;
     private bool lastUpdateLiftWalk = false;
 
-    private bool lastUpdateFlontWalk = false;
-    private bool lastUpdate = false;
-    private bool lastUpdateShift = false;
+    private bool lastUpdateUpWalk = false;
+    private bool lastUpdateDownWalk = false;
+    private bool lastUpdateRun = false;
 
     [MunRPC]
     void RecvJump(int id)
@@ -66,7 +64,46 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             }
         }
     }
-
+    [MunRPC]
+    void RecvLeftWalk(int id,bool isWalk)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateLiftWalk = isWalk;
+        }
+    }
+    [MunRPC]
+    void RecvRightWalk(int id, bool isWalk)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateRightWalk = isWalk;
+        }
+    }
+    [MunRPC]
+    void RecvUpWalk(int id, bool isWalk)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateUpWalk = isWalk;
+        }
+    }
+    [MunRPC]
+    void RecvDownWalk(int id, bool isWalk)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateDownWalk = isWalk;
+        }
+    }
+    [MunRPC]
+    void RecvRun(int id, bool isRun)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateRun = isRun;
+        }
+    }
     private void Awake()
     {
         if (!MonobitNetwork.isHost)
@@ -100,7 +137,47 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             {
                 monobitView.RPC("RecvJump", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
             }
-        
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                monobitView.RPC("RecvLeftWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.A))
+            {
+                monobitView.RPC("RecvLeftWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                monobitView.RPC("RecvRightWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.D))
+            {
+                monobitView.RPC("RecvRightWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                monobitView.RPC("RecvUpWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                monobitView.RPC("RecvUpWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                monobitView.RPC("RecvDownWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                monobitView.RPC("RecvDownWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                monobitView.RPC("RecvRun", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                monobitView.RPC("RecvRun", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
         }
 
         ////ジャンプ
@@ -142,84 +219,84 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 this.GetComponent<Animator>().enabled = true;
             }
         }
-        //if (Input.GetKey(KeyCode.A))
-        //{
-        //    //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
-        //    //速度上限
-        //    if (rb.velocity.magnitude <= maxSpeed)
-        //    {
-        //        rb.AddForce(new Vector3(-movePower, 0.0f, 0.0f), ForceMode.Force);
-        //        if (isRunning == true) animator.SetBool("isRun", true);
-        //        else if (isRunning == false) animator.SetBool("isWalk", true);
-        //    }
-        //    targetAngle = -90.0f;
-        //}
-        //else if (Input.GetKey(KeyCode.D))
-        //{
-        //    //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
-        //    //速度上限
-        //    if (rb.velocity.magnitude <= maxSpeed)
-        //    {
-        //        rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
-        //        if (isRunning == true) animator.SetBool("isRun", true);
-        //        else if (isRunning == false) animator.SetBool("isWalk", true);
-        //    }
-        //    targetAngle = 90.0f;
-        //}
-        //else if (Input.GetKey(KeyCode.W))
-        //{
-        //    if (isDepthLock == false)
-        //    {
-        //        //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
-        //        //速度上限
-        //        if (rb.velocity.magnitude <= maxSpeed)
-        //        {
-        //            rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
-        //            if (isRunning == true) animator.SetBool("isRun", true);
-        //            else if (isRunning == false) animator.SetBool("isWalk", true);
-        //        }
+        if (lastUpdateLiftWalk == true)
+        {
+            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
+            //速度上限
+            if (rb.velocity.magnitude <= maxSpeed)
+            {
+                rb.AddForce(new Vector3(-movePower, 0.0f, 0.0f), ForceMode.Force);
+                if (isRunning == true) animator.SetBool("isRun", true);
+                else if (isRunning == false) animator.SetBool("isWalk", true);
+            }
+            targetAngle = -90.0f;
+        }
+        else if (lastUpdateRightWalk==true)
+        {
+            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
+            //速度上限
+            if (rb.velocity.magnitude <= maxSpeed)
+            {
+                rb.AddForce(new Vector3(movePower, 0.0f, 0.0f), ForceMode.Force);
+                if (isRunning == true) animator.SetBool("isRun", true);
+                else if (isRunning == false) animator.SetBool("isWalk", true);
+            }
+            targetAngle = 90.0f;
+        }
+        else if (lastUpdateUpWalk==true)
+        {
+            if (isDepthLock == false)
+            {
+                //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
+                //速度上限
+                if (rb.velocity.magnitude <= maxSpeed)
+                {
+                    rb.AddForce(new Vector3(0.0f, 0.0f, movePower), ForceMode.Force);
+                    if (isRunning == true) animator.SetBool("isRun", true);
+                    else if (isRunning == false) animator.SetBool("isWalk", true);
+                }
 
-        //        targetAngle = 0.0f;
-        //    }
-        //}
-        //else if (Input.GetKey(KeyCode.S))
-        //{
-        //    if (isDepthLock == false)
-        //    {
-        //        //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
-        //        //速度上限
-        //        if (rb.velocity.magnitude <= maxSpeed)
-        //        {
-        //            rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
-        //            if (isRunning == true) animator.SetBool("isRun", true);
-        //            else if (isRunning == false) animator.SetBool("isWalk", true);
-        //        }
+                targetAngle = 0.0f;
+            }
+        }
+        else if (lastUpdateDownWalk == true)
+        {
+            if (isDepthLock == false)
+            {
+                //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
+                //速度上限
+                if (rb.velocity.magnitude <= maxSpeed)
+                {
+                    rb.AddForce(new Vector3(0.0f, 0.0f, -movePower), ForceMode.Force);
+                    if (isRunning == true) animator.SetBool("isRun", true);
+                    else if (isRunning == false) animator.SetBool("isWalk", true);
+                }
 
-        //        targetAngle = 180.0f;
-        //    }
-        //}
-        //else
-        //{
-        //    if (isRunning == true) animator.SetBool("isRun", false);
-        //    else if (isRunning == false) animator.SetBool("isWalk", false);
-        //}
+                targetAngle = 180.0f;
+            }
+        }
+        else
+        {
+            if (isRunning == true) animator.SetBool("isRun", false);
+            else if (isRunning == false) animator.SetBool("isWalk", false);
+        }
 
 
-        ////走る
-        //if (Input.GetKey(KeyCode.LeftShift))
-        //{
-        //    movePower = firstMovePower * 1.5f;
-        //    maxSpeed = firstSpeed * 2.0f;
-        //    animator.SetBool("isWalk", false);
-        //    isRunning = true;
-        //}
-        //else
-        //{
-        //    movePower = firstMovePower;
-        //    maxSpeed = firstSpeed;
-        //    isRunning = false;
-        //    animator.SetBool("isRun", false);
-        //}
+        //走る
+        if (lastUpdateRun == true)
+        {
+            movePower = firstMovePower * 1.5f;
+            maxSpeed = firstSpeed * 2.0f;
+            animator.SetBool("isWalk", false);
+            isRunning = true;
+        }
+        else
+        {
+            movePower = firstMovePower;
+            maxSpeed = firstSpeed;
+            isRunning = false;
+            animator.SetBool("isRun", false);
+        }
 
         //Z軸固定
         if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
