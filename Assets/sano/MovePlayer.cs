@@ -193,7 +193,10 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
+        if (!MonobitNetwork.isHost)
+        {
+            return;
+        }
 
         //if (isAnotherHold == true)
         //{
