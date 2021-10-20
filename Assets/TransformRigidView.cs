@@ -7,7 +7,6 @@ namespace MonobitEngine
      * オブジェクトの位置・姿勢・倍率の同期クラス.
      */
     [RequireComponent(typeof(MonobitView))]
-    [AddComponentMenu("Monobit Networking/Monobit Transform View")]
     public class TransformRigidView : MonobitEngine.MonoBehaviour
     {
         /** 同一オブジェクトにアタッチされている MonobitView. */
