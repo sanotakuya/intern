@@ -91,8 +91,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 }
                
 
-                // プレイヤーの子オブジェクトにする
-                holdObject.transform.parent = this.transform;
+                //// プレイヤーの子オブジェクトにする
+                //holdObject.transform.parent = this.transform;
                 
                 //オブジェクトの重さをガイドに渡す
                 guide.SetObjectMass(rbHoldObj.mass);
@@ -111,11 +111,11 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
                 //投げる角度を計算
                 CalcForceDirection();
-
                 activeGuide = true;
             }
             else
             {
+
                 if (isDepthLock == true)
                 {
                     // 親から離脱する
@@ -158,12 +158,13 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (movePlayer.myCharactor == true)
         {
-            monobitView.RPC("RecvDownF", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                monobitView.RPC("RecvDownF", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
+            }
         }
-
-
         if (!m_MonobitView.isMine)
         {
             return;
@@ -263,17 +264,17 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             //プレイヤーをZ軸０へ誘導
             PlayerDepthMove();
 
-            ////　0になってたらガイド表示
-            //if (isDepthLock == true)
-            //{
-            //    // 投げる角度更新
-            //    ChangeMaterAngle();
-            //    //ガイド表示
-            //    guide.SetGuidesState(true);
-            //}
+            //　0になってたらガイド表示
+            if (isDepthLock == true)
+            {
+                // 投げる角度更新
+                ChangeMaterAngle();
+                //ガイド表示
+                guide.SetGuidesState(true);
+            }
 
-            ////投げる角度を計算
-            //CalcForceDirection();
+            //投げる角度を計算
+            CalcForceDirection();
 
             //// 指定の角度にオブジェクトを飛ばす
             //if (Input.GetKeyUp(KeyCode.F) && isInput == false)
