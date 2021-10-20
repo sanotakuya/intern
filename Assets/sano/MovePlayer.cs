@@ -29,7 +29,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
 
     private bool isRunning;       //現在は知っている状態なのかを取得する
     
-    static float targetAngle;   //次のプレイヤーの向き
+    public float targetAngle;   //次のプレイヤーの向き
     public  bool isAnotherHold;  //誰かにHoldされていないか
 
     bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
@@ -133,6 +133,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     {
         if (myCharactor==true)
         {
+            
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 monobitView.RPC("RecvJump", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
@@ -191,13 +193,12 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-      
 
-        if (isAnotherHold == true)
-        {
-            monobitView.TransferOwnership(MonobitEngine.MonobitNetwork.host);
-        }
 
+        //if (isAnotherHold == true)
+        //{
+        //    monobitView.TransferOwnership(MonobitEngine.MonobitNetwork.host);
+        //}
         //他スクリプトからの参照
         isGroundTouch = groundCheck.isHitGround;
         isHold = holdThrow.isHold;
@@ -206,7 +207,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         float nowAngle = this.transform.eulerAngles.y;
         float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
         this.transform.eulerAngles = new Vector3(0, angle, 0);
-        
+
+
         if (isJump == true && isGroundTouch == true)
         {
             isJump = false;
@@ -334,15 +336,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
 
 
     //外部参照用関数
-    //-----------------------------------------------------------------------------
-    //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
-    //-----------------------------------------------------------------------------
-    public static void SetTargetAngle(float target)
-    {
-        targetAngle = target;
-    }
-
-   
+  
     //-----------------------------------------------------------------------------
     //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
     //-----------------------------------------------------------------------------

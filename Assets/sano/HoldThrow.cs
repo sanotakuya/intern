@@ -28,6 +28,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     bool isDepthLock;       //　Z軸0に到着しているかどうか
     Vector3 playerPos;      // プレイヤーの現在位置
 
+    MovePlayer movePlayer;
+
     // 入力
     private bool isInput = false;   // 入力があるか管理する
     private float inputCnt = 0;     // 入力があってからのカウント
@@ -67,6 +69,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
         overHitCheck = overHeadCheck.GetComponent<OverHitCheck>();
 
+        movePlayer = this.GetComponent<MovePlayer>();
         m_MonobitView = GetComponent<MonobitView>();
 
         guide = this.GetComponent<ThrowGuide>();
@@ -266,11 +269,11 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             //マウスカーソルのある場所を向く
             if (mouseVec >= 0)       //プレイヤーの右側にカーソルがあるとき
             {
-                MovePlayer.SetTargetAngle(-90.0f);
+                movePlayer.targetAngle = -90.0f;
             }
             else if (mouseVec < 0)    //プレイヤーの左側にカーソルがあるとき
             {
-                MovePlayer.SetTargetAngle(90.0f);
+                movePlayer.targetAngle = 90.0f;
             }
         }
     }
