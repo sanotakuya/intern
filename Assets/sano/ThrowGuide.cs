@@ -57,6 +57,8 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         if (isGuideStart == true)
         {
             SetGuidePositions();
+
+            guidePrent.SetActive(true);
         }
         else
         {
@@ -64,6 +66,7 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
             for (int i = 0; i < protSize; i++)
             {
                 guideList[i].transform.position = guidePrent.transform.position;
+                guidePrent.SetActive(false);
             }
         }
     }
