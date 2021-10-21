@@ -17,8 +17,15 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     private string roomName = "";       // ルーム名
     private GameObject playerObj = null;
-    [SerializeField] private int updateRate = 30;
+    private MonobitPlayer hostPlayer;
 
+    private bool leaveHost = false;
+    private float time = 0;
+
+    [SerializeField] private int updateRate = 30;
+    [SerializeField] private uint maxPlayers = 4;
+    [SerializeField] private string lobbySceneName = "Lobby";
+    [SerializeField] private string RoomSceneName = "Room";
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
@@ -33,10 +40,9 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     void Update()
     {
-        // MUNサーバに接続しており、かつルームに入室している場合
-        if (MonobitNetwork.isConnect && MonobitNetwork.inRoom)
+        // プレイヤーキャラクタが未登場の場合に登場させる
+        if(MonobitNetwork.isConnect && MonobitNetwork.inRoom)
         {
-            // プレイヤーキャラクタが未登場の場合に登場させる
             if (playerObj == null)
             {
                 Object instant = Resources.Load("SD_unitychan_humanoid");
@@ -49,7 +55,33 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
 
                 playerObj.GetComponent<MovePlayer>().myCharactor = true;
                 playerObj.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.host);
-                //camera.transform.parent = playerObj.transform;
+            }
+
+            // ホストが変わったら解散する
+            if(hostPlayer != null)
+            {
+                if (MonobitNetwork.host != hostPlayer)
+                {
+                    if (!leaveHost)
+                    {
+                        monobitView.RPC(
+                           "RecvRoomText",
+                           MonobitEngine.MonobitTargets.All,
+                           "ホストが退出したのでルームが解散されます"
+                           );
+
+                        leaveHost = true;
+
+                    }
+
+
+                    time += Time.deltaTime;
+
+                    if(time > 3)
+                    {
+                        LeaveRoom();
+                    }
+                }
             }
         }
     }
@@ -64,102 +96,38 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             // ルームに入室している場合
             if (MonobitNetwork.inRoom)
             {
-                // ルーム内のプレイヤー一覧の表示
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("PlayerList : ");
-                foreach (MonobitPlayer player in MonobitNetwork.playerList)
-                {
-                    GUILayout.Label(player.name + " ");
-                }
-                GUILayout.EndHorizontal();
-
                 // ルームからの退室
                 if (GUILayout.Button("Leave Room", GUILayout.Width(150)))
                 {
-                    MonobitNetwork.LeaveRoom();
-
-                    // シーンをリロードする
-#if UNITY_5_3_OR_NEWER || UNITY_5_3
-                    string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-#else
-                     Application.LoadLevel(Application.loadedLevelName);
-#endif
+                    LeaveRoom();
                 }
             }
             // ルームに入室していない場合
             else
             {
                 // ルーム名の入力
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("RoomName : ");
-                roomName = GUILayout.TextField(roomName, GUILayout.Width(200));
-                GUILayout.EndHorizontal();
+                EnterText("RoomName : ", ref roomName);
 
-                // ルームを作成して入室する
+                // ルームを作成して入室するad
                 if (GUILayout.Button("Create Room", GUILayout.Width(150)))
                 {
-                    if(MonobitNetwork.CreateRoom(roomName))
-                    {
-
-                    }
+                    CreateRoom(roomName);
                 }
 
-                // ルーム一覧を検索
-                foreach (RoomData room in MonobitNetwork.GetRoomData())
-                {
-                    // ルームパラメータの可視化
-                    System.String roomParam =
-                        System.String.Format(
-                            "{0}({1}/{2})",
-                            room.name,      // ルーム名
-                            room.playerCount,       // 入室人数
-                            ((room.maxPlayers == 0) ? "-" : room.maxPlayers.ToString())     // 最大人数
-                        );
-
-                    // ルームを選択して入室する
-                    if (GUILayout.Button("Enter Room : " + roomParam))
-                    {
-                        if(MonobitNetwork.JoinRoom(room.name))
-                        {
-                            monobitView.RPC(
-                                "RecvRoomText",
-                                MonobitEngine.MonobitTargets.All,
-                                (string)(MonobitNetwork.playerName + "が入室しました")
-                                );
-                        }
-                    }
-                }
+                // ルームを検索して入室できる
+                SearchAndEnterRoom();
 
                 // ボタン入力でサーバから切断＆シーンリセット
                 if (GUILayout.Button("Disconnect", GUILayout.Width(150)))
                 {
-                    // サーバから切断する
-                    MonobitNetwork.DisconnectServer();
-
-                    // シーンをリロードする
-#if UNITY_5_3_OR_NEWER || UNITY_5_3
-                    string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
-#else
-                     Application.LoadLevel(Application.loadedLevelName);
-#endif
+                    DisconnectServer();
                 }
             }
         }
         else    // 接続できていない時
         {
-            // プレイヤーネームを入力するGUIの設定
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("PlayerName : ");
-
-            MonobitNetwork.playerName = GUILayout.TextField(
-                (MonobitNetwork.playerName == null) ?
-                    "" :
-                    MonobitNetwork.playerName, GUILayout.Width(200)
-                    );
-
-            GUILayout.EndHorizontal();
+            string name = MonobitNetwork.player.name;
+            MonobitNetwork.player.name = EnterText("playerName : ",ref name);
 
             // デフォルトロビーへの自動入室を許可する
             MonobitNetwork.autoJoinLobby = true;
@@ -170,5 +138,121 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 MonobitNetwork.ConnectServer("SimpleNetwork3D_v1.0");
             }
         }
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ロビーを作成する関数
+    //-----------------------------------------------------------------------------
+    private void CreateRoom(string roomName)
+    {
+        // ルーム設定を行う
+        MonobitEngine.RoomSettings setting = new RoomSettings();
+        setting.maxPlayers = maxPlayers;
+        setting.isVisible = true;
+        setting.isOpen = true;
+
+        // 現在のロビー情報
+        MonobitEngine.LobbyInfo info = MonobitNetwork.lobby;
+
+        // ロビーの作成
+        MonobitNetwork.CreateRoom(roomName, setting, info);
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		簡易テキスト入力
+    //-----------------------------------------------------------------------------
+    private string EnterText(string label, ref string text)
+    {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label(label);
+        text = GUILayout.TextField(text, GUILayout.Width(200));
+        GUILayout.EndHorizontal();
+
+        return text;
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ルームを検索して選択、入室
+    //-----------------------------------------------------------------------------
+    private void SearchAndEnterRoom()
+    {
+        // ルーム一覧を検索
+        foreach (RoomData room in MonobitNetwork.GetRoomData())
+        {
+            // ルームパラメータの可視化
+            System.String roomParam =
+                System.String.Format(
+                    "{0}({1}/{2})",
+                    room.name,      // ルーム名
+                    room.playerCount,       // 入室人数
+                    ((room.maxPlayers == 0) ? "-" : room.maxPlayers.ToString())     // 最大人数
+                );
+
+            // ルームを選択して入室する
+            if (GUILayout.Button("Enter Room : " + roomParam))
+            {
+                JoinRoom(room.name);
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ルームに入室
+    //-----------------------------------------------------------------------------
+    private void JoinRoom(string roomName)
+    {
+        // シーンをリロードする
+#if UNITY_5_3_OR_NEWER || UNITY_5_3
+        string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+#else
+                             Application.LoadLevel(Application.loadedLevelName);
+#endif
+
+        MonobitNetwork.JoinRoom(roomName);
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		サーバーから切断時
+    //-----------------------------------------------------------------------------
+    private void DisconnectServer()
+    {
+        // サーバから切断する
+        MonobitNetwork.DisconnectServer();
+
+        
+    }
+
+    private void LeaveRoom()
+    {
+        MonobitNetwork.LeaveRoom();
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ロビーに参加したことがサーバーから送られてきたら
+    //-----------------------------------------------------------------------------
+    public void OnJoinedRoom()
+    {
+        hostPlayer = MonobitNetwork.host;
+
+        monobitView.RPC(
+                "RecvRoomText",
+                MonobitEngine.MonobitTargets.All,
+                (string)(MonobitNetwork.playerName + "が入室しました")
+                );
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ロビーから退出したことがサーバーから送られてきたら
+    //-----------------------------------------------------------------------------
+    public void OnLeftRoom()
+    {
+        // シーンをリロードする
+#if UNITY_5_3_OR_NEWER || UNITY_5_3
+        string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+#else
+                     Application.LoadLevel(Application.loadedLevelName);
+#endif
     }
 }

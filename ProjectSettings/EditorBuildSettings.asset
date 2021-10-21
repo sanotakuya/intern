@@ -20,7 +20,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/sano/Throw.unity
     guid: c0efb1a0d9b3ad24398bc033c9ddf79d
-  - enabled: 1
+  - enabled: 0
     path: Assets/sano/AnimationTest.unity
     guid: 6590c5235abd80d4f91ba8e3aa78df6b
+  - enabled: 1
+    path: Assets/Scene/Stage/Stage1.unity
+    guid: c1c7e96c41c4713488a5a0465c006bfb
   m_configObjects: {}
