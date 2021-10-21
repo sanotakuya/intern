@@ -84,7 +84,7 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         for (int i = 0; i < protSize; i++)
         {
             // Prefabをインスタンス化
-            GameObject guideObject = (GameObject)Instantiate(guidePrefab, guidePos, Quaternion.identity);
+            GameObject guideObject = MonobitNetwork.Instantiate(guidePrefab.name, guidePos, Quaternion.identity, 0);
 
             // インスタンス化したオブジェクトをGuideParentの子オブジェクトにする
             guideObject.transform.SetParent(guidePrent.transform);
