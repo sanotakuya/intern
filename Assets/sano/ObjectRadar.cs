@@ -26,7 +26,14 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
         {
             return;
         }
-        
+        if (throwObjects.Count == 0)
+        {
+            Debug.Log("オブジェクト");
+        }
+        foreach(GameObject obj in throwObjects){
+
+            Debug.Log("オブジェクト" + obj);
+        }
     }
     void OnTriggerStay(Collider other)
     {
@@ -43,9 +50,6 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (throwObjects != null)
-        {
-            throwObjects.Clear();
-        }
+        throwObjects.Clear();
     }
 }

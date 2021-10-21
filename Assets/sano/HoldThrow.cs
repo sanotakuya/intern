@@ -22,6 +22,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     [Header("プレイヤーの頭上にスペースがあるのか確認する")] public GameObject overHeadCheck;
     OverHitCheck overHitCheck;
 
+    GameObject cartObj;
+
     // プレイヤーステータス
     public bool isOverHit;  //　頭上にスペースがあるか確認する
     public bool isHold;     //  オブジェクトを掴んでいるかどうか
@@ -126,6 +128,9 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         m_MonobitView = GetComponent<MonobitView>();
 
         guide = this.GetComponent<ThrowGuide>();
+
+        cartObj = GameObject.Find("newCart(Clone)");
+
     }
 
     // Update is called once per frame
@@ -176,6 +181,12 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                     }
                 }
                 guide.SetGuidesState(false);
+
+                if (objectRadar.throwObjects.Count == 0)
+                {
+                    holdObject = null;
+                    minDistance = RESETDISTANCE;
+                }
             }
         }
         if (isRelease == true)
@@ -198,7 +209,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             rbHoldObj.velocity = Vector3.zero;
 
             // 掴んでいるオブジェクトの回転
-            Debug.Log(holdAngle);
+            //Debug.Log(holdAngle);
             rbHoldObj.transform.rotation = Quaternion.AngleAxis(holdAngle, new Vector3(0, 0, 1));
 
             // オブジェクトを投げる//
@@ -239,15 +250,23 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     void PlayerDepthMove()
     {
-        if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
+        if (cartObj.transform.position.x+2.0f > this.transform.position.x && cartObj.transform.position.x - 2.0f < this.transform.position.x)
         {
-            this.transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
-            isDepthLock = true;
-        }
-        else if (this.transform.position.z != 0.0f)
-        {
-            this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
             isDepthLock = false;
+        }
+        else
+        {
+            if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
+            {
+                this.transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
+                isDepthLock = true;
+            }
+            else if (this.transform.position.z != 0.0f)
+            {
+                this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
+                isDepthLock = false;
+            }
+            Debug.Log("掴めえる位置");
         }
     }
 
@@ -315,7 +334,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
         rbHoldObj.AddForce(throwForce, ForceMode.Impulse);
 
-        Debug.Log("飛ばす強さ" + forceDirection);
+        //Debug.Log("飛ばす強さ" + forceDirection);
     }
 
     //-----------------------------------------------------------------------------
