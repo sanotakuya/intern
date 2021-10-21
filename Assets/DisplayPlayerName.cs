@@ -39,4 +39,12 @@ public class DisplayPlayerName : MonobitEngine.MonoBehaviour
     {
         rectTrans.position = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position + offset);
     }
+
+    private void OnDestroy()
+    {
+        if(rectTrans)
+        {
+            Destroy(rectTrans.gameObject);
+        }
+    }
 }
