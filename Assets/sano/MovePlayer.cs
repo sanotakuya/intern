@@ -182,12 +182,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             }
         }
 
-        ////ジャンプ
-        //if (lastUpdateJump == true && isGroundTouch == true && MonobitNetwork.isHost == true)
-        //{
-          
-        //}
-
     }
 
     // Update is called once per frame
@@ -197,11 +191,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         {
             return;
         }
-
-        //if (isAnotherHold == true)
-        //{
-        //    monobitView.TransferOwnership(MonobitEngine.MonobitNetwork.host);
-        //}
+        
         //他スクリプトからの参照
         isGroundTouch = groundCheck.isHitGround;
         isHold = holdThrow.isHold;
@@ -226,7 +216,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         }
         if (lastUpdateLiftWalk == true)
         {
-            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
             //速度上限
             if (rb.velocity.magnitude <= maxSpeed)
             {
@@ -238,7 +227,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         }
         else if (lastUpdateRightWalk==true)
         {
-            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
             //速度上限
             if (rb.velocity.magnitude <= maxSpeed)
             {
@@ -252,7 +240,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         {
             if (isDepthLock == false)
             {
-                //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
                 //速度上限
                 if (rb.velocity.magnitude <= maxSpeed)
                 {
@@ -268,7 +255,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         {
             if (isDepthLock == false)
             {
-                //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
                 //速度上限
                 if (rb.velocity.magnitude <= maxSpeed)
                 {
@@ -326,17 +312,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     }
 
    
-    //public override void OnMonobitSerializeViewWrite(MonobitStream stream, MonobitMessageInfo info)
-    //{
-    //    stream.Enqueue(lastUpdateJump);
-       
-    //}
-    //public override void OnMonobitSerializeViewRead(MonobitStream stream, MonobitMessageInfo info)
-    //{
-    //    updateNetwork = true;
-    //    lastUpdateJump = (bool)stream.Dequeue();
-    //}
-
 
     //外部参照用関数
   

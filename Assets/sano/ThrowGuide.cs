@@ -27,7 +27,7 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
     List<GameObject> guideList;
     
     //投げるオブジェクトの重さ
-    static float holdMass;
+    public float holdMass;
 
     // 画面にプロットするガイドの数を定義
     public int protSize;
@@ -57,10 +57,10 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         {
             return;
         }
-        if (!m_MonobitView.isMine)
-        {
-            return;
-        }
+        //if (!m_MonobitView.isMine)
+        //{
+        //    return;
+        //}
         if (isGuideStart == true)
         {
             SetGuidePositions();
@@ -97,11 +97,9 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
 
             view.ObservedComponents.Add(guideObject.GetComponent<MonobitTransformView>());
 
-            guideObject.AddComponent<Rigidbody>();
-            guideObject.AddComponent<SphereCollider>();
-
+       
             // インスタンス化したオブジェクトをGuideParentの子オブジェクトにする
-            guideObject.transform.SetParent(guidePrent.transform);
+            //guideObject.transform.SetParent(guidePrent.transform);
 
             // オブジェクト名を設定する
             guideObject.name = "Guide_" + i.ToString();
@@ -125,13 +123,13 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         }
 
         // 物理学的なパラメータを取得
-        // 『Sphere』オブジェクトに加わる力
+        // 『Guide』オブジェクトに加わる力
         Vector3 force = holdThrow.GetThrowForce();
     
         // Unityの世界に働く重力
         Vector3 gravity = Physics.gravity;
 
-        // 『Sphere』オブジェクトが斜方投射される時の初速度
+        // 『Guide』オブジェクトが斜方投射される時の初速度
         Vector3 speed = force / holdMass;
 
         // プロット数に応じて、各プロットの時刻をリストに格納

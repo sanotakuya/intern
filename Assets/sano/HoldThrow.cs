@@ -148,10 +148,15 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             }
         }
 
-        if (!m_MonobitView.isMine)
+        if (!MonobitNetwork.isHost)
         {
             return;
         }
+
+        //if (!m_MonobitView.isMine)
+        //{
+        //    return;
+        //}
         
         playerPos = transform.position; //プレイヤー位置更新
 

@@ -5645,7 +5645,8 @@ MonoBehaviour:
   isGuideStart: 0
   guidePrent: {fileID: 3299377179772798750}
   guidePrefab: {fileID: 4390594625524676393, guid: f7297066d63c95e4c99cbec885b69a8a, type: 3}
-  protSize: 200
+  holdMass: 0
+  protSize: 10
 --- !u!114 &3299377180002975754
 MonoBehaviour:
   m_ObjectHideFlags: 0
