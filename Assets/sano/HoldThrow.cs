@@ -41,6 +41,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     const float RESETDISTANCE = 100;// 最短距離リセット
     Rigidbody rbHoldObj;            // 掴んだオブジェクトの物理挙動
     float holdAngle;                // 掴んだオブジェクトの向き
+    private bool isRelease;         // 掴んでるオブジェクトを離す
 
     //投げる処理//
     //角度。方向。力すべて合わせたもの
@@ -91,38 +92,28 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         }
         else if (isHold == true)
         {
-            if (activeGuide == false)
+            if (isDepthLock == true)
             {
-                // 投げる角度更新
-                ChangeMaterAngle();
-                //ガイド表示
-                guide.SetGuidesState(true);
+                // オブジェクトを飛ばす
+                ObjectThrow();
 
-                //投げる角度を計算
-                CalcForceDirection();
-                activeGuide = true;
-            }
-            else
-            {
-
-                if (isDepthLock == true)
-                {
-               
-                    // オブジェクトを飛ばす
-                    ObjectThrow();
-              
-
-                    holdObject = null;
-                    isHold = false;
-                    isInput = true;
-                    minDistance = RESETDISTANCE;
-
-                    activeGuide = false;
-                }
+                holdObject = null;
+                isHold = false;
+                isInput = true;
+                minDistance = RESETDISTANCE;
             }
         }
     }
+    [MunRPC]
+    void RecvDownQ(int id)
+    {
+        if (monobitView.viewID != id)
+        {
+            return;
+        }
 
+        isRelease = true;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -146,17 +137,16 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             {
                 monobitView.RPC("RecvDownF", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
             }
+            if(Input.GetKeyDown(KeyCode.Q))
+            {
+                monobitView.RPC("RecvDownQ", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
+            }
         }
 
         if (!MonobitNetwork.isHost)
         {
             return;
         }
-
-        //if (!m_MonobitView.isMine)
-        //{
-        //    return;
-        //}
         
         playerPos = transform.position; //プレイヤー位置更新
 
@@ -185,7 +175,19 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                         }
                     }
                 }
+                guide.SetGuidesState(false);
             }
+        }
+        if (isRelease == true)
+        {
+         
+            holdObject = null;
+            isHold = false;
+            isInput = true;
+            minDistance = RESETDISTANCE;
+
+            isRelease = false;
+
         }
         if (isHold == true)
         {
@@ -198,10 +200,6 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             // 掴んでいるオブジェクトの回転
             Debug.Log(holdAngle);
             rbHoldObj.transform.rotation = Quaternion.AngleAxis(holdAngle, new Vector3(0, 0, 1));
-
-            // マウスカーソルの位置にプレイヤーを向ける
-            ChangePlayerDirection();
-            
 
             // オブジェクトを投げる//
 
@@ -216,7 +214,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 //ガイド表示
                 guide.SetGuidesState(true);
             }
-
+            
             //投げる角度を計算
             CalcForceDirection();
 
@@ -232,40 +230,6 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             {
                 isInput = false;
                 inputCnt = 0;
-            }
-        }
-    }
-
-   
-
-    //-----------------------------------------------------------------------------
-    //! [内容]		マウスカーソルの位置にプレイヤーを向ける関数
-    //-----------------------------------------------------------------------------
-    void ChangePlayerDirection()
-    {
-        //カメラ位置とマウス位置をもとにRayを作成する
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(ray.origin, ray.direction * 10, Color.red, 5);
-
-        // プレイヤーのいるZ軸にPlaneを更新して、カメラの情報を元にマウスカーソルの位置を取得
-        plane.SetNormalAndPosition(Vector3.forward, transform.localPosition);
-        if (plane.Raycast(ray, out distance))
-        {
-            //当たったところの座標取得
-            Vector3 hitPoint = ray.GetPoint(distance);
-
-            // 座標を元にベクトルを算出して、交点の方を向く
-            mouseVec = transform.position.x - hitPoint.x;
-            //Debug.Log("交点" + vec);
-
-            //マウスカーソルのある場所を向く
-            if (mouseVec >= 0)       //プレイヤーの右側にカーソルがあるとき
-            {
-                movePlayer.targetAngle = -90.0f;
-            }
-            else if (mouseVec < 0)    //プレイヤーの左側にカーソルがあるとき
-            {
-                movePlayer.targetAngle = 90.0f;
             }
         }
     }
@@ -337,14 +301,12 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     void ObjectThrow()
     {
         // 左向きならX軸を反転させる
-        if (mouseVec > 0)
+        if (this.transform.eulerAngles.y >= 265.0f)
         {
-            forceDirection = new Vector3(-forceDirection.x, forceDirection.y, forceDirection.z);
+            forceDirection = new Vector3(forceDirection.x, forceDirection.y, forceDirection.z);
         }
-
         //力の計算
         throwPower = rbHoldObj.mass * strength;
-        Debug.Log("飛ばす強さ" + throwPower);
 
         guide.SetGuidesState(false);
 
@@ -352,6 +314,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         throwForce = throwPower * forceDirection.normalized;
 
         rbHoldObj.AddForce(throwForce, ForceMode.Impulse);
+
+        Debug.Log("飛ばす強さ" + forceDirection);
     }
 
     //-----------------------------------------------------------------------------
@@ -360,10 +324,11 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     public Vector3 GetThrowForce()
     {
         // 左向きならX軸を反転させる
-        if (mouseVec > 0)
+        if (this.transform.eulerAngles.y >= 265.0f)
         {
             forceDirection = new Vector3(-forceDirection.x, forceDirection.y, forceDirection.z);
         }
+
         //力の計算
         throwPower = rbHoldObj.mass * strength;
 
