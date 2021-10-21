@@ -5629,7 +5629,7 @@ MonoBehaviour:
   throwForce: {x: 0, y: 0, z: 0}
   meter: {fileID: 3299377179772798750}
   meterSpeed: 0.5
-  strength: 10
+  strength: 7
 --- !u!114 &3299377180002975749
 MonoBehaviour:
   m_ObjectHideFlags: 0
