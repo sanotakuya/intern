@@ -101,7 +101,7 @@ MonoBehaviour:
   mass: 10
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &1540514775088091859
 MonoBehaviour:
