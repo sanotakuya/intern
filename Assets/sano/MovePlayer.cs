@@ -133,13 +133,10 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     {
         if (myCharactor==true)
         {
-            
-
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 monobitView.RPC("RecvJump", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
             }
-
             if (Input.GetKeyDown(KeyCode.A))
             {
                 monobitView.RPC("RecvLeftWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
