@@ -57,23 +57,17 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         {
             return;
         }
-        //if (!m_MonobitView.isMine)
-        //{
-        //    return;
-        //}
+     
         if (isGuideStart == true)
         {
             SetGuidePositions();
-
-            guidePrent.SetActive(true);
         }
         else
         {
             // ガイドの位置をリセット
             for (int i = 0; i < protSize; i++)
             {
-                guideList[i].transform.position = guidePrent.transform.position;
-                guidePrent.SetActive(false);
+                guideList[i].transform.position = new Vector3(1000.0f, 1000.0f, 1000.0f);
             }
         }
     }
@@ -125,7 +119,7 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         // 物理学的なパラメータを取得
         // 『Guide』オブジェクトに加わる力
         Vector3 force = holdThrow.GetThrowForce();
-    
+        
         // Unityの世界に働く重力
         Vector3 gravity = Physics.gravity;
 
