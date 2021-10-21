@@ -5541,7 +5541,6 @@ GameObject:
   - component: {fileID: 3299377180002975757}
   - component: {fileID: 3299377180002975762}
   - component: {fileID: 3299377180002975763}
-  - component: {fileID: 3299377180002975760}
   - component: {fileID: -86020035101436358}
   m_Layer: 0
   m_Name: SD_unitychan_humanoid
@@ -5602,10 +5601,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 448cc70ca226a0743b1226677992ab61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movePower: 1200
+  movePower: 1500
   jumpPower: 150
-  maxSpeed: 200
+  maxSpeed: 250
   groundCheckObj: {fileID: 3299377178634328590}
+  myCharactor: 0
+  targetAngle: 0
   isAnotherHold: 0
   animator: {fileID: 0}
 --- !u!114 &3299377180002975748
@@ -5625,6 +5626,7 @@ MonoBehaviour:
   isOverHit: 0
   isHold: 0
   holdObject: {fileID: 0}
+  throwForce: {x: 0, y: 0, z: 0}
   meter: {fileID: 3299377179772798750}
   meterSpeed: 0.5
   strength: 10
@@ -5643,7 +5645,8 @@ MonoBehaviour:
   isGuideStart: 0
   guidePrent: {fileID: 3299377179772798750}
   guidePrefab: {fileID: 4390594625524676393, guid: f7297066d63c95e4c99cbec885b69a8a, type: 3}
-  protSize: 200
+  holdMass: 0
+  protSize: 10
 --- !u!114 &3299377180002975754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5871,12 +5874,11 @@ MonoBehaviour:
   m_ObjectStreamCheckTime: 0
   m_ObjectStreamSendBytes: 
   m_IsEncrypt: 1
-  InternalObservedComponents:
-  - {fileID: 3299377180002975762}
-  - {fileID: 3299377180002975763}
+  InternalObservedComponents: []
   ObservedComponents:
   - {fileID: 3299377180002975762}
-  - {fileID: 3299377180002975759}
+  - {fileID: 3299377180002975763}
+  - {fileID: 3299377180002975751}
   ownerId: 0
   group: 0
   prefixBackup: 0
@@ -5896,7 +5898,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SyncPosition:
     m_EnableSync: 1
-    m_EnableInterpolate: 1
+    m_EnableInterpolate: 0
     m_LerpRate: 10
   m_SyncRotation:
     m_EnableSync: 1
@@ -5936,57 +5938,6 @@ MonoBehaviour:
   - m_Type: 4
     m_Name: isRun
     m_EnableSync: 1
---- !u!114 &3299377180002975760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3299377180002975761}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5af7b8fdc9723749b09b2e6d6bf0982, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animView: {fileID: 3299377180002975763}
-  KeyAndAnimSettings:
-  - keyCode: 3
-    axisAction: 0
-    buttonAction: 2
-    actionType: 4
-    Position: {x: 0, y: 1, z: 1}
-    Rotation: {x: 0, y: 0, z: 0}
-    SelectLayer: 0
-    layerInfo:
-    - m_Index: 0
-      m_Name: Base Layer
-      m_animWeight: 0
-    SelectParam: 0
-    paramInfo:
-    - m_Index: 0
-      m_Type: 4
-      m_Name: isJump
-      m_floatValue: 0
-      m_intValue: 0
-      m_boolValue: 0
-    - m_Index: 0
-      m_Type: 4
-      m_Name: isWalk
-      m_floatValue: 0
-      m_intValue: 0
-      m_boolValue: 0
-    - m_Index: 0
-      m_Type: 4
-      m_Name: isRun
-      m_floatValue: 0
-      m_intValue: 0
-      m_boolValue: 0
-    instantiatePrefab: {fileID: 3239026931582470979, guid: 025bb46b17a3f4e4fa72288c4450b16d, type: 3}
-    instantiateType: 0
-    PositionMin: {x: 0, y: 0, z: 0}
-    PositionMax: {x: 0, y: 0, z: 0}
-    RotationMin: {x: 0, y: 0, z: 0}
-    RotationMax: {x: 0, y: 0, z: 0}
 --- !u!114 &-86020035101436358
 MonoBehaviour:
   m_ObjectHideFlags: 0
