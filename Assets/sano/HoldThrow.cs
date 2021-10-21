@@ -250,8 +250,17 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     void PlayerDepthMove()
     {
-        if (cartObj.transform.position.x+2.0f > this.transform.position.x && cartObj.transform.position.x - 2.0f < this.transform.position.x)
+        Vector3 vec = cartObj.transform.position - this.transform.position;
+        if (vec.x < 1.5f && vec.x > -1.5f)  //  カートの座標値に重なっていた場合
         {
+            if(vec.x > 0)
+            {
+                this.transform.position = Vector3.Lerp(transform.position, new Vector3(cartObj.transform.position.x - 3.0f, transform.position.y, 0.0f), Time.deltaTime);
+            }
+            else if(vec.x > -1.5f)
+            {
+                this.transform.position = Vector3.Lerp(transform.position, new Vector3(cartObj.transform.position.x + 3.0f, transform.position.y, 0.0f), Time.deltaTime);
+            }
             isDepthLock = false;
         }
         else
@@ -266,7 +275,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
                 isDepthLock = false;
             }
-            Debug.Log("掴めえる位置");
+           
         }
     }
 
