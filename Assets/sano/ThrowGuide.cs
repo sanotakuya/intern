@@ -88,9 +88,6 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         {
             // Prefabをインスタンス化
             GameObject guideObject = MonobitNetwork.Instantiate(guidePrefab.name, guidePos, Quaternion.identity, 0);
-
-            view.ObservedComponents.Add(guideObject.GetComponent<MonobitTransformView>());
-
        
             // インスタンス化したオブジェクトをGuideParentの子オブジェクトにする
             //guideObject.transform.SetParent(guidePrent.transform);
@@ -101,8 +98,6 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
             // リストへ追加
             guideList.Add(guideObject);
         }
-
-        view.UpdateSerializeViewMethod();
     }
 
     void SetGuidePositions()

@@ -38,19 +38,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //!	public変数
     //-----------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
-    //! [内容]		参加受信関数
-    //-----------------------------------------------------------------------------
-    [MunRPC]
-    void RecvRoomText(string text)
-    {
-        RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
-        textInfo.SetDefault();
-
-        textInfo.text = text;
-
-        GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
-    }
+    
 
     //-----------------------------------------------------------------------------
     //! [内容]		開始時
@@ -87,12 +75,6 @@ public class GameManager : MonobitEngine.MonoBehaviour
         // 入室状態に移行
         if(!inRoom && MonobitNetwork.inRoom)
         {
-            monobitView.RPC(
-                "RecvRoomText", 
-                MonobitEngine.MonobitTargets.All, 
-                (string)(MonobitNetwork.playerName + "が入室しました")
-                );
-
             inRoom = true;
         }
 
@@ -130,7 +112,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //! [内容]		GameManagerがゲーム開始の準備ができているか確認する
     //! [return]    準備ができていたらtrue,できていなかったらfalse 
     //-----------------------------------------------------------------------------
-    bool IsReady()
+    public bool IsReady()
     {
         if(!stackTree)
         {
@@ -154,7 +136,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //! [内容]		現在プレイ中か判断する
     //! [return]   プレイ中ならtrue,そうじゃなかったらfalse 
     //-----------------------------------------------------------------------------
-    bool IsPlaying()
+    public bool IsPlaying()
     {
         return playing;
     }
@@ -162,7 +144,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		ゲーム開始時にコール
     //-----------------------------------------------------------------------------
-    void GameStart()
+    public void GameStart()
     {
 
         // プレイ中フラグを立てる
@@ -175,7 +157,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		ゴールに辿り着いたときコール
     //-----------------------------------------------------------------------------
-    void Goal()
+    public void Goal()
     {
 
     }
@@ -183,7 +165,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		ゲーム開終了時にコール
     //-----------------------------------------------------------------------------
-    void GameEnd()
+    public void GameEnd()
     {
 
         // プレイ中フラグを折る
@@ -195,7 +177,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     public void EnterOneself()
     {
-        monobitView.RPC("RecvRoomText", MonobitEngine.MonobitTargets.All, (string)(MonobitNetwork.playerName +"が入室しました"));
+        
     }
 
     //-----------------------------------------------------------------------------
@@ -203,23 +185,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     public void ExitOneself()
     {
-        monobitView.RPC("RecvRoomText", MonobitEngine.MonobitTargets.All, MonobitNetwork.playerName + "が退出しました");
-    }
-
-    //-----------------------------------------------------------------------------
-    //! [内容]		プレイヤー入室時にコール
-    //-----------------------------------------------------------------------------
-    void EnterPlayer()
-    {
-
-    }
-
-    //-----------------------------------------------------------------------------
-    //! [内容]		プレイヤー退出時にコール
-    //-----------------------------------------------------------------------------
-    void ExitPlayer()
-    {
-
+        
     }
 
     //-----------------------------------------------------------------------------
