@@ -380,7 +380,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             monobitView.RPC(
                "RecvPlayerInfo",
                player,
-               (string)(player.name),
+               (string)(temp.player.name),
                temp.player.ID,
                temp.characterID
                 );
@@ -393,18 +393,22 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     void ExitRoomPlayer(MonobitPlayer player)
     {
-        foreach(RoomPlayer roomPlayer in roomPlayers)
+        RoomPlayer temp = new RoomPlayer();
+
+        foreach (RoomPlayer roomPlayer in roomPlayers)
         {
             if(roomPlayer.player == player)
             {
                 GameObject obj = MonobitView.Find(roomPlayer.characterID).gameObject;
 
                 MonobitNetwork.Destroy(obj);
-            }
 
-            roomPlayers.Remove(roomPlayer);
+                temp = roomPlayer;
+            }
         }
-        
+
+        roomPlayers.Remove(temp);
+
 
         //退出メッセージ送信
         monobitView.RPC(
