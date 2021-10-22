@@ -22,6 +22,9 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     GroundCheck groundCheck;
     HoldThrow holdThrow;
 
+    AudioSource effectAudio;
+    public AudioClip jumpSE;
+
     MonobitView monobitView = null;
 
     private float firstMovePower;   //通常時の速度を保存する
@@ -38,14 +41,13 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     bool isJump;        //プレイヤーがジャンプしているかのフラグ
 
     // アニメーション
-    public Animator animator;
+    Animator animator;
 
     bool updateNetwork = false;
 
     private bool lastUpdateJump = false;
     private bool lastUpdateRightWalk = false;
     private bool lastUpdateLiftWalk = false;
-
     private bool lastUpdateUpWalk = false;
     private bool lastUpdateDownWalk = false;
     private bool lastUpdateRun = false;
@@ -60,6 +62,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 //上に飛ばすだけ 
                 rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
                 animator.SetBool("isJump", true);
+                effectAudio.PlayOneShot(jumpSE);
                 isJump = true;
             }
         }
@@ -121,6 +124,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         groundCheck = groundCheckObj.GetComponent<GroundCheck>();
         holdThrow = this.gameObject.GetComponent<HoldThrow>();
         monobitView = GetComponent<MonobitView>();
+        effectAudio = GetComponent<AudioSource>();
 
         firstMovePower = movePower;
         firstSpeed = maxSpeed;
@@ -197,8 +201,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         float nowAngle = this.transform.eulerAngles.y;
         float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
         this.transform.eulerAngles = new Vector3(0, angle, 0);
-
-
+        
         if (isJump == true && isGroundTouch == true)
         {
             isJump = false;

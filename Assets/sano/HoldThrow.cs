@@ -46,25 +46,31 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     private bool isRelease;         // 掴んでるオブジェクトを離す
 
     //投げる処理//
-    //角度。方向。力すべて合わせたもの
+    // 角度。方向。力すべて合わせたもの
     public Vector3 throwForce;
-    //向き
+    // 向き
     Plane plane = new Plane(); //　Rayを受け止めるためのオブジェクト
     float distance = 0;        //　交点の距離
     float mouseVec = 0;        //　プレイヤーから見たマウス座標へのベクトル
-    //角度
+    // 角度
     [Header("飛ばす角度を保留するオブジェクト(仮)")] public GameObject meter;
     [Tooltip("メーターが動く速度")] public float meterSpeed;
     bool isChangeRot;           //飛ばす角度を正の方向と負の方向に切り替える
     float nowRot;               //現在の角度
-    //力
+    // 力
     [Tooltip("重さに対してどのくらいの力で投げるか")] public float strength;
     float throwPower;          //  オブジェクトを投げる力
     Vector3 forceDirection;    //　力を与える向き
 
-    //ガイドの処理
+    // ガイドの処理
     ThrowGuide guide;
     bool activeGuide = false;
+
+
+    // サウンド処理
+    AudioSource effectAudio;
+    [Tooltip("掴むときのSE")] public AudioClip holdSE;
+    [Tooltip("投げるときのSE")] public AudioClip throwSE;
 
     [MunRPC]
     void RecvDownF(int id)
@@ -86,6 +92,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
                 rbHoldObj = holdObject.GetComponent<Rigidbody>();
 
+                effectAudio.PlayOneShot(holdSE);
+
                 //オブジェクトの重さをガイドに渡す
                 guide.SetObjectMass(rbHoldObj.mass);
                 isHold = true;
@@ -98,6 +106,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             {
                 // オブジェクトを飛ばす
                 ObjectThrow();
+
+                effectAudio.PlayOneShot(throwSE);
 
                 holdObject = null;
                 isHold = false;
@@ -128,6 +138,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         m_MonobitView = GetComponent<MonobitView>();
 
         guide = this.GetComponent<ThrowGuide>();
+
+        effectAudio = this.GetComponent<AudioSource>();
 
         cartObj = GameObject.Find("newCart(Clone)");
 
@@ -191,7 +203,16 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         }
         if (isRelease == true)
         {
-         
+            // 左向きならX軸を反転させる
+            if (this.transform.eulerAngles.y >= 265.0f)
+            {
+                holdObject.transform.position = new Vector3(playerPos.x - 0.5f, playerPos.y + 1.0f, playerPos.z);
+            }
+            else
+            {
+                holdObject.transform.position = new Vector3(playerPos.x + 0.5f, playerPos.y + 1.0f, playerPos.z);
+            }
+
             holdObject = null;
             isHold = false;
             isInput = true;
