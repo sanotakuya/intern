@@ -187,19 +187,23 @@ namespace MonobitEngine
         {
             // ネットワークからの更新を受信したことをフラグで検知
             m_UpdateNetwork = true;
+            GameObject obj = gameObject;
 
-            // ストリームからの受信処理
-            if( m_SyncPosition.m_EnableSync )
+            if(!MonobitNetwork.isHost)
             {
-                m_LastUpdatePosition = (Vector3)stream.Dequeue();
-            }
-            if (m_SyncRotation.m_EnableSync)
-            {
-                m_LastUpdateRotation = (Quaternion)stream.Dequeue();
-            }
-            if (m_SyncScale.m_EnableSync)
-            {
-                m_LastUpdateScale = (Vector3)stream.Dequeue();
+                // ストリームからの受信処理
+                if (m_SyncPosition.m_EnableSync)
+                {
+                    m_LastUpdatePosition = (Vector3)stream.Dequeue();
+                }
+                if (m_SyncRotation.m_EnableSync)
+                {
+                    m_LastUpdateRotation = (Quaternion)stream.Dequeue();
+                }
+                if (m_SyncScale.m_EnableSync)
+                {
+                    m_LastUpdateScale = (Vector3)stream.Dequeue();
+                }
             }
         }
     }

@@ -38,19 +38,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //!	public変数
     //-----------------------------------------------------------------------------
 
-    //-----------------------------------------------------------------------------
-    //! [内容]		参加受信関数
-    //-----------------------------------------------------------------------------
-    [MunRPC]
-    void RecvRoomText(string text)
-    {
-        RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
-        textInfo.SetDefault();
-
-        textInfo.text = text;
-
-        GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
-    }
+    
 
     //-----------------------------------------------------------------------------
     //! [内容]		開始時
@@ -87,12 +75,6 @@ public class GameManager : MonobitEngine.MonoBehaviour
         // 入室状態に移行
         if(!inRoom && MonobitNetwork.inRoom)
         {
-            monobitView.RPC(
-                "RecvRoomText", 
-                MonobitEngine.MonobitTargets.All, 
-                (string)(MonobitNetwork.playerName + "が入室しました")
-                );
-
             inRoom = true;
         }
 
@@ -195,7 +177,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     public void EnterOneself()
     {
-        monobitView.RPC("RecvRoomText", MonobitEngine.MonobitTargets.All, (string)(MonobitNetwork.playerName +"が入室しました"));
+        
     }
 
     //-----------------------------------------------------------------------------
@@ -203,7 +185,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     public void ExitOneself()
     {
-        monobitView.RPC("RecvRoomText", MonobitEngine.MonobitTargets.All, MonobitNetwork.playerName + "が退出しました");
+        
     }
 
     //-----------------------------------------------------------------------------

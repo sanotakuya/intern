@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MonobitEngine;
+using System;
 
 
 //-----------------------------------------------------------------------------
@@ -16,16 +17,74 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     //!	private変数
     //-----------------------------------------------------------------------------
     private string roomName = "";       // ルーム名
-    private GameObject playerObj = null;
+    private bool isCharacterCreate = false;       // 自キャラを生成したか
+    private int myCharacterID = -1;
     private MonobitPlayer hostPlayer;
 
     private bool leaveHost = false;
     private float time = 0;
 
+    struct RoomPlayer
+    {
+        public MonobitPlayer player;
+        public int characterID;
+    }
+    List<RoomPlayer> roomPlayers = new List<RoomPlayer>();
+
+    MonobitPlayer[] beforePlayers = new MonobitPlayer[0];
+
     [SerializeField] private int updateRate = 30;
     [SerializeField] private uint maxPlayers = 4;
     [SerializeField] private string lobbySceneName = "Lobby";
     [SerializeField] private string RoomSceneName = "Room";
+    //-----------------------------------------------------------------------------
+    //! [内容]		参加受信関数
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvEnterRoomText(string playerName,int playerID, int characterID)
+    {
+        RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
+        textInfo.SetDefault();
+
+        textInfo.text = playerName + "が入室しました";
+        textInfo.animStyle = TextAnimation.AnimStyle.WavePosition;
+
+        GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
+
+        GameObject obj = MonobitView.Find(characterID).gameObject;
+        obj.name = playerName;
+
+        // 自分の事だったら
+        if (playerID == MonobitNetwork.player.ID)
+        {
+            myCharacterID = characterID;
+            obj.GetComponent<MovePlayer>().myCharactor = true;
+        }
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		参加受信関数
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvExitRoomText(string playerName)
+    {
+        RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
+        textInfo.SetDefault();
+
+        textInfo.text = playerName + "が退出しました";
+        //textInfo.animStyle = TextAnimation.AnimStyle.WavePosition;
+
+        GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
+    }
+
+    [MunRPC]
+    void RecvPlayerInfo(string playerName, int playerID, int characterID)
+    {
+        GameObject obj = MonobitView.Find(characterID).gameObject;
+        obj.name = playerName;
+
+    }
+
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
@@ -33,6 +92,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     {
         // １秒間に30回のタイミングで、ストリーミング処理を実行します。
         MonobitEngine.MonobitNetwork.updateStreamRate = updateRate;
+        MonobitEngine.MonobitNetwork.sendRate = updateRate;
     }
 
     //-----------------------------------------------------------------------------
@@ -43,29 +103,16 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         // プレイヤーキャラクタが未登場の場合に登場させる
         if(MonobitNetwork.isConnect && MonobitNetwork.inRoom)
         {
-            if (playerObj == null)
+            // ホストを取得できるまでは通らない
+            if (hostPlayer != null)
             {
-                Object instant = Resources.Load("SD_unitychan_humanoid");
-                playerObj = MonobitNetwork.Instantiate(
-                                "SD_unitychan_humanoid",
-                                Vector3.zero,
-                                Quaternion.identity,
-                                0
-                                );
-
-                playerObj.GetComponent<MovePlayer>().myCharactor = true;
-                playerObj.GetComponent<MonobitView>().TransferOwnership(MonobitEngine.MonobitNetwork.host);
-            }
-
-            // ホストが変わったら解散する
-            if(hostPlayer != null)
-            {
+                // ホストが変わったら解散する
                 if (MonobitNetwork.host != hostPlayer)
                 {
                     if (!leaveHost)
                     {
                         monobitView.RPC(
-                           "RecvRoomText",
+                           "RecvExitRoomText",
                            MonobitEngine.MonobitTargets.All,
                            "ホストが退出したのでルームが解散されます"
                            );
@@ -81,6 +128,10 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                     {
                         LeaveRoom();
                     }
+                }
+                else if (MonobitNetwork.isHost)
+                {
+                    UpdatePlayerList();
                 }
             }
         }
@@ -236,9 +287,9 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         hostPlayer = MonobitNetwork.host;
 
         monobitView.RPC(
-                "RecvRoomText",
+                "RecvEnterRoomText",
                 MonobitEngine.MonobitTargets.All,
-                (string)(MonobitNetwork.playerName + "が入室しました")
+                (string)(MonobitNetwork.playerName)
                 );
     }
 
@@ -254,5 +305,112 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
 #else
                      Application.LoadLevel(Application.loadedLevelName);
 #endif
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		プレイヤーリストの変化を確認する
+    //-----------------------------------------------------------------------------
+    void UpdatePlayerList()
+    {
+        MonobitPlayer[] playerList = MonobitNetwork.playerList;
+        // 前回のプレイヤーリストと違ったら
+        if (beforePlayers != playerList)
+        {
+            // 退出したプレイヤーを探す
+            foreach (MonobitPlayer player in beforePlayers)
+            {
+                if (Array.IndexOf(playerList, player) == -1)
+                {
+                    ExitRoomPlayer(player);
+                }
+
+            }
+
+            // 入室したプレイヤーを探す
+            foreach (MonobitPlayer player in playerList)
+            {
+                // 新たなプレイヤーを見つけたら
+                if (Array.IndexOf(beforePlayers, player) == -1)
+                {
+                    EnterNewPlayer(player);
+                }
+            }
+        }
+
+        // 更新
+        beforePlayers = MonobitNetwork.playerList;
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		新たなプレイヤーが参加したとき
+    //-----------------------------------------------------------------------------
+    void EnterNewPlayer(MonobitPlayer player)
+    {
+        // ルームプレイヤー情報を作成
+        RoomPlayer roomPlayer = new RoomPlayer();
+        roomPlayer.player = player;
+
+        // キャラクターを生成
+        GameObject playerObj = MonobitNetwork.Instantiate(
+                            "SD_unitychan_humanoid",
+                            Vector3.zero,
+                            Quaternion.identity,
+                            0
+                            );
+
+        // キャラクターのidセット
+        roomPlayer.characterID = playerObj.GetComponent<MonobitView>().viewID;
+
+        // リストに追加
+        roomPlayers.Add(roomPlayer);
+
+        //入室メッセージ送信
+        monobitView.RPC(
+                "RecvEnterRoomText",
+                MonobitEngine.MonobitTargets.All,
+                (string)(player.name),
+                roomPlayer.player.ID,
+                roomPlayer.characterID
+        );
+
+
+        // 現在いるプレイヤー情報を送信
+        foreach(RoomPlayer temp in roomPlayers)
+        {
+            monobitView.RPC(
+               "RecvPlayerInfo",
+               player,
+               (string)(player.name),
+               temp.player.ID,
+               temp.characterID
+                );
+        }
+       
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		誰かが退出したとき
+    //-----------------------------------------------------------------------------
+    void ExitRoomPlayer(MonobitPlayer player)
+    {
+        foreach(RoomPlayer roomPlayer in roomPlayers)
+        {
+            if(roomPlayer.player == player)
+            {
+                GameObject obj = MonobitView.Find(roomPlayer.characterID).gameObject;
+
+                MonobitNetwork.Destroy(obj);
+            }
+
+            roomPlayers.Remove(roomPlayer);
+        }
+        
+
+        //退出メッセージ送信
+        monobitView.RPC(
+                "RecvExitRoomText",
+                MonobitEngine.MonobitTargets.All,
+                (string)(player.name)
+        );
     }
 }

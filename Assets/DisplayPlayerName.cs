@@ -15,11 +15,10 @@ public class DisplayPlayerName : MonobitEngine.MonoBehaviour
     static GameObject screenSpaceCanvas;
 
     RectTransform rectTrans = null;
-    
+    GameObject textObj = null;
+
     void Start()
     {
-        GameObject textObj = null;
-
         // キャンバスを探す
         if(!screenSpaceCanvas)
         {
@@ -37,6 +36,7 @@ public class DisplayPlayerName : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        textObj.GetComponent<TextMeshProUGUI>().text = gameObject.name;
         rectTrans.position = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position + offset);
     }
 
