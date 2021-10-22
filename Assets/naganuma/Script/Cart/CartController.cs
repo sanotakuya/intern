@@ -36,12 +36,12 @@ public class CartController : MonobitEngine.MonoBehaviour
             rigidbody = this.GetComponent<Rigidbody>();
             if (!rigidbody) Debug.LogError("リジッドボディが見つかりません。");
             // コライダーにコンポーネント追加
-            foreach (var collider in colliders) {
-                var cartPushArea = collider.AddComponent<CartPushArea>();
-                if (!cartPushArea) Debug.LogError("コンポーネントを追加出来ませんでした。");
-                cartPushArea.SetTargetTag(targetTag);
-                cartPushAreas.Add(cartPushArea);
-            }
+            //foreach (var collider in colliders) {
+            //    var cartPushArea = collider.AddComponent<CartPushArea>();
+            //    if (!cartPushArea) Debug.LogError("コンポーネントを追加出来ませんでした。");
+            //    cartPushArea.SetTargetTag(targetTag);
+            //    cartPushAreas.Add(cartPushArea);
+            //}
         }
     }
 
@@ -50,26 +50,26 @@ public class CartController : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     void LateUpdate()
     {
-        if (MonobitNetwork.isHost) {
-            foreach (var cartPushArea in cartPushAreas) {
-                if (!cartPushArea.isHit) {
-                    rigidbody.isKinematic = true;
-                }
-                else {
-                    if (cartPushArea.rigidBody) {
-                        if (cartPushArea.rigidBody.velocity == new Vector3(0.0f, 0.0f, 0.0f)) {
-                            rigidbody.isKinematic = true;
-                        }
-                        else {
-                            rigidbody.isKinematic = false;
-                        }
-                    }
-                    else {
-                        rigidbody.isKinematic = false;
-                    }
-                    break;
-                }
-            }
-        }
+        //if (MonobitNetwork.isHost) {
+        //    foreach (var cartPushArea in cartPushAreas) {
+        //        if (!cartPushArea.isHit) {
+        //            rigidbody.isKinematic = true;
+        //        }
+        //        else {
+        //            if (cartPushArea.rigidBody) {
+        //                if (cartPushArea.rigidBody.velocity == new Vector3(0.0f, 0.0f, 0.0f)) {
+        //                    rigidbody.isKinematic = true;
+        //                }
+        //                else {
+        //                    rigidbody.isKinematic = false;
+        //                }
+        //            }
+        //            else {
+        //                rigidbody.isKinematic = false;
+        //            }
+        //            break;
+        //        }
+        //    }
+        //}
     }
 }
