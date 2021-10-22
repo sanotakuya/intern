@@ -122,7 +122,7 @@ public class InGameUIManager : MonoBehaviour
                 // 高さを表示
                 if (heightLimit != 0) {
                     var height = stackTree.GetHeight();
-                    heightSlider.value = height <= heightLimit ? height : 1.0f;
+                    heightSlider.value = height <= heightLimit ? height / heightLimit : 1.0f;
 
                     // 高さテキストの表示変更
                     for (int i = 0; i < heightTextComs.Length; i++) {

@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 916456461738452594}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 2.19}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
   mass: 10
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &1540514775088091859
 MonoBehaviour:
@@ -127,7 +127,7 @@ MonoBehaviour:
   ownerId: 0
   group: 0
   prefixBackup: 0
-  ownershipTransfer: 0
+  ownershipTransfer: 1
   compressedStream: 0
 --- !u!114 &4867465906311865406
 MonoBehaviour:

@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MonobitEngine;
+
 
 //-----------------------------------------------------------------------------
 //! [制作者]     長沼豪琉
 //! [最終更新日] 2021/10/15
 //! [内容]       ゲームの時間管理
+//!             2021/10/19 小野　ゲーム開始同期処理追加
 //-----------------------------------------------------------------------------
-public class GameTimer : MonoBehaviour
+public class GameTimer : MonobitEngine.MonoBehaviour
 {
     //-----------------------------------------------------------------------------
     //! private変数
@@ -45,12 +48,23 @@ public class GameTimer : MonoBehaviour
         }
     }
 
+    private bool isStart = false; // プレイ開始
+
     //-----------------------------------------------------------------------------
     //! Inspectorに公開する変数
     //-----------------------------------------------------------------------------
     [Header("GameManager")]        public GameManager gameManager        ; // ゲームマネージャー
     [Header("開始するまでの時間")] public float       startTime   = 1.0f ; // 開始するまでの時間
     [Header("制限時間")]           public float       limitTime   = 10.0f; // 制限時間
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ゲーム開始受信関数
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvGameStart(bool temp)
+    {
+        isStart = true;
+    }
 
     //-----------------------------------------------------------------------------
     //! [内容]    開始処理
@@ -70,8 +84,12 @@ public class GameTimer : MonoBehaviour
     //-----------------------------------------------------------------------------
     void Update()
     {
+
         // 時間計測
-        currentTime += Time.deltaTime;
+        if (isStart) {
+            currentTime += Time.deltaTime;
+        }
+
         // プレイ可能なタイミングから計測開始
         if (isPlayable) {
             _currentGameTime += Time.deltaTime;
@@ -86,5 +104,13 @@ public class GameTimer : MonoBehaviour
         if (limitCount == 0.0f) {
             // TODO:終了時処理
         }
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]    ゲーム開始
+    //-----------------------------------------------------------------------------
+    public void GameStart() {
+        bool flag = false;
+        monobitView.RPC("RecvGameStart", MonobitTargets.All, flag);
     }
 }

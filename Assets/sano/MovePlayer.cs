@@ -10,26 +10,30 @@ using MonobitEngine;
 //-----------------------------------------------------------------------------
 public class MovePlayer : MonobitEngine.MonoBehaviour
 {
-    [Tooltip("通常時の歩行速度")] 　　public float movePower; //通常時の歩行速度
-    [Tooltip("ジャンプ力")]       　　public float jumpPower; //ジャンプ力
-    [Tooltip("法定速度")]       　　  public float maxSpeed;  //最大速度
+    [Tooltip("通常時の歩行速度")] public float movePower; //通常時の歩行速度
+    [Tooltip("ジャンプ力")] public float jumpPower; //ジャンプ力
+    [Tooltip("法定速度")] public float maxSpeed;  //最大速度
 
-    [Header("足元チェック用オブジェクト")]     public GameObject groundCheckObj;
+    [Header("足元チェック用オブジェクト")] public GameObject groundCheckObj;
+
+    public bool myCharactor = false;
 
     Rigidbody rb;
     GroundCheck groundCheck;
     HoldThrow holdThrow;
 
-    MonobitView monobitView= null;
+    AudioSource effectAudio;
+    public AudioClip jumpSE;
+
+    MonobitView monobitView = null;
 
     private float firstMovePower;   //通常時の速度を保存する
     private float firstSpeed;       //通常時の最高速度を保存する
 
-
     private bool isRunning;       //現在は知っている状態なのかを取得する
-
-
-    static float targetAngle;  //次のプレイヤーの向き
+    
+    public float targetAngle;   //次のプレイヤーの向き
+    public  bool isAnotherHold;  //誰かにHoldされていないか
 
     bool isGroundTouch; //現在プレイヤーが地面に着いているかのフラグ
     bool isDepthLock;   //Z軸固定されているかのフラグ
@@ -37,7 +41,80 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     bool isJump;        //プレイヤーがジャンプしているかのフラグ
 
     // アニメーション
-    public Animator animator;
+    Animator animator;
+
+    bool updateNetwork = false;
+
+    private bool lastUpdateJump = false;
+    private bool lastUpdateRightWalk = false;
+    private bool lastUpdateLiftWalk = false;
+    private bool lastUpdateUpWalk = false;
+    private bool lastUpdateDownWalk = false;
+    private bool lastUpdateRun = false;
+
+    [MunRPC]
+    void RecvJump(int id)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            if (isGroundTouch == true)
+            {
+                //上に飛ばすだけ 
+                rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
+                animator.SetBool("isJump", true);
+                effectAudio.PlayOneShot(jumpSE);
+                isJump = true;
+            }
+        }
+    }
+    [MunRPC]
+    void RecvLeftWalk(int id,bool isWalk)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateLiftWalk = isWalk;
+        }
+    }
+    [MunRPC]
+    void RecvRightWalk(int id, bool isWalk)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateRightWalk = isWalk;
+        }
+    }
+    [MunRPC]
+    void RecvUpWalk(int id, bool isWalk)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateUpWalk = isWalk;
+        }
+    }
+    [MunRPC]
+    void RecvDownWalk(int id, bool isWalk)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateDownWalk = isWalk;
+        }
+    }
+    [MunRPC]
+    void RecvRun(int id, bool isRun)
+    {
+        if (this.monobitView.viewID == id)
+        {
+            lastUpdateRun = isRun;
+        }
+    }
+    private void Awake()
+    {
+        if (!MonobitNetwork.isHost)
+        {
+            Destroy(this.GetComponent<Rigidbody>());
+            Destroy(this.GetComponent<BoxCollider>());
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -47,20 +124,75 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         groundCheck = groundCheckObj.GetComponent<GroundCheck>();
         holdThrow = this.gameObject.GetComponent<HoldThrow>();
         monobitView = GetComponent<MonobitView>();
+        effectAudio = GetComponent<AudioSource>();
 
         firstMovePower = movePower;
         firstSpeed = maxSpeed;
         isDepthLock = false;
+        isAnotherHold = false;
+    }
+
+   
+    private void Update()
+    {
+        if (myCharactor==true)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                monobitView.RPC("RecvJump", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                monobitView.RPC("RecvLeftWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.A))
+            {
+                monobitView.RPC("RecvLeftWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                monobitView.RPC("RecvRightWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.D))
+            {
+                monobitView.RPC("RecvRightWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                monobitView.RPC("RecvUpWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                monobitView.RPC("RecvUpWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                monobitView.RPC("RecvDownWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                monobitView.RPC("RecvDownWalk", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                monobitView.RPC("RecvRun", MonobitEngine.MonobitTargets.Host, monobitView.viewID, true);
+            }
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                monobitView.RPC("RecvRun", MonobitEngine.MonobitTargets.Host, monobitView.viewID, false);
+            }
+        }
+
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if (!monobitView.isMine)
+        if (!MonobitNetwork.isHost)
         {
             return;
         }
-
+        
         //他スクリプトからの参照
         isGroundTouch = groundCheck.isHitGround;
         isHold = holdThrow.isHold;
@@ -69,14 +201,21 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         float nowAngle = this.transform.eulerAngles.y;
         float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
         this.transform.eulerAngles = new Vector3(0, angle, 0);
-
+        
         if (isJump == true && isGroundTouch == true)
         {
             isJump = false;
         }
-        if (Input.GetKey(KeyCode.A))
+
+        if (isGroundTouch == true)
         {
-            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
+            if (this.GetComponent<Animator>().enabled == false)
+            {
+                this.GetComponent<Animator>().enabled = true;
+            }
+        }
+        if (lastUpdateLiftWalk == true)
+        {
             //速度上限
             if (rb.velocity.magnitude <= maxSpeed)
             {
@@ -86,9 +225,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             }
             targetAngle = -90.0f;
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (lastUpdateRightWalk==true)
         {
-            //rb.velocity = new Vector3(movePower*Time.deltaTime, 0.0f, 0.0f);
             //速度上限
             if (rb.velocity.magnitude <= maxSpeed)
             {
@@ -98,11 +236,10 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             }
             targetAngle = 90.0f;
         }
-        else if (Input.GetKey(KeyCode.W))
+        else if (lastUpdateUpWalk==true)
         {
             if (isDepthLock == false)
             {
-                //rb.velocity = new Vector3(0.0f, 0.0f, movePower * Time.deltaTime);
                 //速度上限
                 if (rb.velocity.magnitude <= maxSpeed)
                 {
@@ -114,11 +251,10 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 targetAngle = 0.0f;
             }
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (lastUpdateDownWalk == true)
         {
             if (isDepthLock == false)
             {
-                //rb.velocity = new Vector3(0.0f, 0.0f, -movePower * Time.deltaTime);
                 //速度上限
                 if (rb.velocity.magnitude <= maxSpeed)
                 {
@@ -136,17 +272,9 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             else if (isRunning == false) animator.SetBool("isWalk", false);
         }
 
-        //ジャンプ
-        if (Input.GetKeyDown(KeyCode.Space) && isGroundTouch == true)
-        {
-            //上に飛ばすだけ 
-            rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
-            animator.SetBool("isJump", true);
-            isJump = true;
-        }
 
         //走る
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (lastUpdateRun == true)
         {
             movePower = firstMovePower * 1.5f;
             maxSpeed = firstSpeed * 2.0f;
@@ -160,7 +288,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             isRunning = false;
             animator.SetBool("isRun", false);
         }
-       
+
         //Z軸固定
         if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
         {
@@ -174,7 +302,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 isDepthLock = false;
             }
         }
-        else if(this.transform.position.z != 0.0f)
+        else if (this.transform.position.z != 0.0f)
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -182,19 +310,31 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             }
         }
     }
-  
+
+   
 
     //外部参照用関数
+  
     //-----------------------------------------------------------------------------
     //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
     //-----------------------------------------------------------------------------
-    public static void SetTargetAngle(float target)
+    public  void SetPlayerHold(bool isHold)
     {
-        targetAngle = target;
-    } 
+        isAnotherHold = isHold;
+    }
+    
+    //-----------------------------------------------------------------------------
+    //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
+    //-----------------------------------------------------------------------------
+    public bool GetAnotherHold()
+    {
+        return isAnotherHold;
+    }
 
     public void AnimationReset(string str)
     {
         animator.SetBool(str, false);
     }
+
+
 }

@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 458588255627605407}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -96,5 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c39f7f728df013147af5a0a03892da9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ownershipManager: {fileID: 0}
   path: food/
   prefab: {fileID: 916456461738452594, guid: c10a604eecd7d614eb4936878e346e51, type: 3}

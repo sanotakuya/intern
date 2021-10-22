@@ -4,7 +4,7 @@ using UnityEngine;
 using MonobitEngine;
 public class ThrowGuide : MonobitEngine.MonoBehaviour
 {
-    static MonobitView m_MonobitView = null;
+    MonobitView m_MonobitView = null;
 
     //　ガイド開始
     public bool isGuideStart;
@@ -25,32 +25,50 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
 
     // インスタンス化されたGuideオブジェクトのリスト
     List<GameObject> guideList;
-
     
     //投げるオブジェクトの重さ
-    static float holdMass;
+    public float holdMass;
 
     // 画面にプロットするガイドの数を定義
     public int protSize;
-    int prots = 25;
 
     void Start()
     {
-        holdThrow = this.GetComponent<HoldThrow>();
-        sphereRb = this.GetComponent<Rigidbody>();
-        guideList = new List<GameObject>();
+        if (MonobitNetwork.isHost)
+        {
+            holdThrow = this.GetComponent<HoldThrow>();
+            sphereRb = this.GetComponent<Rigidbody>();
+            guideList = new List<GameObject>();
 
-        m_MonobitView = GetComponent<MonobitView>();
+            // 親オブジェクトのMonobitViewを取得する
+            if (GetComponentInParent<MonobitEngine.MonobitView>() != null)
+            {
+                m_MonobitView = GetComponentInParent<MonobitEngine.MonobitView>();
+            }
 
-        // Prefabをインスタンス化するメソッドを呼ぶ
-        InstantiateGuidePrefabs();
+            // Prefabをインスタンス化するメソッドを呼ぶ
+            InstantiateGuidePrefabs();
+        }
     }
 
     void Update()
     {
+        if (!MonobitNetwork.isHost)
+        {
+            return;
+        }
+     
         if (isGuideStart == true)
         {
             SetGuidePositions();
+        }
+        else
+        {
+            // ガイドの位置をリセット
+            for (int i = 0; i < protSize; i++)
+            {
+                guideList[i].transform.position = new Vector3(1000.0f, 1000.0f, 1000.0f);
+            }
         }
     }
 
@@ -64,13 +82,15 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         // 『GuideParent』の位置をguidePosにセット
         Vector3 guidePos = guidePrent.transform.position;
 
-        for (int i = 0; i < prots; i++)
+        MonobitView view = guidePrent.transform.parent.GetComponent<MonobitView>();
+
+        for (int i = 0; i < protSize; i++)
         {
             // Prefabをインスタンス化
-            GameObject guideObject = (GameObject)Instantiate(guidePrefab, guidePos, Quaternion.identity);
-
+            GameObject guideObject = MonobitNetwork.Instantiate(guidePrefab.name, guidePos, Quaternion.identity, 0);
+       
             // インスタンス化したオブジェクトをGuideParentの子オブジェクトにする
-            guideObject.transform.SetParent(gameObject.transform);
+            //guideObject.transform.SetParent(guidePrent.transform);
 
             // オブジェクト名を設定する
             guideObject.name = "Guide_" + i.ToString();
@@ -92,17 +112,17 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         }
 
         // 物理学的なパラメータを取得
-        // 『Sphere』オブジェクトに加わる力
+        // 『Guide』オブジェクトに加わる力
         Vector3 force = holdThrow.GetThrowForce();
-    
+        
         // Unityの世界に働く重力
         Vector3 gravity = Physics.gravity;
 
-        // 『Sphere』オブジェクトが斜方投射される時の初速度
+        // 『Guide』オブジェクトが斜方投射される時の初速度
         Vector3 speed = force / holdMass;
 
         // プロット数に応じて、各プロットの時刻をリストに格納
-        List<float> timeProtsList = GetTimeProtsList(speed, gravity, prots);
+        List<float> timeProtsList = GetTimeProtsList(speed, gravity, protSize);
 
         // リストの検証
         if (timeProtsList == null || timeProtsList.Count == 0)
@@ -111,7 +131,7 @@ public class ThrowGuide : MonobitEngine.MonoBehaviour
         }
 
         // 時刻リストを元に、プロットするガイドの位置を設定
-        for (int i = 0; i < prots; i++)
+        for (int i = 0; i < protSize; i++)
         {
             // リストから時刻の値を取り出す
             float time = timeProtsList[i];

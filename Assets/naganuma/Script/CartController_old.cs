@@ -8,7 +8,7 @@ using MonobitEngine;
 //!	[最終更新日] 2021/10/06
 //! [内容]       カート操作クラス
 //-----------------------------------------------------------------------------
-public class CartController : MonobitEngine.MonoBehaviour {
+public class CartController_old : MonobitEngine.MonoBehaviour {
     [Header("カートのスピード")] public float   cartSpeed        = 1.0f; // カートスピード
     [Header("加速度")]           public float   acceleration     = 4.0f; // 加速度
     [Header("カートの減速値")]   public float   cartDeceleration = 0.5f; // カートの低速値

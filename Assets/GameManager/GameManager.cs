@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MonobitEngine;
 
 //-----------------------------------------------------------------------------
 //! [制作者]		小野龍大
 //!	[最終更新日]	2021/10/12
 //! [内容]		ゲームを制御するクラスを橋渡しをするクラス
 //-----------------------------------------------------------------------------
-public class GameManager : MonoBehaviour
+public class GameManager : MonobitEngine.MonoBehaviour
 {
     //-----------------------------------------------------------------------------
     //!	private変数
@@ -15,24 +16,40 @@ public class GameManager : MonoBehaviour
     [SerializeField] StackTree stackTree = null;       // StackTreeがアタッチされているオブジェクト
     [SerializeField] NetworkManager networkManager = null;     // ネットワークマネージャ
     [SerializeField] RegisterScore registerScore = null;     // ネットワークマネージャ
-    [SerializeField] RealTimeTextManager realTimeTextManager = null;
-    int lastDisplayScore = 0;
+    [SerializeField] GameTimer gameTimer = null;     // ネットワークマネージャ
 
+
+    [SerializeField] RealTimeTextManager _realTimeTextManager = null;
+    public RealTimeTextManager realTimeTextManager
+    {  
+        get { return _realTimeTextManager; }
+        set { _realTimeTextManager = realTimeTextManager; }
+    }
+
+    static MonobitEngine.MonobitView monoBitView = null;
+
+    int lastDisplayScore = 0;       // 最後に表示したときのスコア
+    MonobitPlayer[] beforeMonobitPlayer;
+
+    bool inRoom = false;
     bool playing = false;
 
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
 
+    
+
     //-----------------------------------------------------------------------------
-    //! [内容]		生成時
+    //! [内容]		開始時
     //-----------------------------------------------------------------------------
-    private void Awake()
+    private void Start()
     {
-        
+        monoBitView = GetComponent<MonobitEngine.MonobitView>();
+        EnterOneself();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         // スコアが変化していたら表示
         if(lastDisplayScore != registerScore.scoreData.totalScore)
@@ -49,10 +66,21 @@ public class GameManager : MonoBehaviour
                 textInfo.text += str;
             }
 
-            realTimeTextManager.EnqueueText(textInfo);
+            _realTimeTextManager.EnqueueText(textInfo);
 
             textInfo.text = "合計スコア : " + registerScore.scoreData.totalScore.ToString();
-            realTimeTextManager.EnqueueText(textInfo);
+            _realTimeTextManager.EnqueueText(textInfo);
+        }
+
+        // 入室状態に移行
+        if(!inRoom && MonobitNetwork.inRoom)
+        {
+            inRoom = true;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Return) && MonobitNetwork.isHost && !playing)
+        {
+            GameStart();
         }
     }
 
@@ -84,7 +112,7 @@ public class GameManager : MonoBehaviour
     //! [内容]		GameManagerがゲーム開始の準備ができているか確認する
     //! [return]    準備ができていたらtrue,できていなかったらfalse 
     //-----------------------------------------------------------------------------
-    bool IsReady()
+    public bool IsReady()
     {
         if(!stackTree)
         {
@@ -108,7 +136,7 @@ public class GameManager : MonoBehaviour
     //! [内容]		現在プレイ中か判断する
     //! [return]   プレイ中ならtrue,そうじゃなかったらfalse 
     //-----------------------------------------------------------------------------
-    bool IsPlaying()
+    public bool IsPlaying()
     {
         return playing;
     }
@@ -116,17 +144,20 @@ public class GameManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		ゲーム開始時にコール
     //-----------------------------------------------------------------------------
-    void GameStart()
+    public void GameStart()
     {
 
         // プレイ中フラグを立てる
         playing = true;
+
+        // 計測と始める
+        gameTimer.GameStart();
     }
 
     //-----------------------------------------------------------------------------
     //! [内容]		ゴールに辿り着いたときコール
     //-----------------------------------------------------------------------------
-    void Goal()
+    public void Goal()
     {
 
     }
@@ -134,7 +165,7 @@ public class GameManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		ゲーム開終了時にコール
     //-----------------------------------------------------------------------------
-    void GameEnd()
+    public void GameEnd()
     {
 
         // プレイ中フラグを折る
@@ -142,19 +173,19 @@ public class GameManager : MonoBehaviour
     }
 
     //-----------------------------------------------------------------------------
-    //! [内容]		プレイヤー入室時にコール
+    //! [内容]		入室時にコール
     //-----------------------------------------------------------------------------
-    void EnterPlayer()
+    public void EnterOneself()
     {
-
+        
     }
 
     //-----------------------------------------------------------------------------
-    //! [内容]		プレイヤー退出時にコール
+    //! [内容]		退出時にコール
     //-----------------------------------------------------------------------------
-    void ExitPlayer()
+    public void ExitOneself()
     {
-
+        
     }
 
     //-----------------------------------------------------------------------------

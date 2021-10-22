@@ -21,30 +21,37 @@ public class AddPhysics : MonobitEngine.MonoBehaviour
 
     void Awake()
     {
-        GameObject thisObj = this.gameObject;
-        MeshCollider meshCollider = null;
-        Rigidbody rigidbody = null;
-        MonobitView monobitView = null;
+      
 
-        // MeshColliderの設定
-        meshCollider = thisObj.gameObject.AddComponent<MeshCollider>();
-        meshCollider.convex = true;
-
-        // rigidbodyの設定
-        rigidbody = thisObj.gameObject.AddComponent<Rigidbody>();
-        rigidbody.mass = mass;
-        rigidbody.drag = drag;
-        rigidbody.angularDrag = angularDrag;
-        rigidbody.collisionDetectionMode = collisionDetectionMode;
-
-        if(freezeZ)
+        if (MonobitNetwork.isHost)
         {
-            rigidbody.constraints =
-                RigidbodyConstraints.FreezePositionZ |
-                RigidbodyConstraints.FreezeRotationX |
-                RigidbodyConstraints.FreezeRotationY;
-        }
+            GameObject thisObj = this.gameObject;
+            MeshCollider meshCollider = null;
+            Rigidbody rigidbody = null;
+            MonobitView monobitView = null;
+            // MeshColliderの設定
+            meshCollider = thisObj.gameObject.AddComponent<MeshCollider>();
+            meshCollider.convex = true;
 
+            // rigidbodyの設定
+            rigidbody = thisObj.gameObject.AddComponent<Rigidbody>();
+            rigidbody.mass = mass;
+            rigidbody.drag = drag;
+            rigidbody.angularDrag = angularDrag;
+            rigidbody.collisionDetectionMode = collisionDetectionMode;
+
+            if (freezeZ)
+            {
+                rigidbody.constraints =
+                    RigidbodyConstraints.FreezePositionZ |
+                    RigidbodyConstraints.FreezeRotationX |
+                    RigidbodyConstraints.FreezeRotationY;
+            }
+
+            // MonobitViewにRIgidbodyを追加
+            this.monobitView.ObservedComponents.Add(rigidbody);
+        }
+        
         // 同期設定
         //monobitView = thisObj.gameObject.AddComponent<MonobitView>();
         //monobitView.ObservedComponents.Add(thisObj.gameObject.AddComponent<MonobitTransformView>());

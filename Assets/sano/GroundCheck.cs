@@ -7,22 +7,29 @@ public class GroundCheck : MonobitEngine.MonoBehaviour
 {
     public bool isHitGround;   //地面との当たり判定
 
-    static MonobitView m_MonobitView = null;
+    MonobitView m_MonobitView = null;
 
     private void Start()
     {
-        m_MonobitView = GetComponent<MonobitView>();
+        // 親オブジェクトのMonobitViewを取得する
+        if (GetComponentInParent<MonobitEngine.MonobitView>() != null)
+        {
+            m_MonobitView = GetComponentInParent<MonobitEngine.MonobitView>();
+        }
     }
     private void Update()
     {
-        //if (!m_MonobitView.isMine)
-        //{
-        //    return;
-        //}
+        if (!m_MonobitView.isMine)
+        {
+            return;
+        }
     }
     void OnTriggerStay(Collider other)
     {
-        isHitGround = true;
+        if (other.gameObject.tag == "Ground"|| other.gameObject.tag == "Cart")
+        {
+            isHitGround = true;
+        }
     }
     void OnTriggerExit(Collider other)
     {

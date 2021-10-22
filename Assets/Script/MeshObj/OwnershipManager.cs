@@ -45,7 +45,7 @@ public class OwnershipManager : MonobitEngine.MonoBehaviour
         // 自分がホストな場合
         if (MonobitNetwork.isHost) {
             var player = MonobitNetwork.player;
-            // 現在の所有者が自分と違う場合
+            // 現在の所有者が自分と違う場合かプレイヤーが新たに参加した場合
             if (player != currentHost) {
                 List<int> objectIDs = new List<int>();
                 // 所有者を変更する
@@ -54,7 +54,7 @@ public class OwnershipManager : MonobitEngine.MonoBehaviour
                     objectIDs.Add(monobitView.viewID);
                 }
                 // 自分を所有者として送信
-                this.monobitView.RPC("SendOwner", MonobitTargets.All, player, objectIDs.ToArray());
+                this.monobitView.RPC("SendOwner", MonobitTargets.AllBuffered, player, objectIDs.ToArray());
             }
         }
     }
