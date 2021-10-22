@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using MonobitEngine;
 
 //-----------------------------------------------------------------------------
 //! [制作者]     長沼豪琉
 //! [最終更新日] 2021/10/20
 //! [内容]       インゲームのUI
 //-----------------------------------------------------------------------------
-public class InGameUIManager : MonoBehaviour
+public class InGameUIManager : MonobitEngine.MonoBehaviour
 {
     //-----------------------------------------------------------------------------
     //! private変数
@@ -20,6 +21,7 @@ public class InGameUIManager : MonoBehaviour
     private CanvasGroup uiCanvasGroup    ; // UIキャンバスグループ
     private CanvasGroup sb_canvasGroup   ; // スコアボードキャンバスグループ
     private float       timeCount        ; // 経過時間
+    private float       height           ; // 現在の高さ
     bool keyDown = false;
 
     //-----------------------------------------------------------------------------
@@ -48,6 +50,14 @@ public class InGameUIManager : MonoBehaviour
     [Header("(スコアボード)スコアテキスト")]   public Text          sb_scoreText  ; // (スコアボード)スコアテキスト
     [Header("(スコアボード)タイムテキスト")]   public Text          sb_timeText   ; // (スコアボード)タイムテキスト
     [Header("(スコアボード)スタックテキスト")] public Text          sb_stackText  ; // (スコアボード)スタックテキスト
+
+    //-----------------------------------------------------------------------------
+    //! [内容]    RPC受信関数(現在のスコア)
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvHeight(float senderHeight) {
+        height = senderHeight;
+    }
 
     //-----------------------------------------------------------------------------
     //! [内容]    開始処理
@@ -94,85 +104,7 @@ public class InGameUIManager : MonoBehaviour
     //-----------------------------------------------------------------------------
     void Update()
     {
-        if (stackTree) {
-            if (Input.GetKeyDown(KeyCode.Backspace)) {
-                keyDown = true;
-            }
-            // TODO:後でisPlaying()をpublicにするように伝えるs
-            if (/*gameManager.isPlaying()*/!keyDown) {
-                // カウントダウン
-                if (gameTimer.startCount > 0.0f) {
-                    countDown.text = (gameTimer.startCount + 1.0f).ToString();
-                }
-                else {
-                    countDown.enabled = false;
-                }
-
-                // 残り時間から分と秒を計算
-                var limitCount = gameTimer.limitCount;
-                int minutes = Mathf.FloorToInt(limitCount / 60.0f);               // 分
-                int seconds = Mathf.FloorToInt(limitCount - minutes * 60.0f);     // 秒
-                timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-
-                // スコア表示
-                var score = registerScore.scoreData.totalScore;
-                score = score > 9999999 ? 9999999 : score;
-                scoreText.text = string.Format("{0:00000#,0}", score);
-
-                // 高さを表示
-                if (heightLimit != 0) {
-                    var height = stackTree.GetHeight();
-                    heightSlider.value = height <= heightLimit ? height / heightLimit : 1.0f;
-
-                    // 高さテキストの表示変更
-                    for (int i = 0; i < heightTextComs.Length; i++) {
-                        float heightNum = i / 5.0f * heightLimit;
-                        if (i == heightTextComs.Length - 1) {
-                            if (heightNum < height) {
-                                heightNum = height;
-                            }
-                        }
-                        string heightStr = string.Format("{0:0.00}", heightNum) + "m";
-                        heightTextComs[(heightTextComs.Length - 1) - i].text = heightStr;
-                    }
-                }
-            }
-            else {
-                // スコアボードを有効に
-                if (!scoreBoard.activeSelf) {
-                    scoreBoard.SetActive(true);
-
-                    // テキストに各データを適用 //
-
-                    // ランク表示
-                    // TODO:ランク処理
-                    sb_rankText.text = "A";
-                    // スコア
-                    var score = registerScore.scoreData.totalScore;
-                    score = score > 9999999 ? 9999999 : score;
-                    sb_scoreText.text = string.Format("{0:00000#,0}", score);
-                    // タイム
-                    var currentTime = gameTimer.currentGameTime;
-                    int minutes = Mathf.FloorToInt(currentTime / 60.0f);              // 分
-                    int seconds = Mathf.FloorToInt(currentTime - minutes * 60.0f);    // 秒
-                    sb_timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-                    // スタック
-                    // TODO:RegisterScoreでスタック総数をカウントする処理を用意
-                }
-
-                // フェード処理
-                if (sb_canvasGroup.alpha < 1.0f && fadeTime != 0.0f) {
-                    timeCount += Time.deltaTime;
-                    sb_canvasGroup.alpha = timeCount / fadeTime;
-                    uiCanvasGroup.alpha  = 1.0f - (timeCount / fadeTime);
-                }
-                else {
-                    sb_canvasGroup.alpha = 1.0f;
-                    uiCanvasGroup.alpha  = 0.0f;
-                }
-            }
-        }
-        else {
+        if (MonobitNetwork.isHost) {
             if (cartPrefab) {
                 cartObject = GameObject.Find(cartPrefab.name + "(Clone)");
                 // 見つかった場合スタックツリーコンポーネントを取得
@@ -182,6 +114,86 @@ public class InGameUIManager : MonoBehaviour
                         Debug.LogError(cartObject.name + "にスタックツリーが見つかりません。");
                     }
                 }
+            }
+            if (stackTree) {
+                this.monobitView.RPC("RecvHeight", MonobitTargets.All, stackTree.GetHeight());
+            }
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Backspace)) {
+            keyDown = true;
+        }
+        // TODO:後でisPlaying()をpublicにするように伝えるs
+        if (/*gameManager.isPlaying()*/!keyDown) {
+            // カウントダウン
+            if (gameTimer.startCount > 0.0f) {
+                countDown.text = (gameTimer.startCount + 1.0f).ToString();
+            }
+            else {
+                countDown.enabled = false;
+            }
+
+            // 残り時間から分と秒を計算
+            var limitCount = gameTimer.limitCount;
+            int minutes = Mathf.FloorToInt(limitCount / 60.0f);               // 分
+            int seconds = Mathf.FloorToInt(limitCount - minutes * 60.0f);     // 秒
+            timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+            // スコア表示
+            var score = registerScore.scoreData.totalScore;
+            score = score > 9999999 ? 9999999 : score;
+            scoreText.text = string.Format("{0:00000#,0}", score);
+
+            // 高さを表示
+            if (heightLimit != 0) {
+                heightSlider.value = height <= heightLimit ? height / heightLimit : 1.0f;
+
+                // 高さテキストの表示変更
+                for (int i = 0; i < heightTextComs.Length; i++) {
+                    float heightNum = i / 5.0f * heightLimit;
+                    if (i == heightTextComs.Length - 1) {
+                        if (heightNum < height) {
+                            heightNum = height;
+                        }
+                    }
+                    string heightStr = string.Format("{0:0.00}", heightNum) + "m";
+                    heightTextComs[(heightTextComs.Length - 1) - i].text = heightStr;
+                }
+            }
+        }
+        else {
+            // スコアボードを有効に
+            if (!scoreBoard.activeSelf) {
+                scoreBoard.SetActive(true);
+
+                // テキストに各データを適用 //
+
+                // ランク表示
+                // TODO:ランク処理
+                sb_rankText.text = "A";
+                // スコア
+                var score = registerScore.scoreData.totalScore;
+                score = score > 9999999 ? 9999999 : score;
+                sb_scoreText.text = string.Format("{0:00000#,0}", score);
+                // タイム
+                var currentTime = gameTimer.currentGameTime;
+                int minutes = Mathf.FloorToInt(currentTime / 60.0f);              // 分
+                int seconds = Mathf.FloorToInt(currentTime - minutes * 60.0f);    // 秒
+                sb_timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+                // スタック
+                // TODO:RegisterScoreでスタック総数をカウントする処理を用意
+            }
+
+            // フェード処理
+            if (sb_canvasGroup.alpha < 1.0f && fadeTime != 0.0f) {
+                timeCount += Time.deltaTime;
+                sb_canvasGroup.alpha = timeCount / fadeTime;
+                uiCanvasGroup.alpha  = 1.0f - (timeCount / fadeTime);
+            }
+            else {
+                sb_canvasGroup.alpha = 1.0f;
+                uiCanvasGroup.alpha  = 0.0f;
             }
         }
     }
