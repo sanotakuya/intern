@@ -70,44 +70,48 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     AudioSource effectAudio;
     [Tooltip("掴むときのSE")] public AudioClip holdSE;
     [Tooltip("投げるときのSE")] public AudioClip throwSE;
+    bool isPlaySe;
 
     [MunRPC]
     void RecvDownF(int id)
     {
-        if (monobitView.viewID != id)
+        if (monobitView.viewID == id)
         {
-            return;
-        }
-
-        if(isHold==false)
-        {
-            if (holdObject != null)
+            if (isHold == false)
             {
-                // 最短距離のオブジェクトを掴む
-                holdObject.transform.position = new Vector3(playerPos.x, playerPos.y + 1.5f, playerPos.z);
+                if (holdObject != null)
+                {
+                    // 最短距離のオブジェクトを掴む
+                    holdObject.transform.position = new Vector3(playerPos.x, playerPos.y + 1.5f, playerPos.z);
 
-                // オブジェクトの回転初期化
-                holdAngle = 0.0f;
+                    // オブジェクトの回転初期化
+                    holdAngle = 0.0f;
 
-                rbHoldObj = holdObject.GetComponent<Rigidbody>();
-                
-                //オブジェクトの重さをガイドに渡す
-                guide.SetObjectMass(rbHoldObj.mass);
-                isHold = true;
-                isInput = true;
+                    rbHoldObj = holdObject.GetComponent<Rigidbody>();
+
+                    effectAudio.PlayOneShot(holdSE);
+
+                    //オブジェクトの重さをガイドに渡す
+                    guide.SetObjectMass(rbHoldObj.mass);
+                    isHold = true;
+                    isInput = true;
+
+                }
             }
-        }
-        else if (isHold == true)
-        {
-            if (isDepthLock == true)
+            else if (isHold == true)
             {
-                // オブジェクトを飛ばす
-                ObjectThrow();
-                
-                holdObject = null;
-                isHold = false;
-                isInput = true;
-                minDistance = RESETDISTANCE;
+                if (isDepthLock == true)
+                {
+                    // オブジェクトを飛ばす
+                    ObjectThrow();
+
+                    effectAudio.PlayOneShot(throwSE);
+
+                    holdObject = null;
+                    isHold = false;
+                    isInput = true;
+                    minDistance = RESETDISTANCE;
+                }
             }
         }
     }
@@ -148,14 +152,6 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 monobitView.RPC("RecvDownF", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
-                if (isHold == false && holdObject != null)
-                {
-                    effectAudio.PlayOneShot(holdSE);
-                }
-                else if(isHold == true)
-                {
-                    effectAudio.PlayOneShot(throwSE);
-                }
             }
             if(Input.GetKeyDown(KeyCode.Q))
             {
@@ -365,6 +361,10 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         
         // 向きと力の計算
         throwForce = throwPower * forceDirection.normalized;
+
+
+        this.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
 
         rbHoldObj.AddForce(throwForce, ForceMode.Impulse);
 

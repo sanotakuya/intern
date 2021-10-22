@@ -62,6 +62,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 //上に飛ばすだけ 
                 rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
                 animator.SetBool("isJump", true);
+                effectAudio.PlayOneShot(jumpSE);
                 isJump = true;
             }
         }
@@ -139,10 +140,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 monobitView.RPC("RecvJump", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
-                if (isGroundTouch == true)
-                {
-                    effectAudio.PlayOneShot(jumpSE);
-                }
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
@@ -271,6 +268,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         }
         else
         {
+            rb.velocity = Vector3.zero;
             if (isRunning == true) animator.SetBool("isRun", false);
             else if (isRunning == false) animator.SetBool("isWalk", false);
         }
@@ -290,27 +288,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             maxSpeed = firstSpeed;
             isRunning = false;
             animator.SetBool("isRun", false);
-        }
-
-        //Z軸固定
-        if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
-        {
-            if (Input.GetKey(KeyCode.LeftControl))
-            {
-                isDepthLock = true;
-                this.transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
-            }
-            else
-            {
-                isDepthLock = false;
-            }
-        }
-        else if (this.transform.position.z != 0.0f)
-        {
-            if (Input.GetKey(KeyCode.LeftControl))
-            {
-                this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
-            }
         }
     }
 
