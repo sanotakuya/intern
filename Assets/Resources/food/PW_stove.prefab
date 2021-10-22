@@ -335,7 +335,7 @@ GameObject:
   - component: {fileID: 7018304447098740897}
   m_Layer: 0
   m_Name: PW_stove
-  m_TagString: Untagged
+  m_TagString: ThrowObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

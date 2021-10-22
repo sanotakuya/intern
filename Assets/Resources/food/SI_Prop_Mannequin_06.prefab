@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5595731961732461413}
   m_Layer: 0
   m_Name: SI_Prop_Mannequin_06
-  m_TagString: Untagged
+  m_TagString: ThrowObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

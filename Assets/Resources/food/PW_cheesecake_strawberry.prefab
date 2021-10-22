@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 1019622456328808526}
   m_Layer: 0
   m_Name: PW_cheesecake_strawberry
-  m_TagString: Untagged
+  m_TagString: ThrowObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

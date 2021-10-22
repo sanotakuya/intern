@@ -95,5 +95,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownershipManager: {fileID: 0}
-  path: /food
+  path: food/
   prefab: {fileID: 5950627211282963126, guid: 60d6f3f40502a904b8adc432bd36b1b1, type: 3}

@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 1045673501602447607}
   - component: {fileID: 2319888492867379631}
   m_Layer: 0
-  m_Name: SI_Prop_Arcade_GumballMachine (1)
-  m_TagString: Untagged
+  m_Name: SI_Prop_Arcade_GumballMachine
+  m_TagString: ThrowObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

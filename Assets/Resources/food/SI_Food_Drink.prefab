@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3329668209974324928}
   m_Layer: 0
   m_Name: SI_Food_Drink
-  m_TagString: Untagged
+  m_TagString: ThrowObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

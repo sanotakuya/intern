@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownershipManager: {fileID: 0}
-  path: /food
+  path: food/
   prefab: {fileID: 6766099841293612035, guid: 65cf01b002738504a81c38a751e7c955, type: 3}
 --- !u!1 &2735649458952423789
 GameObject:

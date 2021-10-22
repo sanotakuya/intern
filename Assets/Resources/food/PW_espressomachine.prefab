@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6821690310439119782}
   m_Layer: 0
   m_Name: PW_espressomachine
-  m_TagString: Untagged
+  m_TagString: ThrowObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
