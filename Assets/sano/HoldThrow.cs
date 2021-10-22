@@ -28,6 +28,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     public bool isOverHit;  //　頭上にスペースがあるか確認する
     public bool isHold;     //  オブジェクトを掴んでいるかどうか
     bool isDepthLock;       //　Z軸0に到着しているかどうか
+    bool isDepthOnce;
     Vector3 playerPos;      // プレイヤーの現在位置
 
     MovePlayer movePlayer;
@@ -260,6 +261,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             {
                 // 投げる角度更新
                 ChangeMaterAngle();
+
                 //ガイド表示
                 guide.SetGuidesState(true);
             }
@@ -272,29 +274,69 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     void PlayerDepthMove()
     {
         Vector3 vec = cartObj.transform.position - this.transform.position;
-        if (vec.x < 1.5f && vec.x > -1.5f)  //  カートの座標値に重なっていた場合
+        if (vec.x < 1.2f && vec.x > -1.2f)  //  カートの座標値に重なっていた場合
         {
             if(vec.x > 0)
             {
                 this.transform.position = Vector3.Lerp(transform.position, new Vector3(cartObj.transform.position.x - 3.0f, transform.position.y, 0.0f), Time.deltaTime);
+                if (this.transform.position.z > 0)
+                {
+                    movePlayer.SetTargetAngle(180.0f);
+                }
+                else
+                {
+                    movePlayer.SetTargetAngle(0.0f);
+                }
+               
+                movePlayer.SetWalkAnimation(true);
+
+                isDepthOnce = false;
             }
-            else if(vec.x > -1.5f)
+            else if(vec.x > -1.2f)
             {
                 this.transform.position = Vector3.Lerp(transform.position, new Vector3(cartObj.transform.position.x + 3.0f, transform.position.y, 0.0f), Time.deltaTime);
+                if (this.transform.position.z > 0)
+                {
+                    movePlayer.SetTargetAngle(180.0f);
+                }
+                else
+                {
+                    movePlayer.SetTargetAngle(0.0f);
+                }
+                movePlayer.SetWalkAnimation(true);
             }
             isDepthLock = false;
+
+            isDepthOnce = false;
         }
         else
         {
             if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
             {
                 this.transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
+               
                 isDepthLock = true;
+                movePlayer.SetWalkAnimation(false);
+                if (isDepthOnce == false)
+                {
+                    movePlayer.SetTargetAngle(90.0f);
+                    isDepthOnce = true;
+                }
             }
             else if (this.transform.position.z != 0.0f)
             {
                 this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
+                if (this.transform.position.z > 0)
+                {
+                    movePlayer.SetTargetAngle(180.0f);
+                }
+                else
+                {
+                    movePlayer.SetTargetAngle(0.0f);
+                }
+                movePlayer.SetWalkAnimation(true);
                 isDepthLock = false;
+                isDepthOnce = false;
             }
            
         }
@@ -381,7 +423,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         {
             forceDirection = new Vector3(-forceDirection.x, forceDirection.y, forceDirection.z);
         }
-
+       
         //力の計算
         throwPower = rbHoldObj.mass * strength;
 

@@ -294,21 +294,14 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
    
 
     //外部参照用関数
-  
-    //-----------------------------------------------------------------------------
-    //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
-    //-----------------------------------------------------------------------------
-    public  void SetPlayerHold(bool isHold)
+    public void SetTargetAngle(float angle)
     {
-        isAnotherHold = isHold;
+        targetAngle = angle;
+        animator.SetBool("isWalk", true);
     }
-    
-    //-----------------------------------------------------------------------------
-    //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
-    //-----------------------------------------------------------------------------
-    public bool GetAnotherHold()
+    public void SetWalkAnimation(bool flg)
     {
-        return isAnotherHold;
+        animator.SetBool("isWalk", flg);
     }
 
     public void AnimationReset(string str)
