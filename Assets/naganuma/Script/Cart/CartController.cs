@@ -13,7 +13,7 @@ public class CartController : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private Rigidbody          rigidbody                               ;     // リジッドボディ
+    private Rigidbody          rigidbody                               ; // リジッドボディ
     private List<CartPushArea> cartPushAreas = new List<CartPushArea>(); // 当たり判定
 
     //-----------------------------------------------------------------------------
@@ -33,8 +33,13 @@ public class CartController : MonobitEngine.MonoBehaviour
     {
         // ホストの場合コンポーネントを取得
         if (MonobitNetwork.isHost) {
-            rigidbody = this.GetComponent<Rigidbody>();
-            if (!rigidbody) Debug.LogError("リジッドボディが見つかりません。");
+            if (!TryGetComponent<Rigidbody>(out rigidbody)) Debug.LogError("リジッドボディが見つかりません。");
+            // 回転無し & Z固定
+            rigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionZ;
+            // メッシュコライダー削除
+            if (TryGetComponent<MeshCollider>(out var colliderCom)) {
+                Destroy(colliderCom);
+            }
             // コライダーにコンポーネント追加
             foreach (var collider in colliders) {
                 var cartPushArea = collider.AddComponent<CartPushArea>();
