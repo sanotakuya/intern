@@ -176,7 +176,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 // 最短距離を計算
                 for (int i = 0; i < objectRadar.throwObjects.Count; i++)
                 {
-                    if (objectRadar.throwObjects != null)
+                    if (objectRadar.throwObjects[i] != null)
                     {
                         // プレイヤーの距離とオブジェクトの中心距離を計測する
                         float distance = Vector3.Distance(transform.position, objectRadar.throwObjects[i].transform.position);
