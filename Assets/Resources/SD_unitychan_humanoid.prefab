@@ -5625,7 +5625,7 @@ MonoBehaviour:
   holdObject: {fileID: 0}
   throwForce: {x: 0, y: 0, z: 0}
   meter: {fileID: 3299377179772798750}
-  meterSpeed: 0.3
+  meterSpeed: 1
   strength: 7
   holdSE: {fileID: 8300000, guid: 03912864622f55844a505074b55ca69a, type: 3}
   throwSE: {fileID: 8300000, guid: f3e79e63cd2da304298b7fffa1918bf0, type: 3}

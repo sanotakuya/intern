@@ -62,7 +62,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 //上に飛ばすだけ 
                 rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
                 animator.SetBool("isJump", true);
-                effectAudio.PlayOneShot(jumpSE);
                 isJump = true;
             }
         }
@@ -140,6 +139,10 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 monobitView.RPC("RecvJump", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
+                if (isGroundTouch == true)
+                {
+                    effectAudio.PlayOneShot(jumpSE);
+                }
             }
             if (Input.GetKeyDown(KeyCode.A))
             {

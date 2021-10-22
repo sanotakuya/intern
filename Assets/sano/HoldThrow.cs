@@ -65,8 +65,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     // ガイドの処理
     ThrowGuide guide;
     bool activeGuide = false;
-
-
+    
     // サウンド処理
     AudioSource effectAudio;
     [Tooltip("掴むときのSE")] public AudioClip holdSE;
@@ -91,9 +90,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 holdAngle = 0.0f;
 
                 rbHoldObj = holdObject.GetComponent<Rigidbody>();
-
-                effectAudio.PlayOneShot(holdSE);
-
+                
                 //オブジェクトの重さをガイドに渡す
                 guide.SetObjectMass(rbHoldObj.mass);
                 isHold = true;
@@ -106,9 +103,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             {
                 // オブジェクトを飛ばす
                 ObjectThrow();
-
-                effectAudio.PlayOneShot(throwSE);
-
+                
                 holdObject = null;
                 isHold = false;
                 isInput = true;
@@ -153,6 +148,14 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 monobitView.RPC("RecvDownF", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
+                if (isHold == false && holdObject != null)
+                {
+                    effectAudio.PlayOneShot(holdSE);
+                }
+                else if(isHold == true)
+                {
+                    effectAudio.PlayOneShot(throwSE);
+                }
             }
             if(Input.GetKeyDown(KeyCode.Q))
             {
@@ -234,7 +237,25 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             rbHoldObj.transform.rotation = Quaternion.AngleAxis(holdAngle, new Vector3(0, 0, 1));
 
             // オブジェクトを投げる//
-
+            
+            //投げる角度を計算
+            CalcForceDirection();
+        }
+    }
+   
+    private void FixedUpdate()
+    {
+        if (isInput == true)
+        {
+            inputCnt += 1;
+            if (inputCnt >= INPUTWAIT)
+            {
+                isInput = false;
+                inputCnt = 0;
+            }
+        }
+        if (isHold == true)
+        {
             //プレイヤーをZ軸０へ誘導
             PlayerDepthMove();
 
@@ -245,23 +266,6 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                 ChangeMaterAngle();
                 //ガイド表示
                 guide.SetGuidesState(true);
-            }
-            
-            //投げる角度を計算
-            CalcForceDirection();
-
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if (isInput == true)
-        {
-            inputCnt += 1;
-            if (inputCnt >= INPUTWAIT)
-            {
-                isInput = false;
-                inputCnt = 0;
             }
         }
     }
@@ -358,7 +362,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         throwPower = rbHoldObj.mass * strength;
 
         guide.SetGuidesState(false);
-
+        
         // 向きと力の計算
         throwForce = throwPower * forceDirection.normalized;
 
