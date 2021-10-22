@@ -218,8 +218,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     // 乗っているオブジェクトの削除
                     foreach(GameObject obj in stackTree.stackList )
                     {
-                        monobitView.TransferOwnership(MonobitNetwork.player);
-                        obj.transform.position = new Vector3(-1000, 0, 0);
+                        MonobitNetwork.Destroy(obj);
                     }
 
                     // リセット
