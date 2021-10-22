@@ -26,7 +26,11 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
         {
             return;
         }
-        
+      
+        foreach(GameObject obj in throwObjects){
+
+            
+        }
     }
     void OnTriggerStay(Collider other)
     {
@@ -43,9 +47,6 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (throwObjects != null)
-        {
-            throwObjects.Clear();
-        }
+        throwObjects.Clear();
     }
 }
