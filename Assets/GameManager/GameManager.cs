@@ -38,6 +38,23 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //!	public変数
     //-----------------------------------------------------------------------------
 
+
+        //-----------------------------------------------------------------------------
+    //! [内容]		参加受信関数
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvGoal(string bonus, string score)
+    {
+        RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
+        textInfo.SetDefault();
+
+        textInfo.text = "[ボーナス内容]" + bonus;
+
+        _realTimeTextManager.EnqueueText(textInfo);
+
+        textInfo.text = "合計スコア : " + score;
+        _realTimeTextManager.EnqueueText(textInfo);
+    }
     
 
     //-----------------------------------------------------------------------------
@@ -56,20 +73,24 @@ public class GameManager : MonobitEngine.MonoBehaviour
         {
             lastDisplayScore = registerScore.scoreData.totalScore;
 
-            RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
-            textInfo.SetDefault();
-
-            textInfo.text = "ボーナス内容　:";
+            // 送信用のテキストを作成
+            string bonus = "";
+            string total = "";
 
             foreach(string str in registerScore.scoreData.bonusNameList)
             {
-                textInfo.text += str;
+                bonus += "\n";
+                bonus += str;
             }
 
-            _realTimeTextManager.EnqueueText(textInfo);
+            total += registerScore.scoreData.currentTotalScore;
 
-            textInfo.text = "合計スコア : " + registerScore.scoreData.totalScore.ToString();
-            _realTimeTextManager.EnqueueText(textInfo);
+            monobitView.RPC(
+                           "RecvGoal",
+                           MonobitEngine.MonobitTargets.All,
+                           bonus,
+                           total
+                           );
         }
 
         // 入室状態に移行
