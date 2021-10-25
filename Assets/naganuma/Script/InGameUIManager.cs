@@ -31,25 +31,33 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! Inspectorに公開する変数
     //-----------------------------------------------------------------------------
-    [Header("UIキャンバス")]                   public Canvas        uiCanvas      ; // UIキャンバス
-    [Header("スコアボードキャンバス")]         public Canvas        sb_canvas     ; // スコアボードキャンバス
-    [Header("フェードスピード(秒)")]           public float         fadeTime      ; // スコアボードフェードタイム
-    [Header("GameManager")]                    public GameManager   gameManager   ; // ゲームマネージャー
-    [Header("RegisterScore")]                  public RegisterScore registerScore ; // スコア
-    [Header("GameTimer")]                      public GameTimer     gameTimer     ; // ゲームタイマー
-    [Header("カートプレハブ")]                 public GameObject    cartPrefab    ; // カートプレハブ
-    [Header("単位テキスト")]                   public Text          UnitText      ; // 単位テキスト
-    [Header("スコアテキスト")]                 public Text          scoreText     ; // スコアテキスト
-    [Header("タイムテキスト")]                 public Text          timeText      ; // タイムテキスト
-    [Header("カウントダウンテキスト")]         public Text          countDown     ; // ウントダウンテキスト
-    [Header("高さスライダー")]                 public Slider        heightSlider  ; // 高さスライダー
-    [Header("高さスライダーテキスト")]         public Text          heightText    ; // 高さテキスト
-    [Header("高さスライダーの表示上限値")]     public float         heightLimit   ; // スライダーの上限値
-    [Header("スコアボード")]                   public GameObject    scoreBoard    ; // スコアボード
-    [Header("(スコアボード)ランクテキスト")]   public Text          sb_rankText   ; // (スコアボード)ランクテキスト
-    [Header("(スコアボード)スコアテキスト")]   public Text          sb_scoreText  ; // (スコアボード)スコアテキスト
-    [Header("(スコアボード)タイムテキスト")]   public Text          sb_timeText   ; // (スコアボード)タイムテキスト
-    [Header("(スコアボード)スタックテキスト")] public Text          sb_stackText  ; // (スコアボード)スタックテキスト
+    [Header("UIキャンバス")] public Canvas uiCanvas; // UIキャンバス
+    [Header("スコアボードキャンバス")] public Canvas sb_canvas; // スコアボードキャンバス
+    [Header("フェードスピード(秒)")] public float fadeTime; // スコアボードフェードタイム
+    [Header("GameManager")] public GameManager gameManager; // ゲームマネージャー
+    [Header("RegisterScore")] public RegisterScore registerScore; // スコア
+    [Header("GameTimer")] public GameTimer gameTimer; // ゲームタイマー
+    [Header("カートプレハブ")] public GameObject cartPrefab; // カートプレハブ
+    [Header("単位テキスト")] public Text UnitText; // 単位テキスト
+    [Header("スコアテキスト")] public Text scoreText; // スコアテキスト
+    [Header("タイムテキスト")] public Text timeText; // タイムテキスト
+    [Header("カウントダウンテキスト")] public Text countDown; // ウントダウンテキスト
+    [Header("高さスライダー")] public Slider heightSlider; // 高さスライダー
+    [Header("高さスライダーテキスト")] public Text heightText; // 高さテキスト
+    [Header("高さスライダーの表示上限値")] public float heightLimit; // スライダーの上限値
+    [Header("スコアボード")] public GameObject scoreBoard; // スコアボード
+    [Header("(スコアボード)ランクテキスト")] public Text sb_rankText; // (スコアボード)ランクテキスト
+    [Header("(スコアボード)スコアテキスト")] public Text sb_scoreText; // (スコアボード)スコアテキスト
+    [Header("(スコアボード)タイムテキスト")] public Text sb_timeText; // (スコアボード)タイムテキスト
+    [Header("(スコアボード)スタックテキスト")] public Text sb_stackText; // (スコアボード)スタックテキスト
+
+    //-----------------------------------------------------------------------------
+    //! [内容]    RPC受信関数(現在のスコア)
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvHeight(float senderHeight) {
+        height = senderHeight;
+    }
 
     //-----------------------------------------------------------------------------
     //! [内容]    RPC受信関数(現在のスコア)
@@ -62,27 +70,26 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]    開始処理
     //-----------------------------------------------------------------------------
-    void Start()
-    {
+    void Start() {
         // インスペクターで指定されているかチェック
-        if (!uiCanvas)         Debug.LogError("uiCanvasが指定されていません。")                      ;
-        if (!sb_canvas)        Debug.LogError("scoreBoardCanvasが指定されていません。")              ;
-        if (!registerScore)    Debug.LogError("RegisterScoreが指定されていません。")                 ;
-        if (!gameTimer)        Debug.LogError("ゲームタイマーが指定されていません。")                ;
-        if (!UnitText)         Debug.LogError("単位テキストが指定されていません。")                  ;
-        if (!scoreText)        Debug.LogError("スコアテキストが指定されていません。")                ;
-        if (!timeText)         Debug.LogError("タイムテキストが指定されていません。")                ;
-        if (!countDown)        Debug.LogError("カウントダウンテキストが指定されていません。")        ;
-        if (!heightSlider)     Debug.LogError("高さスライダーが指定されていません。")                ;
-        if (!scoreBoard)       Debug.LogError("スコアボードが指定されていません。")                  ;
-        if (!sb_rankText )     Debug.LogError("(スコアボード)ランクテキストが指定されていません。")  ;
-        if (!sb_scoreText)     Debug.LogError("(スコアボード)スコアテキストが指定されていません。")  ;
-        if (!sb_timeText )     Debug.LogError("(スコアボード)タイムテキストが指定されていません。")  ;
-        if (!sb_stackText)     Debug.LogError("(スコアボード)スタックテキストが指定されていません。");
-        if (!heightText)       Debug.LogError("高さテキストが指定されていません。")                  ;
+        if (!uiCanvas) Debug.LogError("uiCanvasが指定されていません。");
+        if (!sb_canvas) Debug.LogError("scoreBoardCanvasが指定されていません。");
+        if (!registerScore) Debug.LogError("RegisterScoreが指定されていません。");
+        if (!gameTimer) Debug.LogError("ゲームタイマーが指定されていません。");
+        if (!UnitText) Debug.LogError("単位テキストが指定されていません。");
+        if (!scoreText) Debug.LogError("スコアテキストが指定されていません。");
+        if (!timeText) Debug.LogError("タイムテキストが指定されていません。");
+        if (!countDown) Debug.LogError("カウントダウンテキストが指定されていません。");
+        if (!heightSlider) Debug.LogError("高さスライダーが指定されていません。");
+        if (!scoreBoard) Debug.LogError("スコアボードが指定されていません。");
+        if (!sb_rankText) Debug.LogError("(スコアボード)ランクテキストが指定されていません。");
+        if (!sb_scoreText) Debug.LogError("(スコアボード)スコアテキストが指定されていません。");
+        if (!sb_timeText) Debug.LogError("(スコアボード)タイムテキストが指定されていません。");
+        if (!sb_stackText) Debug.LogError("(スコアボード)スタックテキストが指定されていません。");
+        if (!heightText) Debug.LogError("高さテキストが指定されていません。");
         else {
             // 高さテキストの子を一括取得
-            heightTextComs    = new Text[heightText.transform.childCount + 1];
+            heightTextComs = new Text[heightText.transform.childCount + 1];
             heightTextComs[0] = heightText;
             for (int i = 0; i < heightText.transform.childCount; i++) {
                 var text = heightText.transform.GetChild(i);
@@ -92,7 +99,7 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
             }
         }
         // キャンバスグループを取得
-        uiCanvasGroup  = uiCanvas.GetComponent<CanvasGroup>();
+        uiCanvasGroup = uiCanvas.GetComponent<CanvasGroup>();
         sb_canvasGroup = sb_canvas.GetComponent<CanvasGroup>();
         if (!(uiCanvasGroup || sb_canvasGroup)) {
             Debug.LogError("キャンバスグループが見つかりません。");
@@ -120,12 +127,12 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
             }
         }
 
+        if (gameManager.IsPlaying()) {
 
-        if (Input.GetKeyDown(KeyCode.Backspace)) {
-            keyDown = true;
-        }
-        // TODO:後でisPlaying()をpublicにするように伝えるs
-        if (/*gameManager.isPlaying()*/!keyDown) {
+            if (!uiCanvas.gameObject.activeSelf) {
+                uiCanvas.gameObject.SetActive(true);
+            }
+
             // カウントダウン
             if (gameTimer.startCount > 0.0f) {
                 countDown.text = (gameTimer.startCount + 1.0f).ToString();
@@ -162,7 +169,7 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
                 }
             }
         }
-        else {
+        else if (gameTimer.limitCount <= 0.0f) {
             // スコアボードを有効に
             if (!scoreBoard.activeSelf) {
                 scoreBoard.SetActive(true);
@@ -189,11 +196,11 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
             if (sb_canvasGroup.alpha < 1.0f && fadeTime != 0.0f) {
                 timeCount += Time.deltaTime;
                 sb_canvasGroup.alpha = timeCount / fadeTime;
-                uiCanvasGroup.alpha  = 1.0f - (timeCount / fadeTime);
+                uiCanvasGroup.alpha = 1.0f - (timeCount / fadeTime);
             }
             else {
                 sb_canvasGroup.alpha = 1.0f;
-                uiCanvasGroup.alpha  = 0.0f;
+                uiCanvasGroup.alpha = 0.0f;
             }
         }
     }
