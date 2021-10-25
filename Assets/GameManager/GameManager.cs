@@ -32,14 +32,14 @@ public class GameManager : MonobitEngine.MonoBehaviour
     MonobitPlayer[] beforeMonobitPlayer;
 
     bool inRoom = false;
-    public bool playing = false;
+    bool isStart = false;
 
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
+    public bool playing = false;
 
-
-        //-----------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------
     //! [内容]		参加受信関数
     //-----------------------------------------------------------------------------
     [MunRPC]
@@ -109,6 +109,13 @@ public class GameManager : MonobitEngine.MonoBehaviour
         {
             CountStart();
         }
+
+        if(gameTimer.isPlayable && !isStart)
+        {
+            GameStart();
+
+            isStart = true;
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -173,14 +180,12 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     public void CountStart()
     {
+        // 計測と始める
+        gameTimer.GameStart();
 
         // プレイ中フラグを立てる
         playing = true;
 
-        // 計測と始める
-        gameTimer.GameStart();
-
-        GameStart();
     }
 
     //-----------------------------------------------------------------------------
@@ -192,6 +197,8 @@ public class GameManager : MonobitEngine.MonoBehaviour
                 "RecvGameStart",
                 MonobitEngine.MonobitTargets.All
                 );
+
+        
     }
 
     //-----------------------------------------------------------------------------

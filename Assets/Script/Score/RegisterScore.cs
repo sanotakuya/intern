@@ -205,7 +205,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
 
                     // 今回のスコアを送信
                     monobitView.RPC("RecvScore"
-                                   ,MonobitTargets.All
+                                   ,MonobitTargets.AllBuffered
                                    ,tmpScore.totalScore
                                    ,tmpScore.currentTotalScore
                                    ,tmpScore.productScore
