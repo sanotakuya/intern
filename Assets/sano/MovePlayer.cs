@@ -212,10 +212,9 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         isHold = holdThrow.isHold;
 
         //移動と回転(shift押されているときはZ軸移動不可）
-        float nowAngle = this.transform.eulerAngles.y;
-        float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
-        this.transform.eulerAngles = new Vector3(0, angle, 0);
-        
+
+        this.transform.rotation = Quaternion.AngleAxis(targetAngle, Vector3.up);
+
         if (isJump == true && isGroundTouch == true)
         {
             isJump = false;
