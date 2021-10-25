@@ -71,7 +71,6 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     AudioSource effectAudio;
     [Tooltip("掴むときのSE")] public AudioClip holdSE;
     [Tooltip("投げるときのSE")] public AudioClip throwSE;
-    bool isPlaySe;
 
     [MunRPC]
     void RecvDownF(int id)
