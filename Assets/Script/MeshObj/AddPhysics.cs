@@ -51,6 +51,15 @@ public class AddPhysics : MonobitEngine.MonoBehaviour
             // MonobitViewにRIgidbodyを追加
             this.monobitView.ObservedComponents.Add(rigidbody);
         }
+        else
+        {
+            // MeshColliderの設定
+            GameObject thisObj = this.gameObject;
+            MeshCollider meshCollider = null;
+
+            meshCollider = thisObj.gameObject.GetComponent<MeshCollider>();
+            Destroy(meshCollider);
+        }
         
         // 同期設定
         //monobitView = thisObj.gameObject.AddComponent<MonobitView>();

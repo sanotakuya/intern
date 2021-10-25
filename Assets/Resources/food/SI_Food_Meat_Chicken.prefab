@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4825737150588011176}
   - component: {fileID: 1293808313478258306}
   - component: {fileID: 7321268394508509641}
+  - component: {fileID: 1485039985480753003}
   m_Layer: 0
   m_Name: SI_Food_Meat_Chicken
   m_TagString: ThrowObject
@@ -99,7 +100,7 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &1293808313478258306
 MonoBehaviour:
@@ -153,3 +154,17 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!64 &1485039985480753003
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027238729054510905}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 5f91e09d685c98d40be4f3033469e3e1, type: 3}

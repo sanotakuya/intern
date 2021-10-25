@@ -333,6 +333,7 @@ GameObject:
   - component: {fileID: 3457896242547131982}
   - component: {fileID: 4535296181768568664}
   - component: {fileID: 7018304447098740897}
+  - component: {fileID: -3948734259673149640}
   m_Layer: 0
   m_Name: PW_stove
   m_TagString: ThrowObject
@@ -373,7 +374,7 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &4535296181768568664
 MonoBehaviour:
@@ -427,6 +428,20 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!64 &-3948734259673149640
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8812916534223146248}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300002, guid: 9f0519225c65144c0b637b15dda857c8, type: 3}
 --- !u!1 &8812952775843947798
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8928062428624019410}
   - component: {fileID: 6933275579641210586}
   - component: {fileID: 1947666644253804291}
+  - component: {fileID: 3471594736997520487}
   m_Layer: 0
   m_Name: PW_tea_pot
   m_TagString: ThrowObject
@@ -96,7 +97,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 067841f7e3e0d49719926a1347625bc1, type: 3}
 --- !u!114 &8928062428624019410
@@ -114,7 +115,7 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &6933275579641210586
 MonoBehaviour:
@@ -168,3 +169,17 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!64 &3471594736997520487
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7230924518302228581}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 067841f7e3e0d49719926a1347625bc1, type: 3}

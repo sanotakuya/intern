@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8674268651550096750}
   - component: {fileID: 7850107980907493135}
   - component: {fileID: 2165153945749991316}
+  - component: {fileID: -369656048828397409}
   m_Layer: 0
   m_Name: PW_toast_cheese
   m_TagString: ThrowObject
@@ -52,7 +53,7 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &7850107980907493135
 MonoBehaviour:
@@ -106,6 +107,20 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!64 &-369656048828397409
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9119797026421655615}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &9119957539645023269
 GameObject:
   m_ObjectHideFlags: 0

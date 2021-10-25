@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2118540358954932297}
   - component: {fileID: 2118540358954932296}
   - component: {fileID: -1028984658514452549}
+  - component: {fileID: -5530908637412628533}
   m_Layer: 0
   m_Name: Watermelon
   m_TagString: ThrowObject
@@ -187,3 +188,17 @@ MonoBehaviour:
   angularDrag: 0.05
   collisionDetectionMode: 3
   freezeZ: 1
+--- !u!64 &-5530908637412628533
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2118540357795239535}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300002, guid: 7977e423937da9b48aac1866c67bb5be, type: 3}

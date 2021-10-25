@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4828720476833887828}
   - component: {fileID: 2930316211299150700}
   - component: {fileID: 5595731961732461413}
+  - component: {fileID: 2297221876791466514}
   m_Layer: 0
   m_Name: SI_Prop_Mannequin_06
   m_TagString: ThrowObject
@@ -99,7 +100,7 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &2930316211299150700
 MonoBehaviour:
@@ -153,3 +154,17 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!64 &2297221876791466514
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5445926950976930220}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 537c7454ac083734a85fd3dfb1a04381, type: 3}
