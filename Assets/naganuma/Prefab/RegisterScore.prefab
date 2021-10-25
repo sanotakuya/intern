@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &787984529803921523
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 787984529803921421}
+  - component: {fileID: 787984529803921420}
+  - component: {fileID: 3422704521021912832}
+  m_Layer: 0
+  m_Name: RegisterScore
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &787984529803921421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787984529803921523}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.08, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &787984529803921420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787984529803921523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3abab96263d4af84fb096d9980f84b62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cashRegisterManager: {fileID: 0}
+  cartPrefab: {fileID: 0}
+  scoreUnit: "\uFFE5"
+  scoreList:
+    list:
+    - key: Hotdog
+      value: 700
+    - key: Banana
+      value: 300
+    - key: Cheese
+      value: 500
+    - key: Hamburger
+      value: 700
+    - key: Olive
+      value: 300
+    - key: Watermelon
+      value: 300
+  setBonusList:
+    list:
+    - key: "\u30AB\u30EC\u30FC"
+      value:
+        score: 1000
+        nameList:
+        - "\u4EBA\u53C2"
+        - "\u7389\u8471"
+        - "\u3058\u3083\u304C\u3044\u3082"
+    - key: "\u30C6\u30B9\u30C8"
+      value:
+        score: 1000
+        nameList:
+        - Hotdog
+  heightBonusList:
+    list:
+    - key: 0
+      value: 1
+    - key: 2
+      value: 1.2
+    - key: 3.5
+      value: 1.5
+    - key: 5
+      value: 2
+--- !u!114 &3422704521021912832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787984529803921523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277584237ad31144584195f79af03cd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_viewIdField: 0
+  m_IsDontDestroyOnRoom: 0
+  m_IsInstantiated: 0
+  m_ObjectStreamCheckTime: 0
+  m_ObjectStreamSendBytes: 
+  m_IsEncrypt: 1
+  InternalObservedComponents: []
+  ObservedComponents: []
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  ownershipTransfer: 0
+  compressedStream: 0
