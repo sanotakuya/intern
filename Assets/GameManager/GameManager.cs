@@ -80,7 +80,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Return) && MonobitNetwork.isHost && !playing)
         {
-            GameStart();
+            CountStart();
         }
     }
 
@@ -142,9 +142,9 @@ public class GameManager : MonobitEngine.MonoBehaviour
     }
 
     //-----------------------------------------------------------------------------
-    //! [内容]		ゲーム開始時にコール
+    //! [内容]		ゲーム開始カウント時にコール
     //-----------------------------------------------------------------------------
-    public void GameStart()
+    public void CountStart()
     {
 
         // プレイ中フラグを立てる
@@ -152,6 +152,19 @@ public class GameManager : MonobitEngine.MonoBehaviour
 
         // 計測と始める
         gameTimer.GameStart();
+
+        GameStart();
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ゲーム開始時にコール
+    //-----------------------------------------------------------------------------
+    public void GameStart()
+    {
+        monobitView.RPC(
+                "RecvGameStart",
+                MonobitEngine.MonobitTargets.All
+                );
     }
 
     //-----------------------------------------------------------------------------
