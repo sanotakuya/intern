@@ -125,7 +125,7 @@ MonoBehaviour:
   - {fileID: 68180439809769778}
   ownerId: 0
   group: 0
-  prefixBackup: -1
+  prefixBackup: 0
   ownershipTransfer: 0
   compressedStream: 0
 --- !u!114 &68180439809769778

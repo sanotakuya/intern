@@ -30,8 +30,8 @@ public class AddPhysics : MonobitEngine.MonoBehaviour
             Rigidbody rigidbody = null;
             MonobitView monobitView = null;
             // MeshColliderの設定
-            meshCollider = thisObj.gameObject.AddComponent<MeshCollider>();
-            meshCollider.convex = true;
+            //meshCollider = thisObj.gameObject.AddComponent<MeshCollider>();
+            //meshCollider.convex = true;
 
             // rigidbodyの設定
             rigidbody = thisObj.gameObject.AddComponent<Rigidbody>();
