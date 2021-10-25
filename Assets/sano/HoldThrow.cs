@@ -74,6 +74,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
     private bool isPlayHoldSE;
     private bool isPlayThrowSE;
+    private bool isPlaySE;
 
     [MunRPC]
     void RecvDownF(int id)
@@ -92,7 +93,13 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
                     rbHoldObj = holdObject.GetComponent<Rigidbody>();
 
-                    effectAudio.PlayOneShot(holdSE);
+                    if (isPlayHoldSE ==　false)
+                    {
+                        isPlayHoldSE = true;
+                        isPlayThrowSE = false;
+                        monobitView.RPC("RecvHoldSE", MonobitEngine.MonobitTargets.AllBuffered, isPlayHoldSE);
+                    }
+                   
 
                     //オブジェクトの重さをガイドに渡す
                     guide.SetObjectMass(rbHoldObj.mass);
@@ -108,8 +115,12 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                     // オブジェクトを飛ばす
                     ObjectThrow();
 
-                    effectAudio.PlayOneShot(throwSE);
-
+                    if (isPlayThrowSE == false)
+                    {
+                        isPlayHoldSE = false;
+                        isPlayThrowSE = true;
+                        monobitView.RPC("RecvThrowSE", MonobitEngine.MonobitTargets.AllBuffered, isPlayThrowSE);
+                    }
                     holdObject = null;
                     isHold = false;
                     isInput = true;
@@ -145,6 +156,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             effectAudio.PlayOneShot(throwSE);
         }
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -172,18 +184,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 monobitView.RPC("RecvDownF", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
-                if (isHold == false)
-                {
-                    isPlayHoldSE = true;
-                    isPlayThrowSE = false;
-                    monobitView.RPC("RecvHoldSE", MonobitEngine.MonobitTargets.Host, isPlayHoldSE);
-                }
-                else if (isHold == true)
-                {
-                    isPlayHoldSE = false;
-                    isPlayThrowSE = true;
-                    monobitView.RPC("RecvThrowSE", MonobitEngine.MonobitTargets.Host, isPlayThrowSE);
-                }
+            
             }
             if(Input.GetKeyDown(KeyCode.Q))
             {
