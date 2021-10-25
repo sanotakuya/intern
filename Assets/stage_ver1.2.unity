@@ -2342,6 +2342,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TEMP_PW_tea_pot
       objectReference: {fileID: 0}
+    - target: {fileID: 1926637501727448749, guid: a53e1eae03f10b74187c031cecc41d15, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9143904904060354250, guid: a53e1eae03f10b74187c031cecc41d15, type: 3}
       propertyPath: ownershipManager
       value: 
