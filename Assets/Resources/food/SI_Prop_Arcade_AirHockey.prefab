@@ -273,7 +273,7 @@ Transform:
   m_GameObject: {fileID: 1002592107422228626}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 15.939632, y: 0, z: -26.831749}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1002592107422537992}
   - {fileID: 1002592107422491728}
@@ -353,7 +353,7 @@ MonoBehaviour:
   - {fileID: 8990806627921243882}
   ownerId: 0
   group: 0
-  prefixBackup: -1
+  prefixBackup: 0
   ownershipTransfer: 0
   compressedStream: 0
 --- !u!114 &8990806627921243882
