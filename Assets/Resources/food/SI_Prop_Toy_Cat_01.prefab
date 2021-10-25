@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2415181593875126102}
   - component: {fileID: 143311755099076249}
   - component: {fileID: 3189106007077031549}
+  - component: {fileID: -7190876333504659793}
   m_Layer: 0
   m_Name: SI_Prop_Toy_Cat_01
   m_TagString: ThrowObject
@@ -99,7 +100,7 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &143311755099076249
 MonoBehaviour:
@@ -153,3 +154,17 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!64 &-7190876333504659793
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043357542461660870}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 5518921b8ec0d8e4987b12e3a7b65710, type: 3}

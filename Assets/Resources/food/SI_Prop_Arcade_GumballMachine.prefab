@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 574544741369511278}
   - component: {fileID: 1045673501602447607}
   - component: {fileID: 2319888492867379631}
+  - component: {fileID: 1768595815093186869}
   m_Layer: 0
   m_Name: SI_Prop_Arcade_GumballMachine
   m_TagString: ThrowObject
@@ -151,5 +152,19 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
+--- !u!64 &1768595815093186869
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329410791732474940}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 3454ab16cc6b2cf4ea46da9cc83ae40f, type: 3}

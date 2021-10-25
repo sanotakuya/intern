@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7042073534544854745}
   - component: {fileID: 4811980101544836749}
   - component: {fileID: 8655770833587363610}
+  - component: {fileID: 5565586058968608208}
   m_Layer: 0
   m_Name: SI_Prop_Instrument_Keyboard
   m_TagString: ThrowObject
@@ -99,7 +100,7 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &4811980101544836749
 MonoBehaviour:
@@ -153,3 +154,17 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!64 &5565586058968608208
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8190008694631816895}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 7acd0c6fd03b06c4f9c3c18deb49ea2e, type: 3}

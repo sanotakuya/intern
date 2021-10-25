@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8982253026152597411}
   - component: {fileID: 3960812608467270988}
   - component: {fileID: 4866475164222118765}
+  - component: {fileID: -1784691195911294973}
   m_Layer: 0
   m_Name: SI_Prop_Toy_Dog_01
   m_TagString: ThrowObject
@@ -99,7 +100,7 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &3960812608467270988
 MonoBehaviour:
@@ -153,3 +154,17 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!64 &-1784691195911294973
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395608604467861797}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 494a4fbd49fd0ab4c88202b5a36e88e0, type: 3}

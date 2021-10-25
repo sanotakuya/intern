@@ -58,7 +58,9 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         if (playerID == MonobitNetwork.player.ID)
         {
             myCharacterID = characterID;
-            obj.GetComponent<MovePlayer>().myCharactor = true;
+
+            //obj.GetComponent<MovePlayer>().myCharactor = true;
+            
         }
     }
 
@@ -72,17 +74,31 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         textInfo.SetDefault();
 
         textInfo.text = playerName + "が退出しました";
-        //textInfo.animStyle = TextAnimation.AnimStyle.WavePosition;
+        textInfo.animStyle = TextAnimation.AnimStyle.WavePosition;
 
         GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
     }
 
+    //-----------------------------------------------------------------------------
+    //! [内容]		参加受信関数
+    //-----------------------------------------------------------------------------
     [MunRPC]
     void RecvPlayerInfo(string playerName, int playerID, int characterID)
     {
         GameObject obj = MonobitView.Find(characterID).gameObject;
         obj.name = playerName;
 
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		参加受信関数
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvGameStart()
+    {
+        GameObject obj = MonobitView.Find(myCharacterID).gameObject;
+
+        obj.GetComponent<MovePlayer>().myCharactor = true;
     }
 
     //-----------------------------------------------------------------------------
@@ -416,5 +432,20 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 MonobitEngine.MonobitTargets.All,
                 (string)(player.name)
         );
+    }
+
+    void SetCharacter()
+    {
+        // 現在いるプレイヤー情報を送信
+        foreach (RoomPlayer temp in roomPlayers)
+        {
+            monobitView.RPC(
+               "RecvPlayerInfo",
+               MonobitTargets.All,
+               (string)(temp.player.name),
+               temp.player.ID,
+               temp.characterID
+                );
+        }
     }
 }
