@@ -104,6 +104,17 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     }
 
     //-----------------------------------------------------------------------------
+    //! [内容]		参加受信関数
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvCountStart()
+    {
+        GameObject obj = MonobitView.Find(myCharacterID).gameObject;
+
+        this.GetComponent<GameManager>().playing = true;
+    }
+
+    //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
     private void Awake()

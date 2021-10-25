@@ -183,9 +183,10 @@ public class GameManager : MonobitEngine.MonoBehaviour
         // 計測と始める
         gameTimer.GameStart();
 
-        // プレイ中フラグを立てる
-        playing = true;
-
+        monobitView.RPC(
+                "RecvCountStart",
+                MonobitEngine.MonobitTargets.All
+                );
     }
 
     //-----------------------------------------------------------------------------
