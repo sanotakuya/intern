@@ -194,13 +194,13 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         else    // 接続できていない時
         {
             string name = MonobitNetwork.player.name;
-            MonobitNetwork.player.name = EnterText("playerName : ",ref name);
+            MonobitNetwork.player.name = EnterText("<size=32>playerName : </size>", ref name);
 
             // デフォルトロビーへの自動入室を許可する
             MonobitNetwork.autoJoinLobby = true;
 
             // MUNサーバに接続する
-            if (GUILayout.Button("Connect Server", GUILayout.Width(150)))
+            if (GUILayout.Button("<size=32>Connect Server</size>", GUILayout.Width(300),GUILayout.Height(100)))
             {
                 MonobitNetwork.ConnectServer("SimpleNetwork3D_v1.0");
             }
@@ -232,7 +232,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     {
         GUILayout.BeginHorizontal();
         GUILayout.Label(label);
-        text = GUILayout.TextField(text, GUILayout.Width(200));
+        text = GUILayout.TextField(text, GUILayout.Width(300));
         GUILayout.EndHorizontal();
 
         return text;
