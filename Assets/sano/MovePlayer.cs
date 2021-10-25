@@ -52,6 +52,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     private bool lastUpdateDownWalk = false;
     private bool lastUpdateRun = false;
 
+    private bool playSe = false;
     [MunRPC]
     void RecvJump(int id)
     {
@@ -62,9 +63,17 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                 //上に飛ばすだけ 
                 rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
                 animator.SetBool("isJump", true);
-                effectAudio.PlayOneShot(jumpSE);
                 isJump = true;
             }
+        }
+    }
+    [MunRPC]
+    void RecvJumpSound(bool flg)
+    {
+        if (flg == true)
+        {
+            effectAudio.PlayOneShot(jumpSE);
+            Debug.Log("a");
         }
     }
     [MunRPC]
@@ -140,6 +149,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 monobitView.RPC("RecvJump", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
+                playSe = true;
+                monobitView.RPC("RecvJumpSound", MonobitEngine.MonobitTargets.AllBuffered, playSe);
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
@@ -205,6 +216,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         if (isJump == true && isGroundTouch == true)
         {
             isJump = false;
+            playSe = false;
         }
 
         if (isGroundTouch == true)
@@ -268,6 +280,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         }
         else
         {
+            rb.velocity = Vector3.zero;
             if (isRunning == true) animator.SetBool("isRun", false);
             else if (isRunning == false) animator.SetBool("isWalk", false);
         }
@@ -288,47 +301,19 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             isRunning = false;
             animator.SetBool("isRun", false);
         }
-
-        //Z軸固定
-        if (this.transform.position.z >= -0.1f && this.transform.position.z <= 0.1f)
-        {
-            if (Input.GetKey(KeyCode.LeftControl))
-            {
-                isDepthLock = true;
-                this.transform.position = new Vector3(transform.position.x, transform.position.y, 0.0f);
-            }
-            else
-            {
-                isDepthLock = false;
-            }
-        }
-        else if (this.transform.position.z != 0.0f)
-        {
-            if (Input.GetKey(KeyCode.LeftControl))
-            {
-                this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, 0.0f), Time.deltaTime);
-            }
-        }
     }
 
    
 
     //外部参照用関数
-  
-    //-----------------------------------------------------------------------------
-    //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
-    //-----------------------------------------------------------------------------
-    public  void SetPlayerHold(bool isHold)
+    public void SetTargetAngle(float angle)
     {
-        isAnotherHold = isHold;
+        targetAngle = angle;
+        animator.SetBool("isWalk", true);
     }
-    
-    //-----------------------------------------------------------------------------
-    //! [内容]		オブジェクトを投げる方向にプレイヤーを向ける
-    //-----------------------------------------------------------------------------
-    public bool GetAnotherHold()
+    public void SetWalkAnimation(bool flg)
     {
-        return isAnotherHold;
+        animator.SetBool("isWalk", flg);
     }
 
     public void AnimationReset(string str)

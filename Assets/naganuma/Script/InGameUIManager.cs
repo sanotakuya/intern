@@ -9,18 +9,19 @@ using MonobitEngine;
 //! [最終更新日] 2021/10/20
 //! [内容]       インゲームのUI
 //-----------------------------------------------------------------------------
-public class InGameUIManager : MonobitEngine.MonoBehaviour {
+public class InGameUIManager : MonobitEngine.MonoBehaviour
+{
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private StackTree stackTree; // スタックツリー
-    private GameObject cartObject; // カートオブジェクト
-    private float prevHeightLimit; // 前フレームの高さ
-    private Text[] heightTextComs; // 高さテキストコンポーネント
-    private CanvasGroup uiCanvasGroup; // UIキャンバスグループ
-    private CanvasGroup sb_canvasGroup; // スコアボードキャンバスグループ
-    private float timeCount; // 経過時間
-    private float height; // 現在の高さ
+    private StackTree   stackTree        ; // スタックツリー
+    private GameObject  cartObject       ; // カートオブジェクト
+    private float       prevHeightLimit  ; // 前フレームの高さ
+    private Text[]      heightTextComs   ; // 高さテキストコンポーネント
+    private CanvasGroup uiCanvasGroup    ; // UIキャンバスグループ
+    private CanvasGroup sb_canvasGroup   ; // スコアボードキャンバスグループ
+    private float       timeCount        ; // 経過時間
+    private float       height           ; // 現在の高さ
     bool keyDown = false;
 
     //-----------------------------------------------------------------------------
@@ -49,6 +50,14 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour {
     [Header("(スコアボード)スコアテキスト")] public Text sb_scoreText; // (スコアボード)スコアテキスト
     [Header("(スコアボード)タイムテキスト")] public Text sb_timeText; // (スコアボード)タイムテキスト
     [Header("(スコアボード)スタックテキスト")] public Text sb_stackText; // (スコアボード)スタックテキスト
+
+    //-----------------------------------------------------------------------------
+    //! [内容]    RPC受信関数(現在のスコア)
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvHeight(float senderHeight) {
+        height = senderHeight;
+    }
 
     //-----------------------------------------------------------------------------
     //! [内容]    RPC受信関数(現在のスコア)
@@ -100,7 +109,8 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour {
     //-----------------------------------------------------------------------------
     //! [内容]    更新処理
     //-----------------------------------------------------------------------------
-    void Update() {
+    void Update()
+    {
         if (MonobitNetwork.isHost) {
             if (cartPrefab) {
                 cartObject = GameObject.Find(cartPrefab.name + "(Clone)");
@@ -115,11 +125,6 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour {
             if (stackTree) {
                 this.monobitView.RPC("RecvHeight", MonobitTargets.All, stackTree.GetHeight());
             }
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.Backspace)) {
-            keyDown = true;
         }
 
         if (gameManager.IsPlaying()) {
