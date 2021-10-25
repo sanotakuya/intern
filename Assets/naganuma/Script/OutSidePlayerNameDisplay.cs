@@ -11,11 +11,20 @@ using MonobitEngine;
 public class OutSidePlayerNameDisplay : MonobitEngine.MonoBehaviour
 {
     //-----------------------------------------------------------------------------
+    //! 構造体
+    //-----------------------------------------------------------------------------
+    struct Player
+    {
+        public string     name      ; // 名前
+        public GameObject GameObject; // ゲームオブジェクト
+    }
+
+    //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private GameObject          triangle              ; // 方向表示用三角形
-    private List<MonobitPlayer> players               ; // プレイヤーリスト
-    private int                 currentPlayerCount = 0; // 現在のプレイヤー数
+    private GameObject   triangle              ; // 方向表示用三角形
+    private List<Player> players               ; // プレイヤーリスト
+    private int          currentPlayerCount = 0; // 現在のプレイヤー数
 
     //-----------------------------------------------------------------------------
     //! public変数
@@ -49,9 +58,27 @@ public class OutSidePlayerNameDisplay : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]    プレイヤーを取得する(コールバック)
     //-----------------------------------------------------------------------------
-    public void OnJoinPlayer(GameObject playerObject)
+    public void OnJoinPlayer(MonobitView monobitView)
     {
+        if (monobitView) {
+            Player player = new Player();
+            player.name = monobitView.name;
+            player.GameObject = monobitView.gameObject;
+            players.Add(player);
+        }
+    }
 
+    //-----------------------------------------------------------------------------
+    //! [内容]    プレイヤーを削除する(コールバック)
+    //-----------------------------------------------------------------------------
+    public void OnLeavePlayer(MonobitView monobitView)
+    {
+        if (monobitView) {
+            var player = players.Find(p => p.name == monobitView.gameObject.name);
+            if (player.name != "") {
+                players.Remove(player);
+            }
+        }
     }
 }
 

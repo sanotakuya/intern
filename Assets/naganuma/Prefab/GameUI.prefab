@@ -864,6 +864,7 @@ GameObject:
   - component: {fileID: 3502717135288396819}
   - component: {fileID: 3502717135288396820}
   - component: {fileID: 8983877721444951826}
+  - component: {fileID: 5785771857586868042}
   m_Layer: 5
   m_Name: GameUI
   m_TagString: Untagged
@@ -984,6 +985,23 @@ MonoBehaviour:
   sb_scoreText: {fileID: 6882713801514146487}
   sb_timeText: {fileID: 5323743668047281307}
   sb_stackText: {fileID: 1459686355084849301}
+--- !u!114 &5785771857586868042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3502717135288396821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd45771a0bd35f948a23b7609de6c9a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textCol:
+  - {r: 1, g: 1, b: 1, a: 0}
+  - {r: 1, g: 0.7951523, b: 0, a: 0}
+  - {r: 0.067178726, g: 1, b: 0, a: 0}
+  transparency: 0.5
 --- !u!1 &3502717135960631841
 GameObject:
   m_ObjectHideFlags: 0
@@ -2494,7 +2512,6 @@ GameObject:
   - component: {fileID: 7484170642647628386}
   - component: {fileID: 1749056728915153814}
   - component: {fileID: 8485054408488416503}
-  - component: {fileID: 1080343342090452263}
   m_Layer: 5
   m_Name: OutSidePlayerName
   m_TagString: Untagged
@@ -2581,19 +2598,3 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1080343342090452263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8498333152744100745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd45771a0bd35f948a23b7609de6c9a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textCol:
-  - {r: 1, g: 1, b: 1, a: 0}
-  - {r: 1, g: 0.7951523, b: 0, a: 0}
-  - {r: 0.067178726, g: 1, b: 0, a: 0}

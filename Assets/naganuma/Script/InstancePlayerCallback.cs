@@ -13,7 +13,8 @@ public class InstancePlayerCallback : MonoBehaviour
     //-----------------------------------------------------------------------------
     //! Inspectorに公開する変数
     //-----------------------------------------------------------------------------
-    [Header("呼び出す関数")] public UnityEvent CallOnGeneration; // イベント
+    [Header("生成時呼び出す関数")] public UnityEvent CallOnGeneration; // 生成時イベント
+    [Header("削除時呼び出す関数")] public UnityEvent CallOnDestroy   ; // 削除時イベント
 
     //-----------------------------------------------------------------------------
     //! [内容]    開始処理
@@ -21,7 +22,15 @@ public class InstancePlayerCallback : MonoBehaviour
     void Start()
     {
         // イベント発行
-        if (CallOnGeneration == null) CallOnGeneration = new UnityEvent();
-        CallOnGeneration.Invoke();
+        CallOnGeneration?.Invoke();
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]     削除処理（コールバック）
+    //-----------------------------------------------------------------------------
+    void OnDestroy()
+    {
+        // インベント発行
+        CallOnDestroy?.Invoke();
     }
 }
