@@ -79,7 +79,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         if (flg == true)
         {
             effectAudio.PlayOneShot(jumpSE);
-            Debug.Log("a");
         }
     }
     [MunRPC]
