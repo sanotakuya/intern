@@ -99,6 +99,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         GameObject obj = MonobitView.Find(myCharacterID).gameObject;
 
         obj.GetComponent<MovePlayer>().myCharactor = true;
+
+        this.GetComponent<GameManager>().playing = true;
     }
 
     //-----------------------------------------------------------------------------
@@ -180,7 +182,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 {
                     CreateRoom(roomName);
                 }
-
+              
                 // ルームを検索して入室できる
                 SearchAndEnterRoom();
 

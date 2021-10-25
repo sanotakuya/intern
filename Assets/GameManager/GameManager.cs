@@ -32,7 +32,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     MonobitPlayer[] beforeMonobitPlayer;
 
     bool inRoom = false;
-    bool playing = false;
+    public bool playing = false;
 
     //-----------------------------------------------------------------------------
     //!	public変数
