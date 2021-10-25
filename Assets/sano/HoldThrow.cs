@@ -72,6 +72,9 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
     [Tooltip("掴むときのSE")] public AudioClip holdSE;
     [Tooltip("投げるときのSE")] public AudioClip throwSE;
 
+    private bool isPlayHoldSE;
+    private bool isPlayThrowSE;
+
     [MunRPC]
     void RecvDownF(int id)
     {
@@ -125,6 +128,23 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
 
         isRelease = true;
     }
+
+    [MunRPC]
+    void RecvHoldSE(bool isPlay)
+    {
+        if (isPlay == true)
+        {
+            effectAudio.PlayOneShot(holdSE);
+        }
+    }
+    [MunRPC]
+    void RecvThrowSE(bool isPlay)
+    {
+        if (isPlay == true)
+        {
+            effectAudio.PlayOneShot(throwSE);
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -152,6 +172,18 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 monobitView.RPC("RecvDownF", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
+                if (isHold == false)
+                {
+                    isPlayHoldSE = true;
+                    isPlayThrowSE = false;
+                    monobitView.RPC("RecvHoldSE", MonobitEngine.MonobitTargets.Host, isPlayHoldSE);
+                }
+                else if (isHold == true)
+                {
+                    isPlayHoldSE = false;
+                    isPlayThrowSE = true;
+                    monobitView.RPC("RecvThrowSE", MonobitEngine.MonobitTargets.Host, isPlayThrowSE);
+                }
             }
             if(Input.GetKeyDown(KeyCode.Q))
             {
