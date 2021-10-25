@@ -48,6 +48,12 @@ public class GameManager : MonobitEngine.MonoBehaviour
         RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
         textInfo.SetDefault();
 
+        // ボーナスがないならないと伝える
+        if(bonus == "")
+        {
+            bonus = "なし";
+        }
+
         textInfo.text = "[ボーナス内容]" + bonus;
 
         _realTimeTextManager.EnqueueText(textInfo);
