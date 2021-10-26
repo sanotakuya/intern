@@ -300,6 +300,7 @@ GameObject:
   - component: {fileID: 5827498890560104365}
   - component: {fileID: 3639280436490649963}
   - component: {fileID: 6666432802423047522}
+  - component: {fileID: 762950116095507864}
   m_Layer: 0
   m_Name: PW_sculent02_S
   m_TagString: ThrowObject
@@ -394,6 +395,20 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!114 &762950116095507864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6766099841293612035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleSize: 0.1
+  objectSpeed: 1.2
 --- !u!1 &6766376429663441749
 GameObject:
   m_ObjectHideFlags: 0

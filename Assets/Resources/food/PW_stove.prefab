@@ -334,6 +334,7 @@ GameObject:
   - component: {fileID: 4535296181768568664}
   - component: {fileID: 7018304447098740897}
   - component: {fileID: -3948734259673149640}
+  - component: {fileID: 7731516046641373499}
   m_Layer: 0
   m_Name: PW_stove
   m_TagString: ThrowObject
@@ -442,6 +443,20 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 9f0519225c65144c0b637b15dda857c8, type: 3}
+--- !u!114 &7731516046641373499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8812916534223146248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleSize: 0.1
+  objectSpeed: 1.2
 --- !u!1 &8812952775843947798
 GameObject:
   m_ObjectHideFlags: 0

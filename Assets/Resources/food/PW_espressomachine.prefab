@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3941309595940750783}
   - component: {fileID: 3199626332631480196}
   - component: {fileID: 6821690310439119782}
+  - component: {fileID: 6562688779428003026}
   m_Layer: 0
   m_Name: PW_espressomachine
   m_TagString: ThrowObject
@@ -104,6 +105,20 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!114 &6562688779428003026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2333674045011982489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleSize: 0.1
+  objectSpeed: 1.2
 --- !u!1 &2334218340115054949
 GameObject:
   m_ObjectHideFlags: 0

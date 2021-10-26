@@ -108,6 +108,7 @@ GameObject:
   - component: {fileID: 586356675985317957}
   - component: {fileID: 2561463446257642631}
   - component: {fileID: 8225167073747006806}
+  - component: {fileID: 2665954029239178367}
   m_Layer: 0
   m_Name: PW_frenchtoast_egg
   m_TagString: ThrowObject
@@ -201,6 +202,20 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!114 &2665954029239178367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5688329205290928850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleSize: 0.1
+  objectSpeed: 1.2
 --- !u!1 &5688485950486932508
 GameObject:
   m_ObjectHideFlags: 0

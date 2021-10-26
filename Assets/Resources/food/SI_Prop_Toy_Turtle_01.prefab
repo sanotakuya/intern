@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5927098415627328448}
   - component: {fileID: 4861980640917159711}
   - component: {fileID: 5009295650697716839}
+  - component: {fileID: 6193764158147298017}
   m_Layer: 0
   m_Name: SI_Prop_Toy_Turtle_01
   m_TagString: ThrowObject
@@ -125,7 +126,7 @@ MonoBehaviour:
   - {fileID: 4861980640917159711}
   ownerId: 0
   group: 0
-  prefixBackup: -1
+  prefixBackup: 0
   ownershipTransfer: 0
   compressedStream: 0
 --- !u!114 &4861980640917159711
@@ -168,3 +169,17 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 63d9cf02704774f449ed1e178c49b2c9, type: 3}
+--- !u!114 &6193764158147298017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107095006127156999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleSize: 0.1
+  objectSpeed: 1.2

@@ -49,6 +49,7 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
         if (rigidbody) {
             // スピードが指定数以上の場合は処理
             if (rigidbody.velocity.magnitude >= objectSpeed) {
+                Bounds bounds = this.GetComponent<MeshFilter>().mesh.bounds;
 #if !OFFLINE
                 var gameObject = MonobitNetwork.Instantiate("Effect/Smoke", this.transform.position, Quaternion.identity, 0);
 #else
@@ -56,7 +57,16 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
                 var gameObject = Instantiate(prefab, this.transform.position, Quaternion.identity);
 #endif
                 if (gameObject) {
-                    gameObject.transform.localScale = new Vector3(particleSize, particleSize, particleSize);
+                    // メッシュのサイズに合わせる
+                    Vector3 size = new Vector3(
+                                     bounds.size.x * transform.localScale.x
+                                    ,bounds.size.y * transform.localScale.y
+                                    ,bounds.size.z * transform.localScale.z
+                                   );
+
+                    float maxSize = Mathf.Max(size.x, size.y, size.z);
+
+                    gameObject.transform.localScale = new Vector3(particleSize * maxSize, particleSize * maxSize, particleSize * maxSize);
                 }
             }
         }

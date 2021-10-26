@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5733487068360416498}
   - component: {fileID: 5733487068360416525}
   - component: {fileID: -7814166513478006810}
+  - component: {fileID: 2845362477778083341}
   m_Layer: 0
   m_Name: Cheese
   m_TagString: ThrowObject
@@ -170,3 +171,17 @@ MonoBehaviour:
   angularDrag: 0.05
   collisionDetectionMode: 3
   freezeZ: 1
+--- !u!114 &2845362477778083341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5733487069079403163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleSize: 0.1
+  objectSpeed: 1.2

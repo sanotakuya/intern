@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1660047592360915978}
   - component: {fileID: 5709166796214147270}
   - component: {fileID: -1527098553151183493}
+  - component: {fileID: 8789855102907854640}
   m_Layer: 0
   m_Name: SI_Prop_Table_02
   m_TagString: ThrowObject
@@ -125,7 +126,7 @@ MonoBehaviour:
   - {fileID: 5709166796214147270}
   ownerId: 0
   group: 0
-  prefixBackup: -1
+  prefixBackup: 0
   ownershipTransfer: 0
   compressedStream: 0
 --- !u!114 &5709166796214147270
@@ -168,3 +169,17 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 00a1188b58f5b53469043a8f47fcf868, type: 3}
+--- !u!114 &8789855102907854640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5972581158352328404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particleSize: 0.1
+  objectSpeed: 1.2
