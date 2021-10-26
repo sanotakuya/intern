@@ -119,6 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   particleSize: 0.1
   objectSpeed: 1.2
+  isThrewAfterDeletion: 1
 --- !u!1 &2334218340115054949
 GameObject:
   m_ObjectHideFlags: 0

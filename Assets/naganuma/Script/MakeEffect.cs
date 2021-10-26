@@ -15,7 +15,8 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private Rigidbody rigidbody;
+    private Rigidbody  rigidbody;
+    private bool       deleteFlag = false;
 
     //-----------------------------------------------------------------------------
     //! public変数
@@ -26,6 +27,7 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     [Header("パーティクルサイズ")]                             public float particleSize;
     [Header("パーティクルを発生させるオブジェクトのスピード")] public float objectSpeed;
+    [Header("プレイヤーが投げた後オブジェクトを削除するか")]   public bool  isThrewAfterDeletion = true;
 
     //-----------------------------------------------------------------------------
     //! [内容]    更新処理
@@ -51,7 +53,7 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
             if (rigidbody.velocity.magnitude >= objectSpeed) {
                 Bounds bounds = this.GetComponent<MeshFilter>().mesh.bounds;
 #if !OFFLINE
-                var gameObject = MonobitNetwork.Instantiate("Effect/Smoke", this.transform.position, Quaternion.identity, 0);
+                var gameObject = MonobitNetwork.Instantiate("Effect/Smoke", collision.GetContact(0).point, Quaternion.identity, 0);
 #else
                 var prefab     = Resources.Load("Effect/Smoke") as GameObject;
                 var gameObject = Instantiate(prefab, this.transform.position, Quaternion.identity);
@@ -67,6 +69,18 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
                     float maxSize = Mathf.Max(size.x, size.y, size.z);
 
                     gameObject.transform.localScale = new Vector3(particleSize * maxSize, particleSize * maxSize, particleSize * maxSize);
+                }
+                // 落ちた先が地面だった場合
+                if (collision.gameObject.tag == "Ground" && deleteFlag) {
+                    MonobitNetwork.Destroy(this.monobitView);
+                }
+            }
+            // プレイヤーが掴んだ場合フラグを有効
+            if (isThrewAfterDeletion) {
+                if (collision.gameObject.TryGetComponent<HoldThrow>(out var holdThrow)) {
+                    if (this.gameObject == holdThrow.holdObject) {
+                        deleteFlag = true;
+                    }
                 }
             }
         }
