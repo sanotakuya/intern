@@ -32,25 +32,36 @@ public class GameManager : MonobitEngine.MonoBehaviour
     MonobitPlayer[] beforeMonobitPlayer;
 
     bool inRoom = false;
-    bool playing = false;
+    bool isStart = false;
 
     //-----------------------------------------------------------------------------
     //!	public変数
     //-----------------------------------------------------------------------------
+    public bool playing = false;
 
     //-----------------------------------------------------------------------------
     //! [内容]		参加受信関数
     //-----------------------------------------------------------------------------
     [MunRPC]
-    void RecvRoomText(string text)
+    void RecvGoal(string bonus, string score)
     {
         RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
         textInfo.SetDefault();
 
-        textInfo.text = text;
+        // ボーナスがないならないと伝える
+        if(bonus == "")
+        {
+            bonus = "なし";
+        }
 
-        GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
+        textInfo.text = "[ボーナス内容]" + bonus;
+
+        _realTimeTextManager.EnqueueText(textInfo);
+
+        textInfo.text = "合計スコア : " + score;
+        _realTimeTextManager.EnqueueText(textInfo);
     }
+    
 
     //-----------------------------------------------------------------------------
     //! [内容]		開始時
@@ -68,37 +79,42 @@ public class GameManager : MonobitEngine.MonoBehaviour
         {
             lastDisplayScore = registerScore.scoreData.totalScore;
 
-            RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
-            textInfo.SetDefault();
-
-            textInfo.text = "ボーナス内容　:";
+            // 送信用のテキストを作成
+            string bonus = "";
+            string total = "";
 
             foreach(string str in registerScore.scoreData.bonusNameList)
             {
-                textInfo.text += str;
+                bonus += "\n";
+                bonus += str;
             }
 
-            _realTimeTextManager.EnqueueText(textInfo);
+            total += registerScore.scoreData.currentTotalScore;
 
-            textInfo.text = "合計スコア : " + registerScore.scoreData.totalScore.ToString();
-            _realTimeTextManager.EnqueueText(textInfo);
+            monobitView.RPC(
+                           "RecvGoal",
+                           MonobitEngine.MonobitTargets.All,
+                           bonus,
+                           total
+                           );
         }
 
         // 入室状態に移行
         if(!inRoom && MonobitNetwork.inRoom)
         {
-            monobitView.RPC(
-                "RecvRoomText", 
-                MonobitEngine.MonobitTargets.All, 
-                (string)(MonobitNetwork.playerName + "が入室しました")
-                );
-
             inRoom = true;
         }
 
         if(Input.GetKeyDown(KeyCode.Return) && MonobitNetwork.isHost && !playing)
         {
+            CountStart();
+        }
+
+        if(gameTimer.isPlayable && !isStart)
+        {
             GameStart();
+
+            isStart = true;
         }
     }
 
@@ -130,7 +146,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //! [内容]		GameManagerがゲーム開始の準備ができているか確認する
     //! [return]    準備ができていたらtrue,できていなかったらfalse 
     //-----------------------------------------------------------------------------
-    bool IsReady()
+    public bool IsReady()
     {
         if(!stackTree)
         {
@@ -154,28 +170,42 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //! [内容]		現在プレイ中か判断する
     //! [return]   プレイ中ならtrue,そうじゃなかったらfalse 
     //-----------------------------------------------------------------------------
-    bool IsPlaying()
+    public bool IsPlaying()
     {
         return playing;
     }
 
     //-----------------------------------------------------------------------------
-    //! [内容]		ゲーム開始時にコール
+    //! [内容]		ゲーム開始カウント時にコール
     //-----------------------------------------------------------------------------
-    void GameStart()
+    public void CountStart()
     {
-
-        // プレイ中フラグを立てる
-        playing = true;
-
         // 計測と始める
         gameTimer.GameStart();
+
+        monobitView.RPC(
+                "RecvCountStart",
+                MonobitEngine.MonobitTargets.All
+                );
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		ゲーム開始時にコール
+    //-----------------------------------------------------------------------------
+    public void GameStart()
+    {
+        monobitView.RPC(
+                "RecvGameStart",
+                MonobitEngine.MonobitTargets.All
+                );
+
+        
     }
 
     //-----------------------------------------------------------------------------
     //! [内容]		ゴールに辿り着いたときコール
     //-----------------------------------------------------------------------------
-    void Goal()
+    public void Goal()
     {
 
     }
@@ -183,7 +213,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		ゲーム開終了時にコール
     //-----------------------------------------------------------------------------
-    void GameEnd()
+    public void GameEnd()
     {
 
         // プレイ中フラグを折る
@@ -195,7 +225,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     public void EnterOneself()
     {
-        monobitView.RPC("RecvRoomText", MonobitEngine.MonobitTargets.All, (string)(MonobitNetwork.playerName +"が入室しました"));
+        
     }
 
     //-----------------------------------------------------------------------------
@@ -203,23 +233,7 @@ public class GameManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     public void ExitOneself()
     {
-        monobitView.RPC("RecvRoomText", MonobitEngine.MonobitTargets.All, MonobitNetwork.playerName + "が退出しました");
-    }
-
-    //-----------------------------------------------------------------------------
-    //! [内容]		プレイヤー入室時にコール
-    //-----------------------------------------------------------------------------
-    void EnterPlayer()
-    {
-
-    }
-
-    //-----------------------------------------------------------------------------
-    //! [内容]		プレイヤー退出時にコール
-    //-----------------------------------------------------------------------------
-    void ExitPlayer()
-    {
-
+        
     }
 
     //-----------------------------------------------------------------------------

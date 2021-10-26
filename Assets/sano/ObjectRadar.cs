@@ -6,13 +6,11 @@ using MonobitEngine;
 public class ObjectRadar : MonobitEngine.MonoBehaviour
 {
     public List<GameObject> throwObjects;
-    //public List<GameObject> hitObjects;
     MonobitView m_MonobitView = null;
 
     private void Start()
     {
         throwObjects = new List<GameObject>();
-        //hitObjects = new List<GameObject>();
 
         // 親オブジェクトのMonobitViewを取得する
         if (GetComponentInParent<MonobitEngine.MonobitView>() != null)
@@ -28,7 +26,11 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
         {
             return;
         }
-        
+      
+        foreach(GameObject obj in throwObjects){
+
+            
+        }
     }
     void OnTriggerStay(Collider other)
     {
@@ -40,16 +42,11 @@ public class ObjectRadar : MonobitEngine.MonoBehaviour
             {
                 throwObjects.Add(other.gameObject);
             }
-            //hitObjects.Add(other.gameObject);
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (throwObjects != null)
-        {
-            throwObjects.Clear();
-            //hitObjects.Clear();
-        }
+        throwObjects.Clear();
     }
 }

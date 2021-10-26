@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MonobitEngine;
 
 //-----------------------------------------------------------------------------
 //! [制作者]     小野龍大
@@ -11,7 +12,7 @@ using UnityEngine;
 //!             unityのflow上physics->Updateの順で通ります
 //!             Tree.rootともにScriptExecutionOrderにおいて優先度を高めています
 //-----------------------------------------------------------------------------
-public class StackTree : MonoBehaviour
+public class StackTree : MonobitEngine.MonoBehaviour
 {
     //-----------------------------------------------------------------------------
     //!	public変数
@@ -48,6 +49,11 @@ public class StackTree : MonoBehaviour
     //-----------------------------------------------------------------------------
     void Update()
     {
+        if(!MonobitNetwork.isHost)
+        {
+            Destroy(this);
+        }
+
         hitGround = false;
         stackList.Clear();
 

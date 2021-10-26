@@ -26,7 +26,7 @@ public class GroundCheck : MonobitEngine.MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Ground")
+        if (other.gameObject.tag == "Ground"|| other.gameObject.tag == "Cart")
         {
             isHitGround = true;
         }

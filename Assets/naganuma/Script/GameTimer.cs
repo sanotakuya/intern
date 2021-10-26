@@ -73,8 +73,7 @@ public class GameTimer : MonobitEngine.MonoBehaviour
     {
         gameManager = this.GetComponent<GameManager>();
 
-        // TODO: 現在はテストのため必要なし
-        if (gameManager && false) {
+        if (!gameManager) {
             Debug.LogError("ゲームマネージャーが設定されていません。");
         }
     }
@@ -102,7 +101,7 @@ public class GameTimer : MonobitEngine.MonoBehaviour
 
         // 終了までのカウントが0なら終了
         if (limitCount == 0.0f) {
-            // TODO:終了時処理
+            gameManager.GameEnd();
         }
     }
 

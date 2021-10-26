@@ -212,7 +212,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
 
                     // 今回のスコアを送信
                     monobitView.RPC("RecvScore"
-                                   ,MonobitTargets.All
+                                   ,MonobitTargets.AllBuffered
                                    ,tmpScore.totalStack
                                    ,tmpScore.totalScore
                                    ,tmpScore.currentTotalScore
@@ -226,8 +226,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                     // 乗っているオブジェクトの削除
                     foreach(GameObject obj in stackTree.stackList )
                     {
-                        monobitView.TransferOwnership(MonobitNetwork.player);
-                        obj.transform.position = new Vector3(-1000, 0, 0);
+                        MonobitNetwork.Destroy(obj);
                     }
 
                     // リセット
