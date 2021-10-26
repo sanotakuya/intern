@@ -239,7 +239,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                         }
 
                         // リセット
-                        stackTree.PowerReset();
+                        stackTree.ForceReset();
 
                         // スコア計算を不可に
                         isScoring = false;
