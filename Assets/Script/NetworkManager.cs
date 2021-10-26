@@ -24,6 +24,9 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     private bool leaveHost = false;
     private float time = 0;
 
+    private int boxX = 200;
+    private int boxY = 60;
+
     struct RoomPlayer
     {
         public MonobitPlayer player;
@@ -182,7 +185,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             if (MonobitNetwork.inRoom)
             {
                 // ルームからの退室
-                if (GUILayout.Button("Leave Room", GUILayout.Width(150)))
+                if (GUILayout.Button("<size=32>Leave Room</size>", GUILayout.Width(boxX),GUILayout.Height(boxY)))
                 {
                     LeaveRoom();
                 }
@@ -194,7 +197,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 EnterText("RoomName : ", ref roomName);
 
                 // ルームを作成して入室するad
-                if (GUILayout.Button("Create Room", GUILayout.Width(150)))
+                if (GUILayout.Button("<size=32>Create Room</size>", GUILayout.Width(boxX), GUILayout.Height(boxY)))
                 {
                     CreateRoom(roomName);
                 }
@@ -203,7 +206,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 SearchAndEnterRoom();
 
                 // ボタン入力でサーバから切断＆シーンリセット
-                if (GUILayout.Button("Disconnect", GUILayout.Width(150)))
+                if (GUILayout.Button("<size=32>Disconnect</size>", GUILayout.Width(boxX), GUILayout.Height(boxY)))
                 {
                     DisconnectServer();
                 }
@@ -212,13 +215,13 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         else    // 接続できていない時
         {
             string name = MonobitNetwork.player.name;
-            MonobitNetwork.player.name = EnterText("playerName : ",ref name);
+            MonobitNetwork.player.name = EnterText("PlayerName : ",ref name);
 
             // デフォルトロビーへの自動入室を許可する
             MonobitNetwork.autoJoinLobby = true;
 
             // MUNサーバに接続する
-            if (GUILayout.Button("Connect Server", GUILayout.Width(150)))
+            if (GUILayout.Button("<size=32>Connect Server</size>", GUILayout.Width(boxX*1.5f), GUILayout.Height(boxY)))
             {
                 MonobitNetwork.ConnectServer("SimpleNetwork3D_v1.0");
             }
@@ -249,8 +252,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     private string EnterText(string label, ref string text)
     {
         GUILayout.BeginHorizontal();
-        GUILayout.Label(label);
-        text = GUILayout.TextField(text, GUILayout.Width(200));
+        GUILayout.Label("<size=32>" + label + "</size>");
+        text = GUILayout.TextField(text, GUILayout.Width(boxX), GUILayout.Height(boxY));
         GUILayout.EndHorizontal();
 
         return text;
@@ -274,7 +277,11 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 );
 
             // ルームを選択して入室する
-            if (GUILayout.Button("Enter Room : " + roomParam))
+            if (GUILayout.Button(
+                "<size=32>" + "Enter Room : " + roomParam + "</size>", 
+                GUILayout.Width(boxX * 5),
+                GUILayout.Height(boxY)
+                ))
             {
                 JoinRoom(room.name);
             }
