@@ -75,38 +75,52 @@ public class OutSidePlayerNameDisplay : MonobitEngine.MonoBehaviour
     {
         for (int i = 0; i < players.Count; i++) {
             var player = players[i];
-            var viewport = mainCamera.WorldToViewportPoint(player.gameObject.transform.position);
-        
-            // Yは常に表示しない
-            if (rect.Contains(new Vector2(viewport.x, 0.5f))) {
-                player.text.enabled = false;
+            if (player.gameObject) {
+                var viewport = mainCamera.WorldToViewportPoint(player.gameObject.transform.position);
+                // Yは常に表示しない
+                if (rect.Contains(new Vector2(viewport.x, 0.5f))) {
+                    player.text.enabled = false;
+                }
+                else {
+                    player.text.enabled = true;
+
+                    // UI調整
+                    Rect canvasRect = ((RectTransform)canvasObject.transform).rect;
+                    canvasRect.Set(
+                             canvasRect.x      + player.textTrans.rect.width  * 0.5f
+                            ,canvasRect.y      + player.textTrans.rect.height * 0.5f
+                            ,canvasRect.width  - player.textTrans.rect.width
+                            ,canvasRect.height - player.textTrans.rect.height
+                        );
+
+                    // 画面内でプレイヤーを追従
+                    viewport.x = Mathf.Clamp01(viewport.x);
+                    viewport.y = Mathf.Clamp01(viewport.y);
+                    player.textTrans.anchoredPosition = Rect.NormalizedToPoint(canvasRect, viewport);
+                }
+
+                if (i < textCol.Count) {
+                    Color color = new Color(textCol[i].r, textCol[i].g, textCol[i].b, transparency);
+                    player.text.color = color;
+                }
+                else {
+                    player.text.color = new Color(1.0f, 1.0f, 1.0f, transparency);
+                }
+
+                if (player.text.text != player.gameObject.name) {
+                    player.text.text = player.gameObject.name;
+                }
             }
             else {
-                player.text.enabled = true;
-
-                // UI調整
-                Rect canvasRect = ((RectTransform)canvasObject.transform).rect;
-                canvasRect.Set(
-                         canvasRect.x      + player.textTrans.rect.width  * 0.5f
-                        ,canvasRect.y      + player.textTrans.rect.height * 0.5f
-                        ,canvasRect.width  - player.textTrans.rect.width
-                        ,canvasRect.height - player.textTrans.rect.height
-                    );
-
-                // 画面内でプレイヤーを追従
-                viewport.x = Mathf.Clamp01(viewport.x);
-                viewport.y = Mathf.Clamp01(viewport.y);
-                player.textTrans.anchoredPosition = Rect.NormalizedToPoint(canvasRect, viewport);
-            }
-
-            if (i < textCol.Count) {
-                Color color = new Color(textCol[i].r, textCol[i].g, textCol[i].b, transparency);
-                player.text.color = color;
-            }
-            else {
-                player.text.color = new Color(1.0f, 1.0f, 1.0f, transparency);
+                // プレイヤーが存在しない場合テキストオブジェクトを削除
+                if (player.text.gameObject) {
+                    Destroy(player.text.gameObject);
+                }
             }
         }
+
+        // 存在しないプレイヤーを削除
+        players.RemoveAll(p => p.gameObject == null);
     }
 
     //-----------------------------------------------------------------------------
@@ -138,11 +152,6 @@ public class OutSidePlayerNameDisplay : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     public void OnLeavePlayer(MonobitView monobitView)
     {
-        if (monobitView) {
-            var player = players.Find(p => p.name == monobitView.gameObject.name);
-            if (player.name != "") {
-                players.Remove(player);
-            }
-        }
+
     }
 }
