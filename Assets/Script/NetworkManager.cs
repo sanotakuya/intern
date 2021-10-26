@@ -51,8 +51,11 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
 
         GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
 
-        GameObject obj = MonobitView.Find(characterID).gameObject;
-        obj.name = playerName;
+        if(MonobitView.Find(characterID))
+        {
+            GameObject obj = MonobitView.Find(characterID).gameObject;
+            obj.name = playerName;
+        }
 
         // 自分の事だったら
         if (playerID == MonobitNetwork.player.ID)
@@ -85,9 +88,11 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     [MunRPC]
     void RecvPlayerInfo(string playerName, int playerID, int characterID)
     {
-        GameObject obj = MonobitView.Find(characterID).gameObject;
-        obj.name = playerName;
-
+        if (MonobitView.Find(characterID))
+        {
+            GameObject obj = MonobitView.Find(characterID).gameObject;
+            obj.name = playerName;
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -396,7 +401,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         //入室メッセージ送信
         monobitView.RPC(
                 "RecvEnterRoomText",
-                MonobitEngine.MonobitTargets.All,
+                MonobitEngine.MonobitTargets.AllBuffered,
                 (string)(player.name),
                 roomPlayer.player.ID,
                 roomPlayer.characterID
@@ -408,7 +413,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         {
             monobitView.RPC(
                "RecvPlayerInfo",
-               player,
+               MonobitEngine.MonobitTargets.AllBuffered,
                (string)(temp.player.name),
                temp.player.ID,
                temp.characterID

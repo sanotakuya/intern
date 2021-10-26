@@ -76,6 +76,7 @@ public class OutSidePlayerNameDisplay : MonobitEngine.MonoBehaviour
         for (int i = 0; i < players.Count; i++) {
             var player = players[i];
             var viewport = mainCamera.WorldToViewportPoint(player.gameObject.transform.position);
+        
             // Yは常に表示しない
             if (rect.Contains(new Vector2(viewport.x, 0.5f))) {
                 player.text.enabled = false;

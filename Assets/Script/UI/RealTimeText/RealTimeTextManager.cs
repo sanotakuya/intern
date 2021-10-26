@@ -42,7 +42,7 @@ public class RealTimeTextManager : MonoBehaviour
             lifeTime = 3;
             fontSize = 64;
             fontType = FontType.LightNovel;
-            animStyle = TextAnimation.AnimStyle.None;
+            animStyle = TextAnimation.AnimStyle.WavePosition;
         }
     }
 
