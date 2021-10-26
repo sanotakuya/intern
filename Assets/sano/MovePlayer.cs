@@ -61,6 +61,8 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             if (isGroundTouch == true)
             {
                 //上に飛ばすだけ 
+                isJump = true;
+
                 rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
                 animator.SetBool("isJump", true);
                 if (isPlaySE == false)
@@ -69,7 +71,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                     monobitView.RPC("RecvJumpSound", MonobitEngine.MonobitTargets.AllBuffered, isPlaySE);   //　全員に向けてジャンプサウンドを再生
                 }
               
-                isJump = true;
+                
             }
         }
     }
@@ -282,7 +284,12 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         }
         else
         {
+            if (isJump == false)
+            {
+                this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, 0.0f, transform.position.z), 0.1f);
+            }
             rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             if (isRunning == true) animator.SetBool("isRun", false);
             else if (isRunning == false) animator.SetBool("isWalk", false);
         }
