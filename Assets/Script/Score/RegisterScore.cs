@@ -66,6 +66,12 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     }
 
     //-----------------------------------------------------------------------------
+    //! 定数
+    //-----------------------------------------------------------------------------
+    public const int DEFAULT_SCORE = 300; // デフォルトのスコア
+
+
+    //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
     private ScoreData   _scoreData  = new ScoreData(); // 現在のスコア
@@ -189,7 +195,8 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                         // スコアを取得
                         int score = 0;
                         scoreList.GetDictionary().TryGetValue(stackObject.name.Replace("(Clone)", ""), out score);
-                        tmpScore.productScore += score;
+                        // スコアが設定されていない場合デフォルトのスコアを設定
+                        tmpScore.productScore += score == 0 ? DEFAULT_SCORE : score;
                     }
 
                     Dictionary<string, int> currenctBonusList = new Dictionary<string, int>();
