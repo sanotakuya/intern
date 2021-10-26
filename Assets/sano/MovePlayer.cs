@@ -52,7 +52,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
     private bool lastUpdateDownWalk = false;
     private bool lastUpdateRun = false;
 
-    private bool playSe = false;
+    private bool isPlaySE = false;
     [MunRPC]
     void RecvJump(int id)
     {
@@ -61,9 +61,17 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             if (isGroundTouch == true)
             {
                 //上に飛ばすだけ 
+                isJump = true;
+
                 rb.AddForce(new Vector3(0.0f, jumpPower, 0.0f), ForceMode.Impulse);
                 animator.SetBool("isJump", true);
-                isJump = true;
+                if (isPlaySE == false)
+                {
+                    isPlaySE = true;
+                    monobitView.RPC("RecvJumpSound", MonobitEngine.MonobitTargets.AllBuffered, isPlaySE);   //　全員に向けてジャンプサウンドを再生
+                }
+              
+                
             }
         }
     }
@@ -73,7 +81,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         if (flg == true)
         {
             effectAudio.PlayOneShot(jumpSE);
-            Debug.Log("a");
         }
     }
     [MunRPC]
@@ -149,8 +156,6 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 monobitView.RPC("RecvJump", MonobitEngine.MonobitTargets.Host, monobitView.viewID);
-                playSe = true;
-                monobitView.RPC("RecvJumpSound", MonobitEngine.MonobitTargets.AllBuffered, playSe);
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
@@ -209,14 +214,13 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         isHold = holdThrow.isHold;
 
         //移動と回転(shift押されているときはZ軸移動不可）
-        float nowAngle = this.transform.eulerAngles.y;
-        float angle = Mathf.LerpAngle(0.0f, targetAngle, nowAngle);
-        this.transform.eulerAngles = new Vector3(0, angle, 0);
-        
+
+        this.transform.rotation = Quaternion.AngleAxis(targetAngle, Vector3.up);
+
         if (isJump == true && isGroundTouch == true)
         {
             isJump = false;
-            playSe = false;
+            isPlaySE = false;
         }
 
         if (isGroundTouch == true)
@@ -280,7 +284,12 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
         }
         else
         {
+            if (isJump == false)
+            {
+                this.transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, 0.0f, transform.position.z), 0.1f);
+            }
             rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
             if (isRunning == true) animator.SetBool("isRun", false);
             else if (isRunning == false) animator.SetBool("isWalk", false);
         }

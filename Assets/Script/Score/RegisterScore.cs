@@ -55,6 +55,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
 
     public struct ScoreData   // スコアデータ
     {
+        public int          totalStack       ; // 今まで積み上げたオブジェクトの総数
         public int          totalScore       ; // 今までの合計スコア
         public int          currentTotalScore; // 今回の合計スコア
         public int          productScore     ; // 商品スコア
@@ -65,6 +66,12 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     }
 
     //-----------------------------------------------------------------------------
+    //! 定数
+    //-----------------------------------------------------------------------------
+    public const int DEFAULT_SCORE = 300; // デフォルトのスコア
+
+
+    //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
     private ScoreData   _scoreData  = new ScoreData(); // 現在のスコア
@@ -72,6 +79,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     private StackTree   stackTree                    ; // スタックツリー
     private MonobitView monobitView                  ; // モノビットビュー
     private bool        isScoring   = true           ; // スコア計算が可能か
+    private bool        isHost      = true           ; // ホストか
 
     //-----------------------------------------------------------------------------
     //! public変数
@@ -84,7 +92,8 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     //! [内容]    RPC受信関数(現在のスコア)
     //-----------------------------------------------------------------------------
     [MunRPC]
-    void RecvScore(int      totalScore        // 今までの合計スコア
+    void RecvScore(int      totalStack        // 今まで積み上げたオブジェクトの総数
+                  ,int      totalScore        // 今までの合計スコア
                   ,int      currentTotalScore // 今回の合計スコア
                   ,int      productScore      // 商品スコア
                   ,int      bonusScore        // ボーナススコア
@@ -93,6 +102,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                   ,string[] bonusNameList     // ボーナスの名前リスト
     )
     {
+        _scoreData.totalStack        = totalStack;
         _scoreData.totalScore        = totalScore;
         _scoreData.currentTotalScore = currentTotalScore;
         _scoreData.productScore      = productScore;
@@ -146,104 +156,116 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     void Update()
     {
-        // ホストの場合のみ処理
-        if (MonobitNetwork.isHost) {
+        if (MonobitNetwork.inRoom) {
+            // ホストの場合のみ処理
+            if (MonobitNetwork.isHost && isHost) {
 
-            // カートがある場合処理
-            if (cartObject) {
-                // レジの範囲に入ったら
-                var registerObject = cashRegisterManager.GetIsWithAnyRegister();
-                if (registerObject && isScoring) {
-
-                    ScoreData tmpScore = new ScoreData(); // スコア一時格納
-                    tmpScore.bonusNameList = new List<string>();
-
-                    // スタックツリーから高さ情報を取得
-                    float height = stackTree.GetHeight();
-
-                    // 高さボーナス
-                    foreach (var heightBonus in heightBonusList.GetDictionary().OrderBy(c => c.Key)) {
-                        if (height >= heightBonus.Key) {
-                            tmpScore.heightScore = heightBonus.Value;
-                        }
-                    }
-
-                    // 格納されている最大の高さを取得
-                    var maxHeight = heightBonusList.GetDictionary().OrderByDescending(c => c.Key).FirstOrDefault().Key;
-
-                    // 最大の高さより大きい場合
-                    if (height > maxHeight) {
-                        int distance = Mathf.FloorToInt(height - maxHeight);
-                        tmpScore.heightScore += distance;
-                    }
-
-                    // カートに載っている物を計算する
-                    foreach (var stackObject in stackTree.stackList) {
-                        // スコアを取得
-                        int score = 0;
-                        scoreList.GetDictionary().TryGetValue(stackObject.name.Replace("(Clone)", ""), out score);
-                        tmpScore.productScore += score;
-                    }
-
-                    Dictionary<string, int> currenctBonusList = new Dictionary<string, int>();
-
-                    // ボーナス条件を満たしているか確認
-                    foreach(var bonusCriteria in setBonusList.GetDictionary()) {
-                        var hasScore = SetBonusDecision(stackTree.stackList, bonusCriteria.Value.nameList);
-                        if (hasScore) {
-                            currenctBonusList.Add(bonusCriteria.Key, bonusCriteria.Value.score);
-                            tmpScore.bonusScore += bonusCriteria.Value.score;
-
-                            // ボーナスのタイプ名をリストに追加
-                            tmpScore.bonusNameList.Add(bonusCriteria.Key);
-                        }
-                    }
-
-                    // トータルスコアを計算
-                    tmpScore.currentTotalScore = (int)(((float)tmpScore.productScore + (float)tmpScore.bonusScore) * tmpScore.heightScore);
-                    tmpScore.totalScore        = scoreData.totalScore + tmpScore.currentTotalScore;
-
-                    // 今回のスコアを送信
-                    monobitView.RPC("RecvScore"
-                                   ,MonobitTargets.All
-                                   ,tmpScore.totalScore
-                                   ,tmpScore.currentTotalScore
-                                   ,tmpScore.productScore
-                                   ,tmpScore.bonusScore
-                                   ,tmpScore.heightScore
-                                   ,height
-                                   ,tmpScore.bonusNameList.ToArray()
-                                   );
-
-                    // 乗っているオブジェクトの削除
-                    foreach(GameObject obj in stackTree.stackList )
-                    {
-                        MonobitNetwork.Destroy(obj);
-                    }
-
-                    // リセット
-                    stackTree.PowerReset();
-
-                    // スコア計算を不可に
-                    isScoring = false;
-                }
-                else if (!registerObject) {
-                    // スコア計算を可能に
-                    isScoring = true;
-                }
-            }
-            // カートを検索
-            else {
-                cartObject = GameObject.Find(cartPrefab.name + "(Clone)");
-                // 見つかった場合スタックツリーコンポーネントを取得
+                // カートがある場合処理
                 if (cartObject) {
-                    stackTree = cartObject.GetComponentInChildren<StackTree>();
-                    if (!stackTree) {
-                        Debug.LogError(cartObject.name + "にスタックツリーが見つかりません。");
+                    // レジの範囲に入ったら
+                    var registerObject = cashRegisterManager.GetIsWithAnyRegister();
+                    if (registerObject && isScoring) {
+
+                        ScoreData tmpScore = new ScoreData(); // スコア一時格納
+                        tmpScore.bonusNameList = new List<string>();
+
+                        // スタックツリーから高さ情報を取得
+                        float height = stackTree.GetHeight();
+
+                        // 高さボーナス
+                        foreach (var heightBonus in heightBonusList.GetDictionary().OrderBy(c => c.Key)) {
+                            if (height >= heightBonus.Key) {
+                                tmpScore.heightScore = heightBonus.Value;
+                            }
+                        }
+
+                        // 格納されている最大の高さを取得
+                        var maxHeight = heightBonusList.GetDictionary().OrderByDescending(c => c.Key).FirstOrDefault().Key;
+
+                        // 最大の高さより大きい場合
+                        if (height > maxHeight) {
+                            int distance = Mathf.FloorToInt(height - maxHeight);
+                            tmpScore.heightScore += distance;
+                        }
+
+                        // 積み上げられている数を取得
+                        var stackNum = stackTree.stackList.Count;
+                        tmpScore.totalStack = scoreData.totalStack + stackNum;
+
+                        // カートに載っている物を計算する
+                        foreach (var stackObject in stackTree.stackList) {
+                            // スコアを取得
+                            int score = 0;
+                            scoreList.GetDictionary().TryGetValue(stackObject.name.Replace("(Clone)", ""), out score);
+                            // スコアが設定されていない場合デフォルトのスコアを設定
+                            tmpScore.productScore += score == 0 ? DEFAULT_SCORE : score;
+                        }
+
+                        Dictionary<string, int> currenctBonusList = new Dictionary<string, int>();
+
+                        // ボーナス条件を満たしているか確認
+                        foreach(var bonusCriteria in setBonusList.GetDictionary()) {
+                            var hasScore = SetBonusDecision(stackTree.stackList, bonusCriteria.Value.nameList);
+                            if (hasScore) {
+                                currenctBonusList.Add(bonusCriteria.Key, bonusCriteria.Value.score);
+                                tmpScore.bonusScore += bonusCriteria.Value.score;
+
+                                // ボーナスのタイプ名をリストに追加
+                                tmpScore.bonusNameList.Add(bonusCriteria.Key);
+                            }
+                        }
+
+                        // トータルスコアを計算
+                        tmpScore.currentTotalScore = (int)(((float)tmpScore.productScore + (float)tmpScore.bonusScore) * tmpScore.heightScore);
+                        tmpScore.totalScore        = scoreData.totalScore + tmpScore.currentTotalScore;
+
+                        // 今回のスコアを送信
+                        monobitView.RPC("RecvScore"
+                                       ,MonobitTargets.AllBuffered
+                                       ,tmpScore.totalStack
+                                       ,tmpScore.totalScore
+                                       ,tmpScore.currentTotalScore
+                                       ,tmpScore.productScore
+                                       ,tmpScore.bonusScore
+                                       ,tmpScore.heightScore
+                                       ,height
+                                       ,tmpScore.bonusNameList.ToArray()
+                                       );
+
+                        // 乗っているオブジェクトの削除
+                        foreach(GameObject obj in stackTree.stackList )
+                        {
+                            MonobitNetwork.Destroy(obj);
+                        }
+
+                        // リセット
+                        stackTree.PowerReset();
+
+                        // スコア計算を不可に
+                        isScoring = false;
+                    }
+                    else if (!registerObject) {
+                        // スコア計算を可能に
+                        isScoring = true;
                     }
                 }
-            }
+                // カートを検索
+                else {
+                    cartObject = GameObject.Find(cartPrefab.name + "(Clone)");
+                    // 見つかった場合スタックツリーコンポーネントを取得
+                    if (cartObject) {
+                        isHost = true;
+                        stackTree = cartObject.GetComponentInChildren<StackTree>();
+                        if (!stackTree) {
+                            Debug.LogError(cartObject.name + "にスタックツリーが見つかりません。");
+                        }
+                    }
+                }
 
+            }
+            else {
+                isHost = false;
+            }
         }
     }
 

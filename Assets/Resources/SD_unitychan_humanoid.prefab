@@ -1783,8 +1783,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.10000001, z: 0.6590904}
-  m_Center: {x: 0, y: -0.01, z: -0.11545479}
+  m_Size: {x: 0.5, y: 0.1, z: 0.3}
+  m_Center: {x: 0, y: 0, z: 0.01}
 --- !u!114 &3299377178634328585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5539,6 +5539,7 @@ GameObject:
   - component: {fileID: -86020035101436358}
   - component: {fileID: 7984167514063483318}
   - component: {fileID: -6838271136237623521}
+  - component: {fileID: -4914095501542399862}
   m_Layer: 0
   m_Name: SD_unitychan_humanoid
   m_TagString: Player
@@ -5958,6 +5959,48 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-4914095501542399862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3299377180002975761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5832aee8b26e33945a4db1e2a2c982c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CallOnGeneration:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5785771857586868042, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+        m_TargetAssemblyTypeName: OutSidePlayerNameDisplay, Assembly-CSharp
+        m_MethodName: OnJoinPlayer
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 3299377180002975757}
+          m_ObjectArgumentAssemblyTypeName: MonobitEngine.MonobitView, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  CallOnDestroy:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5785771857586868042, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+        m_TargetAssemblyTypeName: OutSidePlayerNameDisplay, Assembly-CSharp
+        m_MethodName: OnLeavePlayer
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 3299377180002975757}
+          m_ObjectArgumentAssemblyTypeName: MonobitEngine.MonobitView, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3299377180004458527
 GameObject:
   m_ObjectHideFlags: 0

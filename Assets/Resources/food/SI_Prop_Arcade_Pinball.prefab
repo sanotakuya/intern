@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1478022137219120606}
   - component: {fileID: 8624368223495433230}
   - component: {fileID: 1654865492413163880}
+  - component: {fileID: 1588527125770822585}
   m_Layer: 0
   m_Name: SI_Prop_Arcade_Pinball
   m_TagString: ThrowObject
@@ -151,5 +152,19 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
+--- !u!64 &1588527125770822585
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4661277451118389772}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 7e3e27ba113c2b54888f1d84830e50fd, type: 3}

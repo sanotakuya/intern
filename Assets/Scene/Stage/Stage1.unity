@@ -1180,7 +1180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77732ee396fe8414f991cf5af6e1d852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 380864064}
   startTime: 3
   limitTime: 300
 --- !u!114 &380864068

@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 8627043166730790021}
   - component: {fileID: 8990806627921243882}
   - component: {fileID: 1850066074116299254}
+  - component: {fileID: 2359328528685306271}
   m_Layer: 0
   m_Name: SI_Prop_Arcade_AirHockey
   m_TagString: ThrowObject
@@ -397,5 +398,19 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
+--- !u!64 &2359328528685306271
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002592107422228626}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 40f08e1f51f97004d83e200899d9cf90, type: 3}

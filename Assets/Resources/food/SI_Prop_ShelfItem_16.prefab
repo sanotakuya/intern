@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7224908713506017499}
   - component: {fileID: 610959210669386899}
   - component: {fileID: 68180439809769778}
+  - component: {fileID: -3578861993929231532}
   m_Layer: 0
   m_Name: SI_Prop_ShelfItem_16
   m_TagString: ThrowObject
@@ -99,7 +100,7 @@ MonoBehaviour:
   mass: 1
   drag: 0
   angularDrag: 0.05
-  collisionDetectionMode: 0
+  collisionDetectionMode: 3
   freezeZ: 1
 --- !u!114 &610959210669386899
 MonoBehaviour:
@@ -124,7 +125,7 @@ MonoBehaviour:
   - {fileID: 68180439809769778}
   ownerId: 0
   group: 0
-  prefixBackup: -1
+  prefixBackup: 0
   ownershipTransfer: 0
   compressedStream: 0
 --- !u!114 &68180439809769778
@@ -153,3 +154,17 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!64 &-3578861993929231532
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3492460732782091856}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 69edd42644a6c2047ae333aedf83fd26, type: 3}
