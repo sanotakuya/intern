@@ -4,6 +4,9 @@ using UnityEngine;
 using MonobitEngine;
 using System;
 
+using UnityEngine.UI;
+using TMPro;
+
 
 //-----------------------------------------------------------------------------
 //! [制作者]		小野龍大
@@ -24,6 +27,9 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     private bool leaveHost = false;
     private float time = 0;
 
+    private int boxX = 200;
+    private int boxY = 60;
+
     struct RoomPlayer
     {
         public MonobitPlayer player;
@@ -35,8 +41,15 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
 
     [SerializeField] private int updateRate = 30;
     [SerializeField] private uint maxPlayers = 4;
-    [SerializeField] private string lobbySceneName = "Lobby";
-    [SerializeField] private string RoomSceneName = "Room";
+
+    // ユーザガイド関連
+    [SerializeField] private GameObject connectServer = null;
+    [SerializeField] private GameObject selectRoom = null;
+
+    [SerializeField] private TextMeshProUGUI inputUserName;
+    [SerializeField] private TextMeshProUGUI inputRoomName;
+
+
     //-----------------------------------------------------------------------------
     //! [内容]		参加受信関数
     //-----------------------------------------------------------------------------
@@ -181,8 +194,11 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             // ルームに入室している場合
             if (MonobitNetwork.inRoom)
             {
+                connectServer.SetActive(false);
+                selectRoom.SetActive(false);
+
                 // ルームからの退室
-                if (GUILayout.Button("Leave Room", GUILayout.Width(150)))
+                if (GUILayout.Button("<size=32>Leave Room</size>", GUILayout.Width(boxX),GUILayout.Height(boxY)))
                 {
                     LeaveRoom();
                 }
@@ -190,20 +206,14 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             // ルームに入室していない場合
             else
             {
-                // ルーム名の入力
-                EnterText("RoomName : ", ref roomName);
-
-                // ルームを作成して入室するad
-                if (GUILayout.Button("Create Room", GUILayout.Width(150)))
-                {
-                    CreateRoom(roomName);
-                }
+                connectServer.SetActive(false);
+                selectRoom.SetActive(true);
               
                 // ルームを検索して入室できる
                 SearchAndEnterRoom();
 
                 // ボタン入力でサーバから切断＆シーンリセット
-                if (GUILayout.Button("Disconnect", GUILayout.Width(150)))
+                if (GUILayout.Button("<size=32>Disconnect</size>", GUILayout.Width(boxX), GUILayout.Height(boxY)))
                 {
                     DisconnectServer();
                 }
@@ -211,17 +221,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         }
         else    // 接続できていない時
         {
-            string name = MonobitNetwork.player.name;
-            MonobitNetwork.player.name = EnterText("playerName : ",ref name);
-
-            // デフォルトロビーへの自動入室を許可する
-            MonobitNetwork.autoJoinLobby = true;
-
-            // MUNサーバに接続する
-            if (GUILayout.Button("Connect Server", GUILayout.Width(150)))
-            {
-                MonobitNetwork.ConnectServer("SimpleNetwork3D_v1.0");
-            }
+            connectServer.SetActive(true);
+            selectRoom.SetActive(false);
         }
     }
 
@@ -249,8 +250,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     private string EnterText(string label, ref string text)
     {
         GUILayout.BeginHorizontal();
-        GUILayout.Label(label);
-        text = GUILayout.TextField(text, GUILayout.Width(200));
+        GUILayout.Label("<size=32>" + label + "</size>");
+        text = GUILayout.TextField(text, GUILayout.Width(boxX), GUILayout.Height(boxY));
         GUILayout.EndHorizontal();
 
         return text;
@@ -274,10 +275,24 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 );
 
             // ルームを選択して入室する
-            if (GUILayout.Button("Enter Room : " + roomParam))
+            if (GUILayout.Button(
+                "<size=32>" + "Enter Room : " + roomParam + "</size>", 
+                GUILayout.Width(boxX * 5),
+                GUILayout.Height(boxY)
+                ))
             {
                 JoinRoom(room.name);
             }
+        }
+
+        if (MonobitNetwork.GetRoomData().Length == 0)
+        {
+            // ルームを選択して入室する
+            GUILayout.Button(
+                "<size=32>" + "ルームが存在しません" + "</size>",
+                GUILayout.Width(boxX * 5),
+                GUILayout.Height(boxY)
+                );
         }
     }
 
@@ -452,18 +467,27 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         );
     }
 
-    void SetCharacter()
+    //-----------------------------------------------------------------------------
+    //! [内容]		コネクトボタンが押された時
+    //-----------------------------------------------------------------------------
+    public void OnConnectBotton()
     {
-        // 現在いるプレイヤー情報を送信
-        foreach (RoomPlayer temp in roomPlayers)
-        {
-            monobitView.RPC(
-               "RecvPlayerInfo",
-               MonobitTargets.All,
-               (string)(temp.player.name),
-               temp.player.ID,
-               temp.characterID
-                );
-        }
+        // 名前の設定
+        MonobitNetwork.player.name = inputUserName.text;
+
+        // デフォルトロビーへの自動入室を許可する
+        MonobitNetwork.autoJoinLobby = true;
+
+        // 接続
+        MonobitNetwork.ConnectServer("SimpleNetwork3D_v1.0");
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		クリエイトルームボタンが押されたら
+    //-----------------------------------------------------------------------------
+    public void OnCreateRoomButton()
+    {
+        // ルーム作成
+        CreateRoom(inputRoomName.text);
     }
 }
