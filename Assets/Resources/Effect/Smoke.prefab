@@ -4900,7 +4900,8 @@ MonoBehaviour:
   m_ObjectStreamSendBytes: 
   m_IsEncrypt: 1
   InternalObservedComponents: []
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 7750886012453127631}
   ownerId: 0
   group: 0
   prefixBackup: -1

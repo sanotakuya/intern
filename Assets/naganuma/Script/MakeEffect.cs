@@ -7,7 +7,7 @@ using   MonobitEngine;
 
 //-----------------------------------------------------------------------------
 //! [制作者]     長沼豪琉
-//! [最終更新日] 2021/10/22
+//! [最終更新日] 2021/10/26
 //! [内容]       エフェクト発生
 //-----------------------------------------------------------------------------
 public class MakeEffect : MonobitEngine.MonoBehaviour
@@ -16,6 +16,7 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
     //! private変数
     //-----------------------------------------------------------------------------
     private Rigidbody  rigidbody;
+    private bool       isHost     = true;
     private bool       deleteFlag = false;
 
     //-----------------------------------------------------------------------------
@@ -25,20 +26,27 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! Inspectorに公開する変数
     //-----------------------------------------------------------------------------
-    [Header("パーティクルサイズ")]                             public float particleSize;
-    [Header("パーティクルを発生させるオブジェクトのスピード")] public float objectSpeed;
-    [Header("プレイヤーが投げた後オブジェクトを削除するか")]   public bool  isThrewAfterDeletion = true;
+    [Header("パーティクルサイズ")]                             public float        particleSize               ;
+    [Header("パーティクルを発生させるオブジェクトのスピード")] public float        objectSpeed                ;
+    [Header("プレイヤーが投げた後オブジェクトを削除するか")]   public bool         isThrewAfterDeletion = true;
+    [Header("地面のタグ")]                                     public string       groundTag                  ;
+    [Header("当たり判定を除外するタグ")]                       public List<string> hitExclusionTag            ;
 
     //-----------------------------------------------------------------------------
     //! [内容]    更新処理
     //-----------------------------------------------------------------------------
     void Update()
     {
-        // 自分がホストじゃない場合は処理を行わない
-        if (MonobitNetwork.isHost) {
-            // リジッドボディを検索
-            if (!rigidbody) {
-                rigidbody = this.GetComponent<Rigidbody>();
+        if (MonobitNetwork.inRoom) {
+            // 自分がホストじゃない場合は処理を行わない
+            if (MonobitNetwork.isHost && isHost) {
+                // リジッドボディを検索
+                if (!rigidbody) {
+                    rigidbody = this.GetComponent<Rigidbody>();
+                }
+            }
+            else {
+                isHost = false;
             }
         }
     }
@@ -48,7 +56,7 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     private void OnCollisionEnter(Collision collision)
     {
-        if (rigidbody) {
+        if (rigidbody && !hitExclusionTag.Contains(collision.gameObject.tag)) {
             // スピードが指定数以上の場合は処理
             if (rigidbody.velocity.magnitude >= objectSpeed) {
                 Bounds bounds = this.GetComponent<MeshFilter>().mesh.bounds;
@@ -71,8 +79,8 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
                     gameObject.transform.localScale = new Vector3(particleSize * maxSize, particleSize * maxSize, particleSize * maxSize);
                 }
                 // 落ちた先が地面だった場合
-                if (collision.gameObject.tag == "Ground" && deleteFlag) {
-                    MonobitNetwork.Destroy(this.monobitView);
+                if (collision.gameObject.tag == groundTag && deleteFlag) {
+                    MonobitNetwork.Destroy(this.gameObject);
                 }
             }
             // プレイヤーが掴んだ場合フラグを有効

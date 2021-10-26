@@ -120,6 +120,9 @@ MonoBehaviour:
   particleSize: 0.1
   objectSpeed: 1.2
   isThrewAfterDeletion: 1
+  groundTag: Ground
+  hitExclusionTag:
+  - Player
 --- !u!1 &4514914302519733321
 GameObject:
   m_ObjectHideFlags: 0
