@@ -7,8 +7,10 @@ public class SoundManager : MonobitEngine.MonoBehaviour
 {
     private AudioSource bgmAudio;
 
+    MonobitView m_MonobitView = null;
+
     [System.NonSerialized]
-    public  float fadeTime;
+    public float fadeTime;
 
     [System.NonSerialized]
     public bool fadeInFlg;
@@ -17,12 +19,41 @@ public class SoundManager : MonobitEngine.MonoBehaviour
     public bool fadeOutFlg;
 
     float fadeDeltaTime = 0;
-    // Start is called before the first frame update
-    void Awake()
+    private bool isSoundPlay;
+
+    GameManager gameManager;
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		サウンド再生
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvPlaySound()
     {
-       
+        if (isSoundPlay == false)
+        {
+            AudioPlay();
+            isSoundPlay = true;
+        }
+    }
+
+    [MunRPC]
+    void RecvStopSound()
+    {
+        if (isSoundPlay == true)
+        {
+            AudioStop();
+            isSoundPlay = false;
+        }
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+
         bgmAudio = this.gameObject.GetComponent<AudioSource>();
 
+        m_MonobitView = GetComponent<MonobitView>();
+
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         fadeDeltaTime = 0.0f;
         fadeInFlg = false;
         fadeOutFlg = false;
@@ -33,12 +64,16 @@ public class SoundManager : MonobitEngine.MonoBehaviour
     {
         if (MonobitNetwork.isHost)
         {
-            if (Input.GetKeyDown(KeyCode.M))
+            if (gameManager.IsPlaying())
             {
-                AudioPlay();
+                m_MonobitView.RPC("RecvPlaySound", MonobitEngine.MonobitTargets.AllBuffered);
+            }
+            else if (!gameManager.IsPlaying() && isSoundPlay == true)
+            {
+                m_MonobitView.RPC("RecvStopSound", MonobitEngine.MonobitTargets.AllBuffered);
             }
         }
-      
+
         if (fadeInFlg == true)
         {
             fadeDeltaTime += Time.deltaTime;
