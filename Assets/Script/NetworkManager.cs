@@ -45,9 +45,17 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     // ユーザガイド関連
     [SerializeField] private GameObject connectServer = null;
     [SerializeField] private GameObject selectRoom = null;
+    [SerializeField] private GameObject title = null;
+    [SerializeField] private GameObject tutorial = null;
 
     [SerializeField] private TextMeshProUGUI inputUserName;
     [SerializeField] private TextMeshProUGUI inputRoomName;
+
+    //-----------------------------------------------------------------------------
+    //!	public
+    //-----------------------------------------------------------------------------
+    public bool isTutorial = false;
+
 
 
     //-----------------------------------------------------------------------------
@@ -246,6 +254,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             {
                 connectServer.SetActive(false);
                 selectRoom.SetActive(false);
+                title.SetActive(false);
+
 
                 // ルームからの退室
                 if (GUILayout.Button("<size=32>Leave Room</size>", GUILayout.Width(boxX),GUILayout.Height(boxY)))
@@ -254,11 +264,13 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 }
             }
             // ルームに入室していない場合
-            else
+            else if(!isTutorial) 
             {
                 connectServer.SetActive(false);
                 selectRoom.SetActive(true);
-              
+                title.SetActive(false);
+
+
                 // ルームを検索して入室できる
                 SearchAndEnterRoom();
 
@@ -273,6 +285,11 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         {
             connectServer.SetActive(true);
             selectRoom.SetActive(false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            title.SetActive(false);
         }
     }
 
@@ -539,5 +556,14 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     {
         // ルーム作成
         CreateRoom(inputRoomName.text);
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		チュートリアルボタンが押されたら
+    //-----------------------------------------------------------------------------
+    public void OnTutorialButton()
+    {
+        tutorial.SetActive(true);
+        isTutorial = true;
     }
 }
