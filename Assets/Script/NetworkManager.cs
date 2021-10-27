@@ -59,10 +59,13 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         RealTimeTextManager.TextInfo textInfo = new RealTimeTextManager.TextInfo();
         textInfo.SetDefault();
 
-        textInfo.text = playerName + "が入室しました";
-        textInfo.animStyle = TextAnimation.AnimStyle.WavePosition;
+        if(playerName != "")
+        {
+            textInfo.text = playerName + "が入室しました";
+            textInfo.animStyle = TextAnimation.AnimStyle.WavePosition;
 
-        GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
+            GetComponent<GameManager>().realTimeTextManager.EnqueueText(textInfo);
+        }
 
         if(MonobitView.Find(characterID))
         {
@@ -81,7 +84,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     }
 
     //-----------------------------------------------------------------------------
-    //! [内容]		参加受信関数
+    //! [内容]		抜けたプレイヤーがいたときの受信関数
     //-----------------------------------------------------------------------------
     [MunRPC]
     void RecvExitRoomText(string playerName)
@@ -96,7 +99,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     }
 
     //-----------------------------------------------------------------------------
-    //! [内容]		参加受信関数
+    //! [内容]		参加したときにルームのプレイヤー情報を受け取る受信関数
     //-----------------------------------------------------------------------------
     [MunRPC]
     void RecvPlayerInfo(string playerName, int playerID, int characterID)
@@ -109,7 +112,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     }
 
     //-----------------------------------------------------------------------------
-    //! [内容]		参加受信関数
+    //! [内容]		ゲーム開始受信関数
     //-----------------------------------------------------------------------------
     [MunRPC]
     void RecvGameStart()
@@ -117,12 +120,10 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         GameObject obj = MonobitView.Find(myCharacterID).gameObject;
 
         obj.GetComponent<MovePlayer>().myCharactor = true;
-
-        this.GetComponent<GameManager>().playing = true;
     }
 
     //-----------------------------------------------------------------------------
-    //! [内容]		参加受信関数
+    //! [内容]		カウント開始受信関数
     //-----------------------------------------------------------------------------
     [MunRPC]
     void RecvCountStart()
@@ -130,6 +131,45 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         GameObject obj = MonobitView.Find(myCharacterID).gameObject;
 
         this.GetComponent<GameManager>().playing = true;
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		受け取りに失敗したこと受け取る関数
+    //-----------------------------------------------------------------------------
+    [MunRPC]
+    void RecvReturnsMission(int playerID)
+    {
+        RoomPlayer playerInfo = new RoomPlayer();
+        // 再送信を依頼してきた人のデータを探す
+        foreach (RoomPlayer player in roomPlayers)
+        {
+            if(player.player.ID == playerID)
+            {
+                playerInfo = player;
+            }
+        }
+
+        //入室メッセージ送信
+        monobitView.RPC(
+                "RecvEnterRoomText",
+                MonobitEngine.MonobitTargets.AllBuffered,
+                "",
+                playerInfo.player.ID,
+                playerInfo.characterID
+        );
+
+
+        // 現在いるプレイヤー情報を送信
+        foreach (RoomPlayer temp in roomPlayers)
+        {
+            monobitView.RPC(
+               "RecvPlayerInfo",
+               MonobitEngine.MonobitTargets.AllBuffered,
+               (string)(temp.player.name),
+               temp.player.ID,
+               temp.characterID
+                );
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -179,6 +219,16 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 else if (MonobitNetwork.isHost)
                 {
                     UpdatePlayerList();
+                }
+
+                // 受け取りに失敗していたら
+                if(myCharacterID == -1)
+                {
+                    monobitView.RPC(
+                           "RecvReturnsMission",
+                           MonobitEngine.MonobitTargets.Host,
+                           MonobitNetwork.player.ID
+                           );
                 }
             }
         }

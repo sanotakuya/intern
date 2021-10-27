@@ -39,11 +39,14 @@ public class StackRoot : MonobitEngine.MonoBehaviour
         // 子供をすべてStackListに入れる
         foreach(GameObject obj in children)
         {
-            top.stackList.Add(obj);
-
-            if(obj.CompareTag(top.groundTag))
+            if(obj != null)
             {
-                top.hitGround = true;
+                top.stackList.Add(obj);
+
+                if (obj.CompareTag(top.groundTag))
+                {
+                    top.hitGround = true;
+                }
             }
         }
     }

@@ -97,6 +97,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                     {
                         isPlayHoldSE = true;
                         isPlayThrowSE = false;
+
+                        // 掴む時のSEを全員に送信する
                         monobitView.RPC("RecvHoldSE", MonobitEngine.MonobitTargets.AllBuffered, isPlayHoldSE);
                     }
 
@@ -110,21 +112,25 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
             }
             else if (isHold == true)
             {
-                if (isDepthLock == true)
+                if (holdObject != null)
                 {
-                    // オブジェクトを飛ばす
-                    ObjectThrow();
-
-                    if (isPlayThrowSE == false)
+                    if (isDepthLock == true)
                     {
-                        isPlayHoldSE = false;
-                        isPlayThrowSE = true;
-                        monobitView.RPC("RecvThrowSE", MonobitEngine.MonobitTargets.AllBuffered, isPlayThrowSE);
+                        // オブジェクトを飛ばす
+                        ObjectThrow();
+
+                        if (isPlayThrowSE == false)
+                        {
+                            isPlayHoldSE = false;
+                            isPlayThrowSE = true;
+                            // 投げるときのSEを全員に送信する
+                            monobitView.RPC("RecvThrowSE", MonobitEngine.MonobitTargets.AllBuffered, isPlayThrowSE);
+                        }
+                        holdObject = null;
+                        isHold = false;
+                        isInput = true;
+                        minDistance = RESETDISTANCE;
                     }
-                    holdObject = null;
-                    isHold = false;
-                    isInput = true;
-                    minDistance = RESETDISTANCE;
                 }
             }
         }
@@ -255,20 +261,32 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
         }
         if (isHold == true)
         {
-            // ブロックをもち上げる
-            holdObject.transform.position = new Vector3(playerPos.x, playerPos.y + 1.5f, playerPos.z);
+            //　何らかの影響で持ってるオブジェクトが消えたら
+            if (holdObject == null)
+            {
+                guide.SetGuidesState(false);
+                holdObject = null;
+                isHold = false;
+                isInput = true;
+                minDistance = RESETDISTANCE;
+            }
+            else
+            {
+                // ブロックをもち上げる
+                holdObject.transform.position = new Vector3(playerPos.x, playerPos.y + 1.5f, playerPos.z);
 
-            // オブジェクトの加速度初期化
-            rbHoldObj.velocity = Vector3.zero;
+                // オブジェクトの加速度初期化
+                rbHoldObj.velocity = Vector3.zero;
 
-            // 掴んでいるオブジェクトの回転
-            //Debug.Log(holdAngle);
-            rbHoldObj.transform.rotation = Quaternion.AngleAxis(holdAngle, new Vector3(0, 0, 1));
+                // 掴んでいるオブジェクトの回転
+                //Debug.Log(holdAngle);
+                rbHoldObj.transform.rotation = Quaternion.AngleAxis(holdAngle, new Vector3(0, 0, 1));
 
-            // オブジェクトを投げる//
+                // オブジェクトを投げる//
 
-            //投げる角度を計算
-            CalcForceDirection();
+                //投げる角度を計算
+                CalcForceDirection();
+            }
         }
     }
 
