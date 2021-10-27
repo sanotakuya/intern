@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5983369090740290694}
   - component: {fileID: 7678744098353025114}
   - component: {fileID: 5005121081026608006}
+  - component: {fileID: -1845221172830558472}
   m_Layer: 8
   m_Name: PW_doughnut_pink
   m_TagString: ThrowObject
@@ -168,3 +169,23 @@ MonoBehaviour:
     m_LerpRate: 1
   m_SnapEnabled: 1
   m_SnapThreshold: 3
+--- !u!114 &-1845221172830558472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8890200464518772938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallPrefab: {fileID: 8328928689533258898, guid: 9a3b5b5be72cb3545a001facb94bf04c, type: 3}
+  addPrefab: {fileID: 4889700180705726389, guid: 75e0516622b06de41911895314d4d9bb, type: 3}
+  subPrefab: {fileID: 1826254014985077883, guid: ac8b2c85e0f76e54688c57a1fc552774, type: 3}
+  particleSize: 0.1
+  objectSpeed: 1.2
+  isThrewAfterDeletion: 1
+  destroyInterval: 0.1
+  groundTag: Ground

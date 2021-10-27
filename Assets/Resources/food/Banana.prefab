@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1505592822088368742}
   - component: {fileID: 1505592822088368741}
   - component: {fileID: -7862449904753912287}
+  - component: {fileID: 6948500491398460391}
   m_Layer: 0
   m_Name: Banana
   m_TagString: ThrowObject
@@ -170,3 +171,23 @@ MonoBehaviour:
   angularDrag: 0.05
   collisionDetectionMode: 3
   freezeZ: 1
+--- !u!114 &6948500491398460391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505592820862685371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallPrefab: {fileID: 8328928689533258898, guid: 9a3b5b5be72cb3545a001facb94bf04c, type: 3}
+  addPrefab: {fileID: 4889700180705726389, guid: 75e0516622b06de41911895314d4d9bb, type: 3}
+  subPrefab: {fileID: 1826254014985077883, guid: ac8b2c85e0f76e54688c57a1fc552774, type: 3}
+  particleSize: 0.1
+  objectSpeed: 1.2
+  isThrewAfterDeletion: 1
+  destroyInterval: 0.1
+  groundTag: Ground
