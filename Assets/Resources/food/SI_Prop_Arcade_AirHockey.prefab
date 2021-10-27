@@ -258,6 +258,7 @@ GameObject:
   - component: {fileID: 8990806627921243882}
   - component: {fileID: 1850066074116299254}
   - component: {fileID: 2359328528685306271}
+  - component: {fileID: 6548344941156866641}
   m_Layer: 0
   m_Name: SI_Prop_Arcade_AirHockey
   m_TagString: ThrowObject
@@ -414,3 +415,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 40f08e1f51f97004d83e200899d9cf90, type: 3}
+--- !u!114 &6548344941156866641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002592107422228626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallPrefab: {fileID: 8328928689533258898, guid: 9a3b5b5be72cb3545a001facb94bf04c, type: 3}
+  addPrefab: {fileID: 4889700180705726389, guid: 75e0516622b06de41911895314d4d9bb, type: 3}
+  subPrefab: {fileID: 1826254014985077883, guid: ac8b2c85e0f76e54688c57a1fc552774, type: 3}
+  particleSize: 0.1
+  objectSpeed: 1.2
+  isThrewAfterDeletion: 1
+  destroyInterval: 0.1
+  groundTag: Ground
