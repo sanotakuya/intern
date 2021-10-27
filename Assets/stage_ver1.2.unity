@@ -1501,6 +1501,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
       propertyPath: cashRegisterManager
       value: 
       objectReference: {fileID: 380864068}
@@ -2135,6 +2139,46 @@ PrefabInstance:
     - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
       propertyPath: setBonusList.list.Array.data[0].value.score
       value: 3000
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[1].key
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[1].value
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[2].key
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[2].value
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[4].key
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[4].value
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[5].key
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[5].value
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[3].key
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 787984529803921420, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
+      propertyPath: heightBonusList.list.Array.data[3].value
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 787984529803921421, guid: d8fca4ea3d20c184bb9594338851719f, type: 3}
       propertyPath: m_LocalPosition.x
