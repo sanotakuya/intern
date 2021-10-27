@@ -174,12 +174,13 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
             // 高さを表示
             if (heightLimit != 0) {
 
-                var valueHeight = height < 1.0f ? 0.0f : height - 1.0f;
+                var valueHeight = height < 0.0f ? 0.0f : height;
                 heightSlider.value = valueHeight <= heightLimit ? valueHeight / heightLimit : 1.0f;
 
                 // 高さテキストの表示変更
                 for (int i = 0; i < heightTextComs.Length; i++) {
-                    float heightNum = (i / 5.0f * heightLimit) + 1.0f;
+                    float heightNum = (i / 5.0f * heightLimit);
+                    registerScore.heightBonusList.GetDictionary().TryGetValue(heightNum, out heightNum);
                     if (i == heightTextComs.Length - 1) {
                         if (heightNum < height) {
                             heightNum = height;

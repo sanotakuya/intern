@@ -24,14 +24,15 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private Rigidbody  rigidbody                 ;
-    private bool       isHost     = true         ;
-    private bool       deleteFlag = false        ;
-    private bool       isHold     = false        ;
-    private Vector3    hitPos     = new Vector3(); // 当たった場所
-    private bool       isDestroy  = false        ;
-    private float      countTime  = 0.0f         ; // 時間計測
-    private HoldThrow  holdThrow                 ;
+    private Rigidbody  rigidbody                          ;
+    private bool       isHost              = true         ;
+    private bool       deleteFlag          = false        ;
+    private bool       isHold              = false        ;
+    private Vector3    hitPos              = new Vector3(); // 当たった場所
+    private bool       isDestroy           = false        ;
+    private float      countTime           = 0.0f         ; // 時間計測
+    private HoldThrow  holdThrow                          ;
+    private bool       isPlayDestroyEffect = false        ;
 
     //-----------------------------------------------------------------------------
     //! public変数
@@ -108,6 +109,11 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
         if (holdThrow) {
             if (holdThrow.isHold) {
                 isHold = true;
+                if (isDestroy) {
+                    isDestroy = false;
+                    deleteFlag = false;
+                    countTime = 0.0f;
+                }
             }
             else {
                 if (isHold) deleteFlag = true;
@@ -123,9 +129,13 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
             countTime += Time.deltaTime;
             if (countTime >= destroyInterval) {
                 if (!this.TryGetComponent<StackRoot>(out var stackRoot)) {
-                    MonobitNetwork.Destroy(this.gameObject);
-                    isDestroy = false;
-                    countTime = 0.0f;
+                    if (!isPlayDestroyEffect) {
+                        CreateEffect(CREATEOBJECTTYPE.FALL_EFFECT, this.transform.position);
+                        isPlayDestroyEffect = true;
+                    }
+                    else {
+                        MonobitNetwork.Destroy(this.gameObject);
+                    }
                 }
             }
         }
@@ -149,7 +159,6 @@ public class MakeEffect : MonobitEngine.MonoBehaviour
                 // 落ちた先が地面だった場合
                 if (collision.gameObject.tag == groundTag && deleteFlag) {
                     isDestroy = true;
-                    this.tag = "Untagged";
                 }
             }
         }

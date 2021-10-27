@@ -220,7 +220,7 @@ MonoBehaviour:
   particleSize: 0.1
   objectSpeed: 1.2
   isThrewAfterDeletion: 1
-  destroyInterval: 0.1
+  destroyInterval: 2
   groundTag: Ground
 --- !u!1 &5688485950486932508
 GameObject:
