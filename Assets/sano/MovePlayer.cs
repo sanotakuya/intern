@@ -70,11 +70,10 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
                     isPlaySE = true;
                     monobitView.RPC("RecvJumpSound", MonobitEngine.MonobitTargets.AllBuffered, isPlaySE);   //　全員に向けてジャンプサウンドを再生
                 }
-              
-                
             }
         }
     }
+
     [MunRPC]
     void RecvJumpSound(bool flg)
     {
@@ -83,6 +82,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             effectAudio.PlayOneShot(jumpSE);
         }
     }
+
     [MunRPC]
     void RecvLeftWalk(int id,bool isWalk)
     {
@@ -91,6 +91,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             lastUpdateLiftWalk = isWalk;
         }
     }
+
     [MunRPC]
     void RecvRightWalk(int id, bool isWalk)
     {
@@ -99,6 +100,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             lastUpdateRightWalk = isWalk;
         }
     }
+
     [MunRPC]
     void RecvUpWalk(int id, bool isWalk)
     {
@@ -107,6 +109,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             lastUpdateUpWalk = isWalk;
         }
     }
+
     [MunRPC]
     void RecvDownWalk(int id, bool isWalk)
     {
@@ -115,6 +118,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             lastUpdateDownWalk = isWalk;
         }
     }
+
     [MunRPC]
     void RecvRun(int id, bool isRun)
     {
@@ -123,6 +127,7 @@ public class MovePlayer : MonobitEngine.MonoBehaviour
             lastUpdateRun = isRun;
         }
     }
+
     private void Awake()
     {
         if (!MonobitNetwork.isHost)
