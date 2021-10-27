@@ -97,6 +97,8 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                     {
                         isPlayHoldSE = true;
                         isPlayThrowSE = false;
+
+                        // 掴む時のSEを全員に送信する
                         monobitView.RPC("RecvHoldSE", MonobitEngine.MonobitTargets.AllBuffered, isPlayHoldSE);
                     }
                    
@@ -121,6 +123,7 @@ public class HoldThrow : MonobitEngine.MonoBehaviour
                         {
                             isPlayHoldSE = false;
                             isPlayThrowSE = true;
+                            // 投げるときのSEを全員に送信する
                             monobitView.RPC("RecvThrowSE", MonobitEngine.MonobitTargets.AllBuffered, isPlayThrowSE);
                         }
                         holdObject = null;
