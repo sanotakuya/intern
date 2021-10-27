@@ -45,6 +45,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     // ユーザガイド関連
     [SerializeField] private GameObject connectServer = null;
     [SerializeField] private GameObject selectRoom = null;
+    [SerializeField] private GameObject title = null;
 
     [SerializeField] private TextMeshProUGUI inputUserName;
     [SerializeField] private TextMeshProUGUI inputRoomName;
@@ -273,6 +274,11 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
         {
             connectServer.SetActive(true);
             selectRoom.SetActive(false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            title.SetActive(false);
         }
     }
 
