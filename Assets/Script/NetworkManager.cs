@@ -247,6 +247,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             {
                 connectServer.SetActive(false);
                 selectRoom.SetActive(false);
+                title.SetActive(false);
+
 
                 // ルームからの退室
                 if (GUILayout.Button("<size=32>Leave Room</size>", GUILayout.Width(boxX),GUILayout.Height(boxY)))
@@ -259,7 +261,9 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             {
                 connectServer.SetActive(false);
                 selectRoom.SetActive(true);
-              
+                title.SetActive(false);
+
+
                 // ルームを検索して入室できる
                 SearchAndEnterRoom();
 
