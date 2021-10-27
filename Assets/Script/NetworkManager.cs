@@ -46,9 +46,16 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     [SerializeField] private GameObject connectServer = null;
     [SerializeField] private GameObject selectRoom = null;
     [SerializeField] private GameObject title = null;
+    [SerializeField] private GameObject tutorial = null;
 
     [SerializeField] private TextMeshProUGUI inputUserName;
     [SerializeField] private TextMeshProUGUI inputRoomName;
+
+    //-----------------------------------------------------------------------------
+    //!	public
+    //-----------------------------------------------------------------------------
+    public bool isTutorial = false;
+
 
 
     //-----------------------------------------------------------------------------
@@ -257,7 +264,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 }
             }
             // ルームに入室していない場合
-            else
+            else if(!isTutorial) 
             {
                 connectServer.SetActive(false);
                 selectRoom.SetActive(true);
@@ -549,5 +556,14 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     {
         // ルーム作成
         CreateRoom(inputRoomName.text);
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]		チュートリアルボタンが押されたら
+    //-----------------------------------------------------------------------------
+    public void OnTutorialButton()
+    {
+        tutorial.SetActive(true);
+        isTutorial = true;
     }
 }
