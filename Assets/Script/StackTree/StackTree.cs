@@ -110,8 +110,12 @@ public class StackTree : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! [内容]		リセット関数(削除したとき用)
     //-----------------------------------------------------------------------------
-    public void PowerReset()
+    public void ForceReset()
     {
+        foreach(GameObject obj in children)
+        {
+            obj.GetComponent<StackRoot>().ReleaseRoot();
+        }
         children.Clear();
     }
 
