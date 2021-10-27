@@ -24,7 +24,7 @@ public class DropBlock : MonoBehaviour
         {
             trans.localRotation = Quaternion.Euler(new Vector3(0, 0, Random.value * 360.0f)) ;
 
-            trans.localPosition = new Vector3(-900 + Random.value * 1800, Random.value * 300.0f + 800, 0);
+            trans.localPosition = new Vector3(-900 + Random.value * 1800, Random.value * 1000.0f + 800, 0);
         }
         else
         {
