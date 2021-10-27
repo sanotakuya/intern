@@ -9,6 +9,9 @@ public class SoundManager : MonobitEngine.MonoBehaviour
 
     MonobitView m_MonobitView = null;
 
+    public AudioClip mainBGM;
+    public AudioClip titleBGM;
+
     [System.NonSerialized]
     public float fadeTime;
 
@@ -19,7 +22,10 @@ public class SoundManager : MonobitEngine.MonoBehaviour
     public bool fadeOutFlg;
 
     float fadeDeltaTime = 0;
-    private bool isSoundPlay;
+    private bool isMainSoundPlay;
+    private bool isTitleSoundPlay;
+
+    private bool isStart;
 
     GameManager gameManager;
 
@@ -29,20 +35,23 @@ public class SoundManager : MonobitEngine.MonoBehaviour
     [MunRPC]
     void RecvPlaySound()
     {
-        if (isSoundPlay == false)
+        if (isMainSoundPlay == false)
         {
+            bgmAudio.clip = mainBGM;
             AudioPlay();
-            isSoundPlay = true;
+            isMainSoundPlay = true;
+            isTitleSoundPlay = false;
+            isStart = true;
         }
     }
-
+  
     [MunRPC]
     void RecvStopSound()
     {
-        if (isSoundPlay == true)
+        if (isMainSoundPlay == true)
         {
             AudioStop();
-            isSoundPlay = false;
+            isMainSoundPlay = false;
         }
     }
     // Start is called before the first frame update
@@ -62,16 +71,34 @@ public class SoundManager : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isStart == false)
+        {
+            if (!MonobitNetwork.inRoom)
+            {
+                if (isTitleSoundPlay == false)
+                {
+                    bgmAudio.clip = titleBGM;
+                    AudioPlay();
+                    isTitleSoundPlay = true;
+                }
+            }
+            else
+            {
+                AudioStop();
+                isTitleSoundPlay = false;
+            }
+        }
         if (MonobitNetwork.isHost)
         {
             if (gameManager.IsPlaying())
             {
                 m_MonobitView.RPC("RecvPlaySound", MonobitEngine.MonobitTargets.AllBuffered);
             }
-            else if (!gameManager.IsPlaying() && isSoundPlay == true)
+            else if (!gameManager.IsPlaying() && isMainSoundPlay == true)
             {
                 m_MonobitView.RPC("RecvStopSound", MonobitEngine.MonobitTargets.AllBuffered);
             }
+           
         }
 
         if (fadeInFlg == true)
