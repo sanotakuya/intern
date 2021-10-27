@@ -11010,6 +11010,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6435921973613345906, guid: 8b1cec12a21e85f4886e90018b0acfac, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 64f585ed8afba174ba25c127added604, type: 2}
+    - target: {fileID: 6435921973613345906, guid: 8b1cec12a21e85f4886e90018b0acfac, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -6668298584288882901, guid: 64f585ed8afba174ba25c127added604, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b1cec12a21e85f4886e90018b0acfac, type: 3}
 --- !u!1001 &1731840871
@@ -13264,7 +13272,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1073126651407191443, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.21
       objectReference: {fileID: 0}
     - target: {fileID: 1073126651407191443, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
       propertyPath: m_LocalPosition.y
