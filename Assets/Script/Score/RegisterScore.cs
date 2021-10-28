@@ -6,7 +6,7 @@ using System.Linq;
 
 //-----------------------------------------------------------------------------
 //! [制作者]     長沼豪琉
-//!	[最終更新日] 2021/10/14
+//!	[最終更新日] 2021/10/28
 //! [内容]       レジのスコア処理
 //-----------------------------------------------------------------------------
 public class RegisterScore : MonobitEngine.MonoBehaviour
@@ -80,6 +80,8 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     private MonobitView monobitView                  ; // モノビットビュー
     private bool        isScoring   = true           ; // スコア計算が可能か
     private bool        isHost      = true           ; // ホストか
+    private AudioSource audioSource                  ;
+    private int         prevTotalScore               ;
 
     //-----------------------------------------------------------------------------
     //! public変数
@@ -102,13 +104,13 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                   ,string[] bonusNameList     // ボーナスの名前リスト
     )
     {
-        _scoreData.totalStack        = totalStack;
-        _scoreData.totalScore        = totalScore;
-        _scoreData.currentTotalScore = currentTotalScore;
-        _scoreData.productScore      = productScore;
-        _scoreData.bonusScore        = bonusScore;
-        _scoreData.heightScore       = heightScore;
-        _scoreData.height            = height;
+        _scoreData.totalStack        = totalStack                    ;
+        _scoreData.totalScore        = totalScore                    ;
+        _scoreData.currentTotalScore = currentTotalScore             ;
+        _scoreData.productScore      = productScore                  ;
+        _scoreData.bonusScore        = bonusScore                    ;
+        _scoreData.heightScore       = heightScore                   ;
+        _scoreData.height            = height                        ;
         _scoreData.bonusNameList     = bonusNameList.ToList<string>();
     }
 
@@ -121,6 +123,7 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
     [Header("スコアリスト(プレハブの名前,スコア)")]           public ScoreList           scoreList          ; // スコアリスト
     [Header("セットボーナスリスト(セットの名前,セット情報)")] public SetBonusList        setBonusList       ; // スコアリスト
     [Header("高さボーナスリスト(高さ(昇順),スコア(倍率))")]   public HeightBonusList     heightBonusList    ; // 高さボーナスリスト
+    [Header("レジサウンド")]                                  public AudioClip           registerSound      ; // レジ音
 
     //-----------------------------------------------------------------------------
     //! [内容]    有効時処理
@@ -148,6 +151,10 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
         monobitView = this.GetComponent<MonobitView>();
         if (!monobitView) {
             Debug.LogError("MonobitViewが設定されていません。");
+        }
+
+        if (!this.TryGetComponent<AudioSource>(out audioSource)) {
+            Debug.LogError("オーディオソースが設定されていません。");
         }
     }
 
@@ -267,6 +274,13 @@ public class RegisterScore : MonobitEngine.MonoBehaviour
                 isHost = false;
             }
         }
+
+        // スコアが変わった時にサウンド再生
+        if (prevTotalScore != scoreData.totalScore) {
+            audioSource.PlayOneShot(registerSound);
+        }
+
+        prevTotalScore = scoreData.totalScore;
     }
 
     //-----------------------------------------------------------------------------
