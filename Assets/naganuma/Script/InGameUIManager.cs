@@ -198,13 +198,24 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
 
                 // テキストに各データを適用 //
 
-                // ランク表示
-                // TODO:ランク処理
-                sb_rankText.text = "A";
                 // スコア
                 var score = registerScore.scoreData.totalScore;
                 score = score > 9999999 ? 9999999 : score;
                 sb_scoreText.text = string.Format("{0:00000#,0}", score);
+                // ランク表示
+                if (score >= 1000000) {
+                    sb_rankText.text = "S";
+                }
+                else if (score >= 500000) {
+                    sb_rankText.text = "A";
+                }
+                else if (score >= 200000) {
+                    sb_rankText.text = "B";
+                }
+                else {
+                    sb_rankText.text = "C";
+                }
+
                 // タイム
                 var currentTime  = gameTimer.currentGameTime;
                 int minutes      = Mathf.FloorToInt(currentTime / 60.0f);              // 分

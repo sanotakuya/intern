@@ -2863,7 +2863,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   startTime: 3
-  limitTime: 300
+  limitTime: 360
 --- !u!114 &380864068
 MonoBehaviour:
   m_ObjectHideFlags: 0
