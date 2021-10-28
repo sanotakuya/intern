@@ -10507,6 +10507,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 133165055}
     m_Modifications:
+    - target: {fileID: 4201798221124496851, guid: e605265cffd289f4d8972b01c34f4c18, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4201798221124496854, guid: e605265cffd289f4d8972b01c34f4c18, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -10989,6 +10993,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 133165055}
     m_Modifications:
+    - target: {fileID: 1187416115759854929, guid: 596747f2373ea564ca92f7b9264af00d, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1187416115759854930, guid: 596747f2373ea564ca92f7b9264af00d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -11430,6 +11438,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1137667736957685701, guid: 6ce41194f65c66c438b6701d832dc8b9, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1137667736957685721, guid: 6ce41194f65c66c438b6701d832dc8b9, type: 3}
+      propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -14481,6 +14493,10 @@ PrefabInstance:
       propertyPath: networkManager
       value: 
       objectReference: {fileID: 133165053}
+    - target: {fileID: 5756264510088105944, guid: fde88ac24cb99f84d8edbd566e7462ce, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5756264510088105947, guid: fde88ac24cb99f84d8edbd566e7462ce, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
