@@ -14,43 +14,44 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     //! private変数
     //-----------------------------------------------------------------------------
-    private StackTree   stackTree        ; // スタックツリー
-    private GameObject  cartObject       ; // カートオブジェクト
-    private float       prevHeightLimit  ; // 前フレームの高さ
-    private Text[]      heightTextComs   ; // 高さテキストコンポーネント
-    private CanvasGroup uiCanvasGroup    ; // UIキャンバスグループ
-    private CanvasGroup sb_canvasGroup   ; // スコアボードキャンバスグループ
-    private float       timeCount        ; // 経過時間
-    private float       height           ; // 現在の高さ
-    bool keyDown = false;
+    private StackTree     stackTree                ; // スタックツリー
+    private GameObject    cartObject               ; // カートオブジェクト
+    private float         prevHeightLimit          ; // 前フレームの高さ
+    private Text[]        heightTextComs           ; // 高さテキストコンポーネント
+    private CanvasGroup   uiCanvasGroup            ; // UIキャンバスグループ
+    private CanvasGroup   sb_canvasGroup           ; // スコアボードキャンバスグループ
+    private float         timeCount                ; // 経過時間
+    private float         height                   ; // 現在の高さ
+    private bool          isHost = true            ; // ホストか
+    private GameUISound   gameUiSound              ;
+    private bool          isPlayTimeUpSound = false;
 
     //-----------------------------------------------------------------------------
     //! public変数
     //-----------------------------------------------------------------------------
-    private bool isHost = true; // ホストか
 
     //-----------------------------------------------------------------------------
     //! Inspectorに公開する変数
     //-----------------------------------------------------------------------------
-    [Header("UIキャンバス")]                   public Canvas uiCanvas            ; // UIキャンバス
-    [Header("スコアボードキャンバス")]         public Canvas sb_canvas           ; // スコアボードキャンバス
-    [Header("フェードスピード(秒)")]           public float fadeTime             ; // スコアボードフェードタイム
-    [Header("GameManager")]                    public GameManager gameManager    ; // ゲームマネージャー
+    [Header("UIキャンバス")]                   public Canvas        uiCanvas     ; // UIキャンバス
+    [Header("スコアボードキャンバス")]         public Canvas        sb_canvas    ; // スコアボードキャンバス
+    [Header("フェードスピード(秒)")]           public float         fadeTime     ; // スコアボードフェードタイム
+    [Header("GameManager")]                    public GameManager   gameManager  ; // ゲームマネージャー
     [Header("RegisterScore")]                  public RegisterScore registerScore; // スコア
-    [Header("GameTimer")]                      public GameTimer gameTimer        ; // ゲームタイマー
-    [Header("カートプレハブ")]                 public GameObject cartPrefab      ; // カートプレハブ
-    [Header("単位テキスト")]                   public Text UnitText              ; // 単位テキスト
-    [Header("スコアテキスト")]                 public Text scoreText             ; // スコアテキスト
-    [Header("タイムテキスト")]                 public Text timeText              ; // タイムテキスト
-    [Header("カウントダウンテキスト")]         public Text countDown             ; // ウントダウンテキスト
-    [Header("高さスライダー")]                 public Slider heightSlider        ; // 高さスライダー
-    [Header("高さスライダーテキスト")]         public Text heightText            ; // 高さテキスト
-    [Header("高さスライダーの表示上限値")]     public float heightLimit          ; // スライダーの上限値
-    [Header("スコアボード")]                   public GameObject scoreBoard      ; // スコアボード
-    [Header("(スコアボード)ランクテキスト")]   public Text sb_rankText           ; // (スコアボード)ランクテキスト
-    [Header("(スコアボード)スコアテキスト")]   public Text sb_scoreText          ; // (スコアボード)スコアテキスト
-    [Header("(スコアボード)タイムテキスト")]   public Text sb_timeText           ; // (スコアボード)タイムテキスト
-    [Header("(スコアボード)スタックテキスト")] public Text sb_stackText          ; // (スコアボード)スタックテキスト
+    [Header("GameTimer")]                      public GameTimer     gameTimer    ; // ゲームタイマー
+    [Header("カートプレハブ")]                 public GameObject    cartPrefab   ; // カートプレハブ
+    [Header("単位テキスト")]                   public Text          UnitText     ; // 単位テキスト
+    [Header("スコアテキスト")]                 public Text          scoreText    ; // スコアテキスト
+    [Header("タイムテキスト")]                 public Text          timeText     ; // タイムテキスト
+    [Header("カウントダウンテキスト")]         public Text          countDown    ; // ウントダウンテキスト
+    [Header("高さスライダー")]                 public Slider        heightSlider ; // 高さスライダー
+    [Header("高さスライダーテキスト")]         public Text          heightText   ; // 高さテキスト
+    [Header("高さスライダーの表示上限値")]     public float         heightLimit  ; // スライダーの上限値
+    [Header("スコアボード")]                   public GameObject    scoreBoard   ; // スコアボード
+    [Header("(スコアボード)ランクテキスト")]   public Text          sb_rankText  ; // (スコアボード)ランクテキスト
+    [Header("(スコアボード)スコアテキスト")]   public Text          sb_scoreText ; // (スコアボード)スコアテキスト
+    [Header("(スコアボード)タイムテキスト")]   public Text          sb_timeText  ; // (スコアボード)タイムテキスト
+    [Header("(スコアボード)スタックテキスト")] public Text          sb_stackText ; // (スコアボード)スタックテキスト
 
     //-----------------------------------------------------------------------------
     //! [内容]    RPC受信関数(現在のスコア)
@@ -97,6 +98,10 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
         if (!(uiCanvasGroup || sb_canvasGroup)) {
             Debug.LogError("キャンバスグループが見つかりません。");
         }
+
+        if (!this.TryGetComponent<GameUISound>(out gameUiSound)) {
+            Debug.LogError("InGameUiSOundがありません。");
+        }
     }
 
     //-----------------------------------------------------------------------------
@@ -130,6 +135,8 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
 
             if (!uiCanvas.gameObject.activeSelf) {
                 uiCanvas.gameObject.SetActive(true);
+                // カウントダウンSEを再生
+                gameUiSound.PlaySE(GameUISound.SETYPE.COUNTDOWN);
             }
 
             // カウントダウン
@@ -137,6 +144,10 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
                 countDown.text = (gameTimer.startCount + 1.0f).ToString();
             }
             else {
+                if (countDown.enabled) {
+                    // BGM再生
+                    //gameUiSound.PlayBGM(GameUISound.BGMTYPE.DOTABATA_FAST);
+                }
                 countDown.enabled = false;
             }
 
@@ -146,6 +157,15 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
             int seconds    = Mathf.FloorToInt(limitCount - minutes * 60.0f);     // 秒
             timeText.text  = string.Format("{0:00}:{1:00}", minutes, seconds);
 
+            // 残り時間3秒以下でSE再生&文字色を赤に
+            if (limitCount <= 3.0f) {
+                timeText.color = new Color(1.0f, 0.0f, 0.0f);
+                if (!isPlayTimeUpSound) {
+                    gameUiSound.PlaySE(GameUISound.SETYPE.TIMEUP);
+                    isPlayTimeUpSound = true;
+                }
+            }
+
             // スコア表示
             var score = registerScore.scoreData.totalScore;
             score = score > 9999999 ? 9999999 : score;
@@ -153,17 +173,20 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
 
             // 高さを表示
             if (heightLimit != 0) {
-                heightSlider.value = height <= heightLimit ? height / heightLimit : 1.0f;
+
+                var valueHeight = height < 0.0f ? 0.0f : height;
+                heightSlider.value = valueHeight <= heightLimit ? valueHeight / heightLimit : 1.0f;
 
                 // 高さテキストの表示変更
                 for (int i = 0; i < heightTextComs.Length; i++) {
-                    float heightNum = i / 5.0f * heightLimit;
+                    float heightNum = (i / 5.0f * heightLimit);
+                    registerScore.heightBonusList.GetDictionary().TryGetValue(heightNum, out heightNum);
                     if (i == heightTextComs.Length - 1) {
                         if (heightNum < height) {
                             heightNum = height;
                         }
                     }
-                    string heightStr = string.Format("{0:0.00}", heightNum) + "m";
+                    string heightStr = string.Format("{0:0.00}", heightNum) + "×";
                     heightTextComs[(heightTextComs.Length - 1) - i].text = heightStr;
                 }
             }
@@ -175,20 +198,33 @@ public class InGameUIManager : MonobitEngine.MonoBehaviour
 
                 // テキストに各データを適用 //
 
-                // ランク表示
-                // TODO:ランク処理
-                sb_rankText.text = "A";
                 // スコア
                 var score = registerScore.scoreData.totalScore;
                 score = score > 9999999 ? 9999999 : score;
                 sb_scoreText.text = string.Format("{0:00000#,0}", score);
+                // ランク表示
+                if (score >= 1000000) {
+                    sb_rankText.text = "S";
+                }
+                else if (score >= 500000) {
+                    sb_rankText.text = "A";
+                }
+                else if (score >= 200000) {
+                    sb_rankText.text = "B";
+                }
+                else {
+                    sb_rankText.text = "C";
+                }
+
                 // タイム
                 var currentTime  = gameTimer.currentGameTime;
                 int minutes      = Mathf.FloorToInt(currentTime / 60.0f);              // 分
                 int seconds      = Mathf.FloorToInt(currentTime - minutes * 60.0f);    // 秒
                 sb_timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
                 // スタック
-                // TODO:RegisterScoreでスタック総数をカウントする処理を用意
+                var stack = registerScore.scoreData.totalStack;
+                stack = stack > 9999 ? 9999 : stack;
+                sb_stackText.text = string.Format("{0:00#,0}", stack);
             }
 
             // フェード処理

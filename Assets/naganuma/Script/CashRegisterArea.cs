@@ -62,7 +62,7 @@ public class CashRegisterArea : MonobitEngine.MonoBehaviour
     //-----------------------------------------------------------------------------
     void LateUpdate()
     {
-        _inArea = false;
+        //_inArea = false;
     }
 
     //-----------------------------------------------------------------------------
@@ -76,5 +76,12 @@ public class CashRegisterArea : MonobitEngine.MonoBehaviour
                 _inArea = true;
             }
         }
+    }
+
+    //-----------------------------------------------------------------------------
+    //! [内容]    当たり判定
+    //-----------------------------------------------------------------------------
+    private void OnTriggerExit(Collider other) {
+        _inArea = false;
     }
 }

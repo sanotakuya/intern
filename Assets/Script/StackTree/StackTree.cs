@@ -116,7 +116,6 @@ public class StackTree : MonobitEngine.MonoBehaviour
         {
             obj.GetComponent<StackRoot>().ReleaseRoot();
         }
-
         children.Clear();
     }
 

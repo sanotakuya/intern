@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1293808313478258306}
   - component: {fileID: 7321268394508509641}
   - component: {fileID: 1485039985480753003}
+  - component: {fileID: 7630577372407267667}
   m_Layer: 0
   m_Name: SI_Food_Meat_Chicken
   m_TagString: ThrowObject
@@ -125,7 +126,7 @@ MonoBehaviour:
   - {fileID: 7321268394508509641}
   ownerId: 0
   group: 0
-  prefixBackup: -1
+  prefixBackup: 0
   ownershipTransfer: 0
   compressedStream: 0
 --- !u!114 &7321268394508509641
@@ -168,3 +169,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 5f91e09d685c98d40be4f3033469e3e1, type: 3}
+--- !u!114 &7630577372407267667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2027238729054510905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed805a98ba9904597e188c47cc1deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallPrefab: {fileID: 8328928689533258898, guid: 9a3b5b5be72cb3545a001facb94bf04c, type: 3}
+  addPrefab: {fileID: 4889700180705726389, guid: 75e0516622b06de41911895314d4d9bb, type: 3}
+  subPrefab: {fileID: 1826254014985077883, guid: ac8b2c85e0f76e54688c57a1fc552774, type: 3}
+  particleSize: 0.1
+  objectSpeed: 1.2
+  isThrewAfterDeletion: 1
+  destroyInterval: 2
+  groundTag: Ground

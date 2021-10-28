@@ -7,8 +7,14 @@ public class SoundManager : MonobitEngine.MonoBehaviour
 {
     private AudioSource bgmAudio;
 
+    MonobitView m_MonobitView = null;
+
+    public AudioClip mainBGM;
+    public AudioClip titleBGM;
+    public AudioClip waitTimeBGM;
+
     [System.NonSerialized]
-    public  float fadeTime;
+    public float fadeTime;
 
     [System.NonSerialized]
     public bool fadeInFlg;
@@ -17,12 +23,22 @@ public class SoundManager : MonobitEngine.MonoBehaviour
     public bool fadeOutFlg;
 
     float fadeDeltaTime = 0;
+    private bool isMainSoundPlay;
+    private bool isTitleSoundPlay;
+    private bool isWaitSoundPlay;
+
+    private bool isStart;
+
+    GameManager gameManager;
+    
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-       
         bgmAudio = this.gameObject.GetComponent<AudioSource>();
 
+        m_MonobitView = GetComponent<MonobitView>();
+
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         fadeDeltaTime = 0.0f;
         fadeInFlg = false;
         fadeOutFlg = false;
@@ -31,14 +47,48 @@ public class SoundManager : MonobitEngine.MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (MonobitNetwork.isHost)
+        if (isStart == false)
         {
-            if (Input.GetKeyDown(KeyCode.M))
+            if (!MonobitNetwork.inRoom)
             {
-                AudioPlay();
+                if (isTitleSoundPlay == false)
+                {
+                    bgmAudio.clip = titleBGM;
+                    AudioPlay();
+                    isTitleSoundPlay = true;
+                }
+            }
+            else
+            {
+                AudioStop();
+                isStart = true;
+                isTitleSoundPlay = false;
             }
         }
-      
+        else
+        {
+            if (!gameManager.IsPlaying() && isWaitSoundPlay == false)
+            {
+                bgmAudio.clip = waitTimeBGM;
+                AudioPlay();
+                isWaitSoundPlay = true;
+            }
+            else if (gameManager.IsPlaying() && isMainSoundPlay == false)
+            {
+                bgmAudio.clip = mainBGM;
+                AudioPlay();
+                isMainSoundPlay = true;
+                isWaitSoundPlay = false;
+            }
+            else if (!gameManager.IsPlaying() && isMainSoundPlay == true)
+            {
+                AudioStop();
+                isStart = false;
+                isMainSoundPlay = false;
+            }
+        }
+     
+
         if (fadeInFlg == true)
         {
             fadeDeltaTime += Time.deltaTime;
