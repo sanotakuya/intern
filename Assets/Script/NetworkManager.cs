@@ -292,7 +292,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             selectRoom.SetActive(false);
         }
 
-        if(Input.GetKeyDown(KeyCode.Return) && !MonobitNetwork.inRoom)
+        if(Input.GetKeyDown(KeyCode.Return) && title.active)
         {
             title.SetActive(false);
             gameUISound.PlaySE(GameUISound.SETYPE.BUTTON);
