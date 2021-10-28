@@ -18,11 +18,11 @@ MonobitEngineを利用した協力オンラインゲーム
 
 # Installation
 
-実行ファイルをダウンロードじてgane.exeを実行
+実行ファイルをダウンロード
 
 # Usage
 
-実行ファイル内のgane.exeを実行して起動
+実行ファイル内のgame.exeを実行して起動
 
 ## ゲーム開始までの流れ
 
