@@ -51,6 +51,9 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     [SerializeField] private TextMeshProUGUI inputUserName;
     [SerializeField] private TextMeshProUGUI inputRoomName;
 
+    [SerializeField] private GameUISound gameUISound;
+
+
     //-----------------------------------------------------------------------------
     //!	public
     //-----------------------------------------------------------------------------
@@ -278,6 +281,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 if (GUILayout.Button("<size=32>Disconnect</size>", GUILayout.Width(boxX), GUILayout.Height(boxY)))
                 {
                     DisconnectServer();
+                    gameUISound.PlaySE(GameUISound.SETYPE.BUTTON);
+
                 }
             }
         }
@@ -287,9 +292,10 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
             selectRoom.SetActive(false);
         }
 
-        if(Input.GetKeyDown(KeyCode.Return))
+        if(Input.GetKeyDown(KeyCode.Return) && !MonobitNetwork.inRoom)
         {
             title.SetActive(false);
+            gameUISound.PlaySE(GameUISound.SETYPE.BUTTON);
         }
     }
 
@@ -349,6 +355,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
                 ))
             {
                 JoinRoom(room.name);
+                gameUISound.PlaySE(GameUISound.SETYPE.BUTTON);
+
             }
         }
 
@@ -547,6 +555,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
 
         // 接続
         MonobitNetwork.ConnectServer("SimpleNetwork3D_v1.0");
+        gameUISound.PlaySE(GameUISound.SETYPE.BUTTON);
+
     }
 
     //-----------------------------------------------------------------------------
@@ -556,6 +566,8 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     {
         // ルーム作成
         CreateRoom(inputRoomName.text);
+        gameUISound.PlaySE(GameUISound.SETYPE.BUTTON);
+
     }
 
     //-----------------------------------------------------------------------------
@@ -565,5 +577,7 @@ public class NetworkManager : MonobitEngine.MonoBehaviour
     {
         tutorial.SetActive(true);
         isTutorial = true;
+        gameUISound.PlaySE(GameUISound.SETYPE.BUTTON);
+
     }
 }
