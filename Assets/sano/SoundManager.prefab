@@ -45,6 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30be2b41cf6136741901f30a706d7590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainBGM: {fileID: 8300000, guid: 7a1672bb875a3a643973f04b5520c9b1, type: 3}
+  titleBGM: {fileID: 8300000, guid: b57f8dbaed8fbfc44a198dc56506d433, type: 3}
+  waitTimeBGM: {fileID: 8300000, guid: 2c9c742949b42f64ba102d350c3eb396, type: 3}
 --- !u!82 &1267945803744266155
 AudioSource:
   m_ObjectHideFlags: 0
@@ -55,11 +58,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 99dbf79334cdd2b4e8ddcccf308d6663, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 1
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.25
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
