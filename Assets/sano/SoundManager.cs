@@ -11,6 +11,7 @@ public class SoundManager : MonobitEngine.MonoBehaviour
 
     public AudioClip mainBGM;
     public AudioClip titleBGM;
+    public AudioClip waitTimeBGM;
 
     [System.NonSerialized]
     public float fadeTime;
@@ -24,40 +25,15 @@ public class SoundManager : MonobitEngine.MonoBehaviour
     float fadeDeltaTime = 0;
     private bool isMainSoundPlay;
     private bool isTitleSoundPlay;
+    private bool isWaitSoundPlay;
 
     private bool isStart;
 
     GameManager gameManager;
-
-    //-----------------------------------------------------------------------------
-    //! [内容]		サウンド再生
-    //-----------------------------------------------------------------------------
-    [MunRPC]
-    void RecvPlaySound()
-    {
-        if (isMainSoundPlay == false)
-        {
-            bgmAudio.clip = mainBGM;
-            AudioPlay();
-            isMainSoundPlay = true;
-            isTitleSoundPlay = false;
-            isStart = true;
-        }
-    }
-  
-    [MunRPC]
-    void RecvStopSound()
-    {
-        if (isMainSoundPlay == true)
-        {
-            AudioStop();
-            isMainSoundPlay = false;
-        }
-    }
+    
     // Start is called before the first frame update
     void Start()
     {
-
         bgmAudio = this.gameObject.GetComponent<AudioSource>();
 
         m_MonobitView = GetComponent<MonobitView>();
@@ -85,21 +61,33 @@ public class SoundManager : MonobitEngine.MonoBehaviour
             else
             {
                 AudioStop();
+                isStart = true;
                 isTitleSoundPlay = false;
             }
         }
-        if (MonobitNetwork.isHost)
+        else
         {
-            if (gameManager.IsPlaying())
+            if (!gameManager.IsPlaying() && isWaitSoundPlay == false)
             {
-                m_MonobitView.RPC("RecvPlaySound", MonobitEngine.MonobitTargets.AllBuffered);
+                bgmAudio.clip = waitTimeBGM;
+                AudioPlay();
+                isWaitSoundPlay = true;
+            }
+            else if (gameManager.IsPlaying() && isMainSoundPlay == false)
+            {
+                bgmAudio.clip = mainBGM;
+                AudioPlay();
+                isMainSoundPlay = true;
+                isWaitSoundPlay = false;
             }
             else if (!gameManager.IsPlaying() && isMainSoundPlay == true)
             {
-                m_MonobitView.RPC("RecvStopSound", MonobitEngine.MonobitTargets.AllBuffered);
+                AudioStop();
+                isStart = false;
+                isMainSoundPlay = false;
             }
-           
         }
+     
 
         if (fadeInFlg == true)
         {
