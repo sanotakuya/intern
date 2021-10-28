@@ -11324,6 +11324,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 133165055}
     m_Modifications:
+    - target: {fileID: 1137667735061969705, guid: 6ce41194f65c66c438b6701d832dc8b9, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 64f585ed8afba174ba25c127added604, type: 2}
+    - target: {fileID: 1137667735061969705, guid: 6ce41194f65c66c438b6701d832dc8b9, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -6668298584288882901, guid: 64f585ed8afba174ba25c127added604, type: 2}
     - target: {fileID: 1137667736886032117, guid: 6ce41194f65c66c438b6701d832dc8b9, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -11422,7 +11430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1137667736957685701, guid: 6ce41194f65c66c438b6701d832dc8b9, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ce41194f65c66c438b6701d832dc8b9, type: 3}
