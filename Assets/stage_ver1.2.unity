@@ -9363,6 +9363,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3502717135288396821, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
   m_PrefabInstance: {fileID: 2032706764}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1410537078 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3015063570782593245, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+  m_PrefabInstance: {fileID: 2032706764}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410537077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9744cd2c02d83f4439cc056111cb295a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1432097059
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10135,7 +10146,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1877170997821472201, guid: 3f3ac9b839ac71c4eac5270e2936ff17, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1000
+      value: 1200
       objectReference: {fileID: 0}
     - target: {fileID: 1877170997821472201, guid: 3f3ac9b839ac71c4eac5270e2936ff17, type: 3}
       propertyPath: m_SizeDelta.y
@@ -13176,6 +13187,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameUI
       objectReference: {fileID: 0}
+    - target: {fileID: 3532720244678398072, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
+      propertyPath: m_Volume
+      value: 0.508
+      objectReference: {fileID: 0}
     - target: {fileID: 4971768335999705899, guid: 9e323d1100d5cc4479e79a7953fde713, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -14188,6 +14203,10 @@ PrefabInstance:
       propertyPath: title
       value: 
       objectReference: {fileID: 1591665735}
+    - target: {fileID: 1073126651407191444, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
+      propertyPath: gameUISound
+      value: 
+      objectReference: {fileID: 1410537078}
     - target: {fileID: 7507806573229991182, guid: c9e08716ccaf37343ad4f42f4e086414, type: 3}
       propertyPath: canvas
       value: 
