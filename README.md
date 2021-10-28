@@ -64,6 +64,6 @@ MonoAI technology株式会社　インターン生
 3.長沼豪琉
 
 # License
-音楽利用　OtoLogic様　https://otologic.jp/
+音楽利用　OtoLogic様　https://otologic.jp/  
 SDユニティちゃん © Unity Technologies Japan/UCL
 
