@@ -1,26 +1,27 @@
 
 # Intern_OverStack!!
 
-## DEMO
+## 紹介
 ![](https://github.com/sanotakuya/intern/blob/master/Assets/texture/Screenshot%20-%202021-10-27%2010.25.46.png)
 
-# Features
+# 内容
 
 MonobitEngineを利用した協力オンラインゲーム
 
-# Concept
+# コンセプト
 
 支え合う一体感とギリギリを攻める緊張感
 
-# Requirement
+# 要件
 
-特になし
+Unity 2020.1.2f1
+Monobit Unity Networking 2.0
 
-# Installation
+# ゲーム実行準備
 
 実行ファイルをダウンロード
 
-# Usage
+# 実行方法
 
 実行ファイル内のgame.exeを実行して起動
 
@@ -52,9 +53,9 @@ SPACE			　 :ジャンプ
 
 # Note
 
-オンラインゲームなので、オンライン環境で行ってください
-デュアルモニターだと解像度がおかしくなる場合があります
-解像度が高いモニターだとUIの表示がおかしくなる場合があります
+オンラインゲームなので、オンライン環境で行ってください  
+デュアルモニターだと解像度がおかしくなる場合があります  
+解像度が高いモニターだとUIの表示がおかしくなる場合があります  
 
 # Author
 
