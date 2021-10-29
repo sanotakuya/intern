@@ -14,7 +14,7 @@ MonobitEngineを利用した協力オンラインゲーム
 
 # 要件
 
-Unity 2020.1.2f1
+Unity 2020.1.2f1  
 Monobit Unity Networking 2.0
 
 # ゲーム実行準備
